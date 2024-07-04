@@ -1,0 +1,17 @@
+<div class="login-box">
+    <p>Stargi</p>
+    <p>Iniciar sesión</p>
+    <div class="flex flex-column gap-2">
+        <label for="username">Usuario</label>
+        <input 
+            pInputText 
+            id="username" 
+            aria-describedby="username-help" 
+             />
+        <label for="password" >Contraseña</label>
+        <p-password id="password" [feedback]="false" [toggleMask]="true"/>
+        
+        <p-button label="Ingresar" (onClick)="logIn()" />
+    </div>
+    
+</div>
