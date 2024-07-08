@@ -6,10 +6,11 @@
         <input 
             pInputText 
             id="username" 
+            [(ngModel)]="userName"
             aria-describedby="username-help" 
              />
         <label for="password" >Contraseña</label>
-        <p-password id="password" [feedback]="false" [toggleMask]="true"/>
+        <p-password id="password" [feedback]="false" [(ngModel)]="password" [toggleMask]="true"/>
         
         <p-button label="Ingresar" (onClick)="logIn()" />
     </div>

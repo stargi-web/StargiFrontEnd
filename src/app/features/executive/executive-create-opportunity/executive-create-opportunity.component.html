@@ -1,36 +1,43 @@
 <form [formGroup]="opportunityForm" (ngSubmit)="onSubmit()">
     <p>Ingrese los datos</p>
   
-    <label for="ruc">Ruc:</label>
-    <p-inputNumber formControlName="ruc" id="ruc" [useGrouping]="false" mode="decimal"></p-inputNumber>
-  
-    <label for="businessName">Razón Social:</label>
-    <input type="text" id="businessName" pInputText formControlName="businessName"/>
-  
-    <label for="sfaNumber">Número de oportunidad SFA:</label>
-    <p-inputNumber formControlName="sfaOpportunityNumber" id="sfaNumber" [useGrouping]="false" mode="decimal"></p-inputNumber>
-  
-    <label for="sfaCreationDate">Fecha de creación de la opp en SFA</label>
-    <p-calendar formControlName="creationDateSfaOpp" dateFormat="dd.mm.yyyy"></p-calendar>
-  
-    <label for="opportunityType">Tipo de oportunidad</label>
-    <p-dropdown [options]="opportunityTypes" id="opportunityType" formControlName="opportunityType" placeholder="Seleccione un tipo"></p-dropdown>
-  
-    <label for="Producto">Producto:</label>
-    <p-dropdown [options]="products" formControlName="product" id="Producto" placeholder="Seleccione un producto"></p-dropdown>
-  
-    <label for="others">Detalles otros:</label>
-    <textarea rows="5" cols="30" formControlName="otherDetails" id="others"></textarea>
-  
-    <label for="status">Estado:</label>
-    <p-dropdown [options]="states" formControlName="status" id="status" placeholder="Seleccione un estado"></p-dropdown>
-  
-    <label for="closeDate">Fecha de cierre estimada:</label>
-    <p-calendar formControlName="estimatedClosingDate" dateFormat="dd.mm.yyyy"></p-calendar>
-  
-    <label for="commentary">Comentario:</label>
-    <textarea rows="5" cols="30" formControlName="commentary" id="commentary"></textarea>
-  
-    <button type="submit" pButton label="Guardar"></button>
+    
+      <label for="ruc">RUC</label>
+      <input pInputText type="text" id="ruc" formControlName="ruc" required>
+
+
+      <label for="businessName">Nombre del Negocio</label>
+      <input pInputText type="text" id="businessName" formControlName="businessName" required>
+
+
+      <label for="SfaNumber">Número SFA</label>
+      <input pInputText type="number" id="SfaNumber" formControlName="SfaNumber" required>
+
+
+      <label for="oppSfaDateCreation">Fecha de Creación SFA</label>
+      <p-calendar id="oppSfaDateCreation" formControlName="oppSfaDateCreation" dateFormat="yy-mm-dd" required></p-calendar>
+
+
+      <label for="type">Tipo</label>
+      <p-dropdown id="type" [options]="opportunityTypes" formControlName="type" required></p-dropdown>
+ 
+      <label for="product">Producto</label>
+      <p-dropdown id="product" [options]="products" formControlName="product" required></p-dropdown>
+
+      <label for="otherDetails">Detalles Adicionales</label>
+      <textarea pInputTextarea id="otherDetails" formControlName="otherDetails"></textarea>
+
+      <label for="state">Estado</label>
+      <p-dropdown id="state" [options]="states" formControlName="state" required></p-dropdown>
+
+      <label for="estimatedClosingDate">Fecha de Cierre Estimada</label>
+      <p-calendar id="estimatedClosingDate" formControlName="estimatedClosingDate" dateFormat="yy-mm-dd" required></p-calendar>
+
+      <label for="commentary">Comentario</label>
+      <textarea pInputTextarea id="commentary" formControlName="commentary"></textarea>
+
+
+
+    <button pButton type="submit" label="Crear Oportunidad"></button>
   </form>
   

@@ -21,13 +21,13 @@
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Oportunidad SFA
-                    <p-columnFilter type="numeric" field="sfaOpportunityNumber" display="menu"/>
+                    <p-columnFilter type="numeric" field="SfaNumber" display="menu"/>
                 </div>
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Tipo
-                    <p-columnFilter type="text" field="opportunityType" display="menu"/>
+                    <p-columnFilter type="text" field="type" display="menu"/>
                 </div>
             </th>
             <th>
@@ -50,7 +50,7 @@
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Estado
-                    <p-columnFilter type="text" field="status" display="menu"/>
+                    <p-columnFilter type="text" field="state" display="menu"/>
                 </div>
             </th>
             <th>
@@ -75,10 +75,10 @@
                 {{opportunity.businessName}}
             </td>
             <td>
-                {{opportunity.sfaOpportunityNumber}}
+                {{opportunity.SfaNumber}}
             </td>
             <td>
-                {{opportunity.opportunityType}}
+                {{opportunity.type}}
             </td>
             <td>
                 {{opportunity.product}}
@@ -90,7 +90,7 @@
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
             </td>
             <td>
-                {{opportunity.status}}
+                {{opportunity.state}}
             </td>
             <td>
                 {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}

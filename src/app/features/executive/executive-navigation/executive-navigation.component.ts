@@ -32,6 +32,8 @@ export class ExecutiveNavigationComponent implements OnInit{
         label:'Cerrar sesión',
         icon:'pi pi-sign-out',
         command:()=>{
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('userId');
           this.router.navigate(['/login'])
         }
       }

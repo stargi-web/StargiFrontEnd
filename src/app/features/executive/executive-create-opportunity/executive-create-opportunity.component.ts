@@ -8,6 +8,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { OpportunityService } from '../../../services/opportunityService';
 @Component({
   selector: 'app-executive-create-opportunity',
   standalone: true,
@@ -17,6 +18,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class ExecutiveCreateOpportunityComponent implements OnInit {
   onSubmit() {
+    if(this.opportunityForm.valid){
+      console.log(this.opportunityForm.value)
+      this.opportunityService.createOpportunity(this.opportunityForm.value).subscribe(
+        {
+          next:response=>{
+            alert("Creación exitosa");
+            this.opportunityForm.reset();
+          },
+          error:error=>console.error(error)
+        }
+      );
+      
+    }
+    else{
+      alert("Los valores no son validos");
+    }
     
   }
   
@@ -37,31 +54,33 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     { label: 'Otros', value: 'Otros' }
   ];
   states = [
+    { label: 'No contactado', value: 'No contactado' },
     { label: 'Potenciales', value: 'Potenciales' },
     { label: 'Prospecto', value: 'Prospecto' },
-    { label: 'Prospecto Calificado', value: 'Prospecto Calificado' },
-    { label: 'Prospecto Desarrollo', value: 'Prospecto Desarrollo' },
+    { label: 'Prospecto calificado', value: 'Prospecto calificado' },
+    { label: 'Prospecto desarrollado', value: 'Prospecto desarrollado' },
     { label: 'Cierre', value: 'Cierre' },
-    { label: 'No Cierre', value: 'No Cierre' },
-    { label: 'No Contactado', value: 'No Contactado' }
+    { label: 'No cierre', value: 'No cierre' }
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private opportunityService:OpportunityService) {
+    const userId=Number(sessionStorage.getItem("userId"));
     this.opportunityForm = this.fb.group({
       ruc: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
       businessName: ['', Validators.required],
-      sfaOpportunityNumber: ['', Validators.required],
-      creationDateSfaOpp: ['', Validators.required],
-      opportunityType: ['', Validators.required],
+      SfaNumber: ['', Validators.required],
+      oppSfaDateCreation: ['', Validators.required],
+      type: ['', Validators.required],
       product: ['', Validators.required],
       otherDetails: [''],
-      createdAt: ['', Validators.required],
-      status: ['', Validators.required],
+      state: ['', Validators.required],
       estimatedClosingDate: ['', Validators.required],
-      commentary: ['']
+      commentary: [''],
+      userId:userId
     });
   }
   ngOnInit(): void {
     
   }
+
 }

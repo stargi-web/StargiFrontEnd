@@ -4,6 +4,8 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/authService';
+import { LogInUser } from '../core/models/LogInUser';
 
 @Component({
   selector: 'app-auth',
@@ -13,8 +15,19 @@ import { Router } from '@angular/router';
   styleUrl: './auth.component.css'
 })
 export class AuthComponent {
-  constructor(private router:Router){}
-  logIn(){
-    this.router.navigate(['/executive']);
+  userName: string = '';
+  password: string = '';
+  constructor(private router:Router,private authService:AuthService){}
+  logIn() {
+    const logInUser: LogInUser = { userName: this.userName, password: this.password };
+    this.authService.logIn(logInUser).subscribe({
+      next: (response) => {
+        this.authService.redirectToRoleBasedComponent();
+      },
+      error: (error) => {
+        console.error('Error en el login', error);
+      }
+    });
   }
+
 }
