@@ -51,8 +51,18 @@ export class ExecutiveDashboardComponent implements OnInit {
     this.editingRowIndex = rowIndex;
   }
 
-  saveChanges() {
-    this.editingRowIndex = null;
+  saveChanges(oppId:number,newState:string,commentary:string) {
+    this.opportunityService.editOpportunity({oppId,newState,commentary}).subscribe(
+      {
+        next:response=>{
+          alert(`${response.message}`);
+          this.editingRowIndex=null;
+        },
+        error:error=>{console.error(error);this.editingRowIndex = null;}
+        
+      }
+    );
+    
   }
 
   cancelEditing() {
