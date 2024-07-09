@@ -8,6 +8,11 @@
         <tr>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Acción                   
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Ruc
                     <p-columnFilter type="numeric" field="ruc" display="menu"/>
                 </div>
@@ -66,9 +71,18 @@
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-opportunity>
+    <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
         <tr>
             <td>
+                @if(editingRowIndex===rowIndex){
+                    <p-button label="Guardar" (onClick)="saveChanges()" *ngIf="editingRowIndex === rowIndex"></p-button>
+                    <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
+                }
+                @else{
+                    <p-button label="Modificar" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
+                }
+            </td>
+            <td (click)="openRecordsDialog(opportunity.id)">
                 {{opportunity.ruc}}
             </td>
             <td>
@@ -89,15 +103,32 @@
             <td>
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
             </td>
-            <td>
-                {{opportunity.state}}
-            </td>
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <p-dropdown [(ngModel)]="opportunity.state" [options]="states"></p-dropdown>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.state}}
+                </td>
+            }   
             <td>
                 {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
             </td>
-            <td>
-                {{opportunity.commentary}}
-            </td>
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <textarea pInputTextarea [(ngModel)]="opportunity.commentary"></textarea>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.commentary}}
+                </td>
+            }  
         </tr>
     </ng-template>
 </p-table>
+

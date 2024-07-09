@@ -1,0 +1,40 @@
+<p-table
+    [value]="records"
+    [rows]="5"
+    [loading]="loading"
+    [paginator]="true"
+    [tableStyle]="{ 'min-width': '75rem' }"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="min-width:15rem">
+                <div class="flex align-items-center">
+                    Estado
+                </div>
+            </th>
+            <th style="min-width:15rem">
+                <div class="flex align-items-center">
+                    Comentario
+                </div>
+            </th>
+            <th style="min-width:15rem">
+                <div class="flex align-items-center">
+                    Fecha de modificación
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-record>
+        <tr>
+            <td>
+                {{record.state}}
+            </td>
+            <td>
+                {{record.commentary}}
+            </td>
+            <td>
+                {{record.modifyAt|date:'dd/MM/yyyy'}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

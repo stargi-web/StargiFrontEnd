@@ -1,0 +1,36 @@
+<form [formGroup]="opportunityForm" (ngSubmit)="onSubmit()">
+    <p>Ingrese los datos</p>
+    
+    <label for="ruc">RUC</label>
+  <input pInputText type="text" id="ruc" [(ngModel)]="ruc" name="ruc" readonly required>
+
+  <label for="businessName">Nombre del Negocio</label>
+  <input pInputText type="text" id="businessName" [(ngModel)]="businessName" name="businessName" readonly required>
+
+  <label for="SfaNumber">Número SFA</label>
+  <input pInputText type="number" id="SfaNumber" [(ngModel)]="SfaNumber" name="SfaNumber" readonly required>
+
+  <label for="oppSfaDateCreation">Fecha de Creación SFA</label>
+  <p-calendar id="oppSfaDateCreation" [(ngModel)]="oppSfaDateCreation" name="oppSfaDateCreation" dateFormat="yy-mm-dd" [readonlyInput]="true" required></p-calendar>
+
+  <label for="type">Tipo</label>
+  <p-dropdown id="type" [options]="opportunityTypes" [(ngModel)]="type" name="type" [disabled]="true" required></p-dropdown>
+ 
+  <label for="product">Producto</label>
+  <p-dropdown id="product" [options]="products" [(ngModel)]="product" name="product" [disabled]="true" required></p-dropdown>
+
+  <label for="otherDetails">Detalles Adicionales</label>
+  <textarea pInputTextarea id="otherDetails" [(ngModel)]="otherDetails" name="otherDetails" readonly></textarea>
+
+  <label for="state">Estado</label>
+  <p-dropdown id="state" [options]="states" formControlName="state" required></p-dropdown>
+
+  <label for="estimatedClosingDate">Fecha de Cierre Estimada</label>
+  <p-calendar id="estimatedClosingDate" [(ngModel)]="estimatedClosingDate" name="estimatedClosingDate" dateFormat="yy-mm-dd" [readonlyInput]="true" required></p-calendar>
+
+  <label for="commentary">Comentario</label>
+  <textarea pInputTextarea id="commentary" formControlName="commentary"></textarea>
+
+  <button pButton type="submit" label="Crear Oportunidad"></button>
+  </form>
+  
