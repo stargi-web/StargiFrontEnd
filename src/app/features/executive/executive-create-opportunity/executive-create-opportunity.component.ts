@@ -54,7 +54,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     { label: 'Otros', value: 'Otros' }
   ];
   states = [
-    { label: 'No contactado', value: 'No contactado' },
+    
     { label: 'Potenciales', value: 'Potenciales' },
     { label: 'Prospecto', value: 'Prospecto' },
     { label: 'Prospecto calificado', value: 'Prospecto calificado' },
