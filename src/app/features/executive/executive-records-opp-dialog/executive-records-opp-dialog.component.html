@@ -22,6 +22,16 @@
                     Fecha de modificación
                 </div>
             </th>
+            <th style="min-width:15rem">
+                <div class="flex align-items-center">
+                    Nombre de contacto
+                </div>
+            </th>
+            <th style="min-width:15rem">
+                <div class="flex align-items-center">
+                    Número de contacto
+                </div>
+            </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-record>
@@ -34,6 +44,12 @@
             </td>
             <td>
                 {{record.modifyAt|date:'dd/MM/yyyy'}}
+            </td>
+            <td>
+                {{record.contactName}}
+            </td>
+            <td>
+                {{record.contactNumber}}
             </td>
         </tr>
     </ng-template>

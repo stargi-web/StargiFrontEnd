@@ -11,5 +11,7 @@ export interface OpportunityModel{
     updatedAt:Date
     state:string,
     estimatedClosingDate:Date,
-    commentary:string
+    commentary:string,
+    contactName?:string,
+    contactNumber?:string
 }

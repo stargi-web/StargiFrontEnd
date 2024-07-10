@@ -69,13 +69,25 @@
                     Comentario
                 </div>
             </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Persona Contactada
+                    <p-columnFilter type="text" field="contactName" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Teléfono
+                    <p-columnFilter type="text" field="contactNumber" display="menu"/>
+                </div>
+            </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
         <tr>
             <td>
                 @if(editingRowIndex===rowIndex){
-                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary)" *ngIf="editingRowIndex === rowIndex"></p-button>
+                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber)" *ngIf="editingRowIndex === rowIndex"></p-button>
                     <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
                 }
                 @else{
@@ -127,7 +139,29 @@
                 <td>
                     {{opportunity.commentary}}
                 </td>
-            }  
+            }
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <textarea pInputTextarea [(ngModel)]="opportunity.contactName"></textarea>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.contactName}}
+                </td>
+            }
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <textarea pInputTextarea [(ngModel)]="opportunity.contactNumber"></textarea>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.contactNumber}}
+                </td>
+            } 
         </tr>
     </ng-template>
 </p-table>

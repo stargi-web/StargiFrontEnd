@@ -76,6 +76,8 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       state: ['', Validators.required],
       estimatedClosingDate: ['', Validators.required],
       commentary: [''],
+      contactName:[''],
+      contactNumber:[''],
       userId:userId
     });
   }
