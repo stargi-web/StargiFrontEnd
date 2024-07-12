@@ -43,6 +43,12 @@ export class ExecutiveDashboardComponent implements OnInit {
             next:response=>{
                 this.opportunities=response;
                 this.loading=false;
+                this.opportunities.forEach(opp=>{
+                  opp.oppSfaDateCreation=new Date(opp.oppSfaDateCreation);
+                  opp.createdAt=new Date(opp.createdAt);
+                  opp.updatedAt=new Date(opp.updatedAt);
+                  opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
+                })
             },error:error=>{console.error(error)}
         }
     )

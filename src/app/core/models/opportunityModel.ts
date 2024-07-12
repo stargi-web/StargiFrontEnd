@@ -3,14 +3,14 @@ export interface OpportunityModel{
     ruc:number,
     businessName:string,
     sfaNumber:number,
-    oppSfaDateCreation:Date,
+    oppSfaDateCreation:Date|string,
     type:string,
     product:string,
     otherDetails:string,
-    createdAt:Date,
-    updatedAt:Date
+    createdAt:Date|string,
+    updatedAt:Date|string
     state:string,
-    estimatedClosingDate:Date,
+    estimatedClosingDate:Date|string,
     commentary:string,
     contactName?:string,
     contactNumber?:string

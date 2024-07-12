@@ -1,0 +1,18 @@
+<div >
+    @for (team of teams; track $index) {
+        <!--<p-panel [header]="team.teamName" [toggleable]="true">
+            <p>
+                Cantidad de miembros: {{team.membersCount}} <br>
+                Lider:{{team.leader?team.leader:"No asignado"}}
+            </p>
+            class="card flex justify-content-center"
+        </p-panel>-->
+        <p-card [header]="team.teamName" >
+            <p class="m-0">
+                Cantidad de miembros:{{team.membersCount}}<br>
+                Lider:{{team.leader?team.leader:"No asignado"}}
+            </p>
+        </p-card>
+    }
+    
+</div>

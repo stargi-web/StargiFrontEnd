@@ -23,6 +23,13 @@ export class AdminNavigationComponent implements OnInit {
         }
       },
       {
+        label:'Equipos',
+        icon:'pi pi-users',
+        command:()=>{
+          this.router.navigate(['/admin/teams-view']);
+        }
+      },
+      {
         label:'Cerrar sesión',
         icon:'pi pi-sign-out',
         command:()=>{
@@ -31,6 +38,7 @@ export class AdminNavigationComponent implements OnInit {
           this.router.navigate(['/login'])
         }
       }
+      
     ]
   }
 }
