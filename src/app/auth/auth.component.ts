@@ -17,8 +17,10 @@ import { LogInUser } from '../core/models/LogInUser';
 export class AuthComponent {
   userName: string = '';
   password: string = '';
+  disablebt=false;
   constructor(private router:Router,private authService:AuthService){}
   logIn() {
+    this.disablebt=true;
     const logInUser: LogInUser = { userName: this.userName, password: this.password };
     this.authService.logIn(logInUser).subscribe({
       next: (response) => {
@@ -26,6 +28,7 @@ export class AuthComponent {
       },
       error: (error) => {
         console.error('Error en el login', error);
+        this.disablebt=false;
       }
     });
   }

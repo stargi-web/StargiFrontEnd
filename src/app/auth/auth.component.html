@@ -12,7 +12,7 @@
         <label for="password" >Contraseña</label>
         <p-password id="password" [feedback]="false" [(ngModel)]="password" [toggleMask]="true"/>
         
-        <p-button label="Ingresar" (onClick)="logIn()" />
+        <p-button label="Ingresar" (onClick)="logIn()" [disabled]="disablebt"/>
     </div>
     
 </div>
