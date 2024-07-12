@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {PanelModule}from 'primeng/panel';
 import { TeamCardModel } from '../../../core/models/teamCardModel';
 import { TeamService } from '../../../services/teamService';
 import {CardModule} from 'primeng/card';
 @Component({
   selector: 'app-admin-teams-view',
   standalone: true,
-  imports: [PanelModule,CardModule],
+  imports: [CardModule],
   templateUrl: './admin-teams-view.component.html',
   styleUrl: './admin-teams-view.component.css'
 })

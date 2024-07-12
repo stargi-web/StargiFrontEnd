@@ -12,17 +12,16 @@ import { Router } from '@angular/router';
 })
 export class AdminUsersViewComponent implements OnInit {
 
-  
   users!:UserModel[];
   loading=true;
   constructor(private userService:UserService,private router:Router){}
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadUsers();
   }
   loadUsers(){
     this.userService.getUsers().subscribe(
       {
-        next:response=>{
+        next:(response)=>{
         this.users=response;
         this.loading=false;
       },
@@ -30,7 +29,7 @@ export class AdminUsersViewComponent implements OnInit {
       }
     )
   }
-  viewOpportunities(userId:number) {//users-opp/:userId
+  viewOpportunities(userId:number) {
     this.router.navigate([`/admin/users-opp/${userId}`])
     }
 }

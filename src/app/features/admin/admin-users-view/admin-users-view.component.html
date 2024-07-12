@@ -2,7 +2,9 @@
     [value]="users"
     [rows]="10"
     [loading]="loading"
+    [rowsPerPageOptions]="[10,15,20]"
     [paginator]="true"
+    
 >
     <ng-template pTemplate="header">
         <tr>
@@ -27,7 +29,7 @@
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Rol
-                    <p-columnFilter type="text" field="role" display="menu"/>                   
+                    <p-columnFilter type="text" field="role" display="menu"/>               
                 </div>
             </th>
         </tr>
