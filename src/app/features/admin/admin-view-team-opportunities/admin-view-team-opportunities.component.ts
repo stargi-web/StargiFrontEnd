@@ -30,6 +30,7 @@ loading=true;
       {
         next:response=>{
           this.opportunities=response;
+          console.log(response)
           this.loading=false;
         },
         error:error=>console.error(error)

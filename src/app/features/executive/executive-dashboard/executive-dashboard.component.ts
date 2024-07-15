@@ -1,3 +1,4 @@
+import { InputNumberModule } from 'primeng/inputnumber';
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { OpportunityModel } from '../../../core/models/opportunityModel';
@@ -13,7 +14,7 @@ import { ExecutiveRecordsOppDialogComponent } from '../executive-records-opp-dia
   selector: 'app-executive-dashboard',
   providers:[DialogService],
   standalone: true,
-  imports: [TableModule, DropdownModule, FormsModule, CommonModule, ButtonModule, ExecutiveEditOpportunityComponent],
+  imports: [InputNumberModule,TableModule, DropdownModule, FormsModule, CommonModule, ButtonModule, ExecutiveEditOpportunityComponent],
   templateUrl: './executive-dashboard.component.html',
   styleUrl: './executive-dashboard.component.css'
 })
@@ -57,8 +58,8 @@ export class ExecutiveDashboardComponent implements OnInit {
     this.editingRowIndex = rowIndex;
   }
 
-  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string) {
-    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber}).subscribe(
+  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number) {
+    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount}).subscribe(
       {
         next:response=>{
           alert(`${response.message}`);

@@ -20,7 +20,13 @@
 
       <label for="type">Tipo</label>
       <p-dropdown id="type" [options]="opportunityTypes" formControlName="type" required></p-dropdown>
- 
+
+      <label for="amount">Monto</label>
+      <p-inputNumber
+          formControlName="amount"
+          mode="decimal"
+          [useGrouping]="false"/>
+
       <label for="product">Producto</label>
       <p-dropdown id="product" [options]="products" formControlName="product" required></p-dropdown>
 

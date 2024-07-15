@@ -38,6 +38,12 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Monto
+                    <p-columnFilter type="numeric" field="type" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Producto
                     <p-columnFilter type="text" field="product" display="menu"/>
                 </div>
@@ -100,6 +106,9 @@
             </td>
             <td>
                 {{opportunity.type}}
+            </td>
+            <td>
+                {{opportunity.amount?'Monto no asignado':opportunity.amount}}
             </td>
             <td>
                 {{opportunity.product}}

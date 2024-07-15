@@ -14,5 +14,6 @@ export interface OpportunityModel{
     commentary:string,
     contactName?:string,
     contactNumber?:string,
-    userAssigned?:string
+    userAssigned?:string,
+    amount?:number
 }

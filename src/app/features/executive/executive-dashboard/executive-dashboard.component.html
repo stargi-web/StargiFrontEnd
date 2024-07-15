@@ -37,6 +37,12 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Monto
+                    <p-columnFilter type="numeric" field="type" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Producto
                     <p-columnFilter type="text" field="product" display="menu"/>
                 </div>
@@ -87,7 +93,7 @@
         <tr>
             <td>
                 @if(editingRowIndex===rowIndex){
-                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber)" *ngIf="editingRowIndex === rowIndex"></p-button>
+                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount)" *ngIf="editingRowIndex === rowIndex"></p-button>
                     <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
                 }
                 @else{
@@ -105,6 +111,18 @@
             </td>
             <td>
                 {{opportunity.type}}
+            </td>
+            <td>
+                @if(editingRowIndex===rowIndex){
+                    <p-inputNumber
+                        [(ngModel)]="opportunity.amount"
+                        mode="decimal"
+                        [useGrouping]="false"/>
+                }
+                @else{
+                    {{opportunity.amount}}
+                }
+                
             </td>
             <td>
                 {{opportunity.product}}

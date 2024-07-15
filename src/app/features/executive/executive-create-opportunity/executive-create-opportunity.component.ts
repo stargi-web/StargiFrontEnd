@@ -71,6 +71,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       SfaNumber: ['', Validators.required],
       oppSfaDateCreation: ['', Validators.required],
       type: ['', Validators.required],
+      amount:['',Validators.required],
       product: ['', Validators.required],
       otherDetails: [''],
       state: ['', Validators.required],
