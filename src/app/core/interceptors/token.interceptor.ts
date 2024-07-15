@@ -5,7 +5,7 @@
     const platformId=inject(PLATFORM_ID);
     if(isPlatformBrowser(platformId)){
       const token=sessionStorage.getItem('token');
-      if(token){
+      if(token){//algo
         const cloned=req.clone({
           headers: req.headers.set('Authorization', `Bearer ${token}`)
           });
