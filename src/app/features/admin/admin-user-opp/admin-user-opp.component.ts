@@ -4,22 +4,25 @@ import { OpportunityModel } from '../../../core/models/opportunityModel';
 import { OpportunityService } from '../../../services/opportunityService';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { OpportunityRecordService } from '../../../services/opportunityRecordService';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ExecutiveRecordsOppDialogComponent } from '../../executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
 @Component({
   selector: 'app-admin-user-opp',
+  providers:[DialogService],
   standalone: true,
   imports: [TableModule,CommonModule],
   templateUrl: './admin-user-opp.component.html',
   styleUrl: './admin-user-opp.component.css'
 })
 export class AdminUserOppComponent implements OnInit{
-openRecordsDialog(arg0: any) {
-throw new Error('Method not implemented.');
-}
+
 
   opportunities!:OpportunityModel[];
   loading=true;
   userId?:number;
-  constructor(private route:ActivatedRoute,private opportunityService:OpportunityService){}
+  constructor(public dialogService:DialogService,private route:ActivatedRoute,private opportunityService:OpportunityService,private oppRecordService:OpportunityRecordService){}
+  ref:DynamicDialogRef|undefined;
   ngOnInit(): void {
     this.userId=Number(this.route.snapshot.paramMap.get('userId'));
     this.loadOpportunities();
@@ -40,5 +43,14 @@ throw new Error('Method not implemented.');
     })
   }
 
-
+  openRecordsDialog(oppId:number) {
+    const config={
+      data:{
+        oppId
+      },
+      Headers:'Historial de cambios',
+      with:'60vw',
+    }
+    this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
+  }
 }
