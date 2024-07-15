@@ -24,6 +24,7 @@ loading=true;
   ngOnInit(): void {
     this.teamId=Number(this.route.snapshot.paramMap.get('teamId'));
     this.loadOpportunities();
+    //.
   }
   loadOpportunities(){
     this.opportunityService.getOpportunitiesByTeamId(this.teamId).subscribe(
