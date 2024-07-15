@@ -42,8 +42,8 @@ export class AuthService{
             this.router.navigate(['/admin']);
           } else if (role==='user') {
             this.router.navigate(['/user']);
-          } else if (role==='salesmanager') {
-            this.router.navigate(['/user-view']); 
+          } else if (role==='supervisor') {
+            this.router.navigate(['/supervisor']); 
           } else if (role==='executive') {
             this.router.navigate(['/executive']);
           } else {

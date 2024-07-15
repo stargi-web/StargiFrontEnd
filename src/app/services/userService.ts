@@ -13,4 +13,20 @@ export class UserService{
     getUsers():Observable<any>{
         return this.httpClient.get(this.apiUrl);
     } 
+
+    getUsersByTeamId(teamId:number):Observable<any>{
+        return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
+    }
+
+    getLeadingTeamInfo(userId:number):Observable<any>{
+        return this.httpClient.get(`${this.apiUrl}/${userId}/leader/team`);
+    }
+
+    getUsersByRole(role:string):Observable<any>{
+        return this.httpClient.get(`${this.apiUrl}/${role}/role`);
+    }
+
+    createUser(body:any):Observable<any>{
+        return this.httpClient.post(this.apiUrl,body);
+    }
 }

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { environment } from "../env/environment";
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
     providedIn:'root',
@@ -16,6 +16,9 @@ export class OpportunityService{
                 
             }),catchError(this.handleError)
         )
+    }
+    getOpportunitiesByTeamId(teamId:number):Observable<any>{
+        return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
     }
     createOpportunity(body:any){
         console.log("Entrando al servicio de creación");
