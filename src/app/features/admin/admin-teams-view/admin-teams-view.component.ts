@@ -8,6 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { UserService } from '../../../services/userService';
 import { UserModel } from '../../../core/models/userModel';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-admin-teams-view',
   standalone: true,
@@ -22,7 +23,7 @@ export class AdminTeamsViewComponent implements OnInit {
   selectedSupervisor?:UserModel;
   teams!:TeamCardModel[];
   loading=true;
-  constructor(private teamService:TeamService,private userService:UserService){}
+  constructor(private teamService:TeamService,private userService:UserService,private router:Router){}
   ngOnInit(): void {
     this.loadTeams();
   }
@@ -67,5 +68,8 @@ export class AdminTeamsViewComponent implements OnInit {
         }
       )
     }
+  }
+  openTeamOppView(teamId:number){
+    this.router.navigate([`/admin/team-opportunities/${teamId}`])
   }
 }

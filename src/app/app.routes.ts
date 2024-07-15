@@ -12,6 +12,7 @@ import { SupervisorNavigationComponent } from './features/supervisor/supervisor-
 import { SupervisorTeamMembersComponent } from './features/supervisor/supervisor-team-members/supervisor-team-members.component';
 import { SupervisorOpportunitiesComponent } from './features/supervisor/supervisor-opportunities/supervisor-opportunities.component';
 import { SupervisorCreateMemberComponent } from './features/supervisor/supervisor-create-member/supervisor-create-member.component';
+import { AdminViewTeamOpportunitiesComponent } from './features/admin/admin-view-team-opportunities/admin-view-team-opportunities.component';
 
 export const routes: Routes = [
     {path:'',redirectTo:'/login',pathMatch:'full'},
@@ -45,6 +46,10 @@ export const routes: Routes = [
             {
                 path:'teams-view',
                 component:AdminTeamsViewComponent
+            },
+            {
+                path:'team-opportunities/:teamId',
+                component:AdminViewTeamOpportunitiesComponent
             }
         ]
     },

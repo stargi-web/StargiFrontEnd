@@ -1,0 +1,132 @@
+<p-table
+    [value]="opportunities"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="10"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Ruc
+                    <p-columnFilter type="numeric" field="ruc" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Creador
+                    <p-columnFilter type="text" field="userAssigned" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Nombre
+                    <p-columnFilter type="text" field="businessName" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Oportunidad SFA
+                    <p-columnFilter type="numeric" field="SfaNumber" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Tipo
+                    <p-columnFilter type="text" field="type" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Producto
+                    <p-columnFilter type="text" field="product" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Otros detalles
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Creación
+                    <p-columnFilter type="date" field="createdAt" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Estado
+                    <p-columnFilter type="text" field="state" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Cierre
+                    <p-columnFilter type="date" field="estimatedClosingDate" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Comentario
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Persona Contactada
+                    <p-columnFilter type="text" field="contactName" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Teléfono
+                    <p-columnFilter type="text" field="contactNumber" display="menu"/>
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-opportunity>
+        <tr>
+            <td (click)="openRecordsDialog(opportunity.id)">
+                {{opportunity.ruc}}
+            </td>
+            <td>
+                {{opportunity.userAssigned}}
+            </td>
+            <td>
+                {{opportunity.businessName}}
+            </td>
+            <td>
+                {{opportunity.SfaNumber}}
+            </td>
+            <td>
+                {{opportunity.type}}
+            </td>
+            <td>
+                {{opportunity.product}}
+            </td>
+            <td>
+                {{opportunity.otherDetails}}
+            </td>
+            <td>
+                {{opportunity.createdAt|date:'dd/MM/yyyy'}}
+            </td>
+            <td>
+                {{opportunity.state}}
+            </td>
+            <td>
+                {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
+            </td>
+            <td>
+                {{opportunity.commentary}}
+            </td>
+            <td>
+                {{opportunity.contactName}}
+            </td>
+            <td>
+                {{opportunity.contactNumber}}
+            </td>
+            
+        </tr>
+
+    </ng-template>
+</p-table>
