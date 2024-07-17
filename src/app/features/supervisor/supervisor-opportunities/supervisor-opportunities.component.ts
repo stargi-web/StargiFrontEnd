@@ -3,18 +3,35 @@ import { TableModule } from 'primeng/table';
 import { OpportunityService } from '../../../services/opportunityService';
 import { OpportunityModel } from '../../../core/models/opportunityModel';
 import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { ExecutiveRecordsOppDialogComponent } from '../../executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-supervisor-opportunities',
   standalone: true,
-  imports: [TableModule,CommonModule],
+  providers:[DialogService],
+  imports: [TableModule,CommonModule,ButtonModule,InputNumberModule,DropdownModule,FormsModule],
   templateUrl: './supervisor-opportunities.component.html',
   styleUrl: './supervisor-opportunities.component.css'
 })
 export class SupervisorOpportunitiesComponent implements OnInit{
   opportunities!:OpportunityModel[];
   loading=true;
-  constructor(private opportunityService:OpportunityService){}
+  states = [
+    { label: 'Potenciales', value: 'Potenciales' },
+    { label: 'Prospecto', value: 'Prospecto' },
+    { label: 'Prospecto calificado', value: 'Prospecto calificado' },
+    { label: 'Prospecto desarrollado', value: 'Prospecto desarrollado' },
+    { label: 'Cierre', value: 'Cierre' },
+    { label: 'No cierre', value: 'No cierre' }]
+  editingRowIndex: number | null = null;
+  ref:DynamicDialogRef|undefined;
+  constructor(public dialogService:DialogService,private opportunityService:OpportunityService){}
   ngOnInit(): void {
+    
     this.loadOpportunities();
   }
   loadOpportunities(){
@@ -27,5 +44,36 @@ export class SupervisorOpportunitiesComponent implements OnInit{
         }
       }
     )
+  }
+  startEditing(rowIndex: number) {
+    this.editingRowIndex = rowIndex;
+  }
+
+  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number) {
+    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount}).subscribe(
+      {
+        next:response=>{
+          alert(`${response.message}`);
+          this.editingRowIndex=null;
+        },
+        error:error=>{console.error(error);this.editingRowIndex = null;}
+        
+      }
+    );
+    
+  }
+
+  cancelEditing() {
+    this.editingRowIndex = null;
+  }
+  openRecordsDialog(oppId:number){
+    const config={
+      data:{
+        oppId
+      },
+      Headers:'Historial de cambios',
+      with:'60vw',
+    }
+    this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
   }
 }

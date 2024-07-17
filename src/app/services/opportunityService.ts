@@ -32,6 +32,9 @@ export class OpportunityService{
             catchError(this.handleError)
         );
     }
+    deleteOpportunity(oppId:number):Observable<any>{
+        return this.httpClient.delete(`${this.apiUrl}/${oppId}`);
+    }
     private handleError(error:HttpErrorResponse){
         if(error.status===0){
           console.error('Se ha producio un error ', error.error);

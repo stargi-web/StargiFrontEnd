@@ -1,11 +1,16 @@
 <p-table
     [value]="opportunities"
-    [loading]="loading"
-    [paginator]="true"
     [rows]="10"
->
+    [rowsPerPageOptions]="[10,15,20]"
+    [loading]="loading"
+    [paginator]="true">
     <ng-template pTemplate="header">
         <tr>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Acción                   
+                </div>
+            </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Ruc
@@ -32,13 +37,19 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Monto
+                    <p-columnFilter type="numeric" field="type" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Producto
                     <p-columnFilter type="text" field="product" display="menu"/>
                 </div>
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
-                    Otros detalles
+                    Detalles producto
                 </div>
             </th>
             <th>
@@ -78,9 +89,18 @@
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-opportunity>
+    <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
         <tr>
             <td>
+                @if(editingRowIndex===rowIndex){
+                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount)" *ngIf="editingRowIndex === rowIndex"></p-button>
+                    <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
+                }
+                @else{
+                    <p-button label="Modificar" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
+                }
+            </td>
+            <td (click)="openRecordsDialog(opportunity.id)">
                 {{opportunity.ruc}}
             </td>
             <td>
@@ -93,6 +113,18 @@
                 {{opportunity.type}}
             </td>
             <td>
+                @if(editingRowIndex===rowIndex){
+                    <p-inputNumber
+                        [(ngModel)]="opportunity.amount"
+                        mode="decimal"
+                        [useGrouping]="false"/>
+                }
+                @else{
+                    {{opportunity.amount}}
+                }
+                
+            </td>
+            <td>
                 {{opportunity.product}}
             </td>
             <td>
@@ -101,23 +133,54 @@
             <td>
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
             </td>
-            <td>
-                {{opportunity.state}}
-            </td>
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <p-dropdown [(ngModel)]="opportunity.state" [options]="states"></p-dropdown>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.state}}
+                </td>
+            }   
             <td>
                 {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
             </td>
-            <td>
-                {{opportunity.commentary}}
-            </td>
-            <td>
-                {{opportunity.contactName}}
-            </td>
-            <td>
-                {{opportunity.contactNumber}}
-            </td>
-            
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <textarea pInputTextarea [(ngModel)]="opportunity.commentary"></textarea>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.commentary}}
+                </td>
+            }
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <textarea pInputTextarea [(ngModel)]="opportunity.contactName"></textarea>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.contactName}}
+                </td>
+            }
+            @if (editingRowIndex===rowIndex) {
+                <td>
+                    <textarea pInputTextarea [(ngModel)]="opportunity.contactNumber"></textarea>
+                </td>
+                
+            }
+            @else {
+                <td>
+                    {{opportunity.contactNumber}}
+                </td>
+            } 
         </tr>
-
     </ng-template>
 </p-table>
+

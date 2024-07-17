@@ -1,3 +1,4 @@
+import { config } from './../../../app.config.server';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
@@ -10,6 +11,7 @@ import { OpportunityService } from '../../../services/opportunityService';
 import { ExecutiveEditOpportunityComponent } from "../executive-edit-opportunity/executive-edit-opportunity.component";
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ExecutiveRecordsOppDialogComponent } from '../executive-records-opp-dialog/executive-records-opp-dialog.component';
+import { ConfirmDeleteOpportunityDialogComponent } from '../../../shared/components/confirm-delete-opportunity-dialog/confirm-delete-opportunity-dialog.component';
 @Component({
   selector: 'app-executive-dashboard',
   providers:[DialogService],
@@ -19,6 +21,7 @@ import { ExecutiveRecordsOppDialogComponent } from '../executive-records-opp-dia
   styleUrl: './executive-dashboard.component.css'
 })
 export class ExecutiveDashboardComponent implements OnInit {
+
 
   opportunities!:OpportunityModel[];
   editingRowIndex: number | null = null;
@@ -74,6 +77,28 @@ export class ExecutiveDashboardComponent implements OnInit {
 
   cancelEditing() {
     this.editingRowIndex = null;
+  }
+  deleteOpportunity(name: string,id:number) {
+    const config={
+      data:{
+        bussinesName:name
+      },
+      Headers:'Confimar eliminacion'
+    }
+    this.ref=this.dialogService.open(ConfirmDeleteOpportunityDialogComponent,config);
+    this.ref.onClose.subscribe((response:boolean)=>{
+      if(response){
+        this.opportunityService.deleteOpportunity(id).subscribe(
+          {
+            next:response=>{
+              this.opportunities=this.opportunities.filter(o=>o.id!==id);
+            },error:error=>{
+              console.error(error);
+            }
+          }
+        )
+      }
+    })
   }
   openRecordsDialog(oppId:number){
     const config={

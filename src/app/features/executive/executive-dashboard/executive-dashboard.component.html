@@ -49,7 +49,7 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
-                    Otros detalles
+                    Detalles producto
                 </div>
             </th>
             <th>
@@ -97,7 +97,8 @@
                     <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
                 }
                 @else{
-                    <p-button label="Modificar" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
+                    <p-button icon="pi pi-cog" [rounded]="true" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" (onClick)="deleteOpportunity(opportunity.businessName,opportunity.id)"/>
                 }
             </td>
             <td (click)="openRecordsDialog(opportunity.id)">

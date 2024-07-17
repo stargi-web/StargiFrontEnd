@@ -17,7 +17,7 @@ import { ExecutiveRecordsOppDialogComponent } from '../../executive/executive-re
 })
 export class AdminUserOppComponent implements OnInit{
 
-
+  sort=-1
   opportunities!:OpportunityModel[];
   loading=true;
   userId?:number;
