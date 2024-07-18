@@ -20,6 +20,21 @@ import { FormsModule } from '@angular/forms';
 export class SupervisorOpportunitiesComponent implements OnInit{
   opportunities!:OpportunityModel[];
   loading=true;
+  opportunityTypes = [
+    { label: 'Básico', value: 'Básico' },
+    { label: 'Estandar', value: 'Estandar' },
+    { label: 'No estandar', value: 'No estandar' }
+  ];
+  products = [
+    { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
+    { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
+    { label: 'DBI-GPON', value: 'DBI-GPON' },
+    { label: 'Nube Pública', value: 'Nube Pública' },
+    { label: 'Antivirus', value: 'Antivirus' },
+    { label: 'Cloud Backup', value: 'Cloud Backup' },
+    { label: 'Central telefónica', value: 'Central telefónica' },
+    { label: 'Otros', value: 'Otros' }
+  ];
   states = [
     { label: 'Potenciales', value: 'Potenciales' },
     { label: 'Prospecto', value: 'Prospecto' },
@@ -49,8 +64,8 @@ export class SupervisorOpportunitiesComponent implements OnInit{
     this.editingRowIndex = rowIndex;
   }
 
-  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number) {
-    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount}).subscribe(
+  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string) {
+    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type}).subscribe(
       {
         next:response=>{
           alert(`${response.message}`);

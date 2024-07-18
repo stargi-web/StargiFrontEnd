@@ -27,7 +27,7 @@ export class OpportunityService{
                 tap(response=>(console.log("Enviando opp"))),
                 catchError(this.handleError));
     }
-    editOpportunity(body:{oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number}){
+    editOpportunity(body:{oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string}){
         return this.httpClient.patch<any>(`${this.apiUrl}/edit`,body).pipe(
             catchError(this.handleError)
         );

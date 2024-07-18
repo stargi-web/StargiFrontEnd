@@ -93,7 +93,7 @@
         <tr>
             <td>
                 @if(editingRowIndex===rowIndex){
-                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount)" *ngIf="editingRowIndex === rowIndex"></p-button>
+                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type)"></p-button>
                     <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
                 }
                 @else{
@@ -111,7 +111,13 @@
                 {{opportunity.SfaNumber}}
             </td>
             <td>
-                {{opportunity.type}}
+                @if (editingRowIndex===rowIndex) {
+                    <p-dropdown [(ngModel)]="opportunity.type" [options]="opportunityTypes"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.type}}
+                }
+                
             </td>
             <td>
                 @if(editingRowIndex===rowIndex){
@@ -123,10 +129,15 @@
                 @else{
                     {{opportunity.amount}}
                 }
-                
             </td>
             <td>
-                {{opportunity.product}}
+                @if(editingRowIndex===rowIndex){
+                    <p-dropdown [(ngModel)]="opportunity.product"[options]="products"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.product}}
+                }
+                
             </td>
             <td>
                 {{opportunity.otherDetails}}
@@ -134,53 +145,41 @@
             <td>
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
             </td>
-            @if (editingRowIndex===rowIndex) {
-                <td>
+            <td>
+                @if(editingRowIndex===rowIndex){
                     <p-dropdown [(ngModel)]="opportunity.state" [options]="states"></p-dropdown>
-                </td>
-                
-            }
-            @else {
-                <td>
+                }
+                @else {
                     {{opportunity.state}}
-                </td>
-            }   
+                }
+            </td>
             <td>
                 {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
             </td>
-            @if (editingRowIndex===rowIndex) {
-                <td>
+            <td>
+                @if(editingRowIndex===rowIndex){
                     <textarea pInputTextarea [(ngModel)]="opportunity.commentary"></textarea>
-                </td>
-                
-            }
-            @else {
-                <td>
+                }
+                @else {
                     {{opportunity.commentary}}
-                </td>
-            }
-            @if (editingRowIndex===rowIndex) {
-                <td>
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex){
                     <textarea pInputTextarea [(ngModel)]="opportunity.contactName"></textarea>
-                </td>
-                
-            }
-            @else {
-                <td>
+                }
+                @else {
                     {{opportunity.contactName}}
-                </td>
-            }
-            @if (editingRowIndex===rowIndex) {
-                <td>
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex){
                     <textarea pInputTextarea [(ngModel)]="opportunity.contactNumber"></textarea>
-                </td>
-                
-            }
-            @else {
-                <td>
+                }
+                @else {
                     {{opportunity.contactNumber}}
-                </td>
-            } 
+                }
+            </td>
         </tr>
     </ng-template>
 </p-table>

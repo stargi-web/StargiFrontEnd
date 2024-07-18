@@ -15,6 +15,11 @@
                 </th>
                 <th>
                     <div class="flex align-items-center" style="min-width:10rem">
+                        Acciones
+                    </div>
+                </th>
+                <th>
+                    <div class="flex align-items-center" style="min-width:10rem">
                         Ruc
                         <p-columnFilter type="text" field="ruc" display="menu"/>
                     </div>
@@ -35,6 +40,12 @@
                     <div class="flex align-items-center" style="min-width:10rem">
                         Tipo
                         <p-columnFilter type="text" field="type" display="menu"/>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex align-items-center" style="min-width:10rem">
+                        Monto
+                        <p-columnFilter type="numeric" field="type" display="menu"/>
                     </div>
                 </th>
                 <th>
@@ -85,12 +96,22 @@
                 </th>
             </tr>
         </ng-template>
-       <ng-template pTemplate="body" let-opportunity>
+       <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
             <tr>
                 <td>
                     {{opportunity.userAssigned}}
                 </td>
-                <td >
+                <td>
+                    @if(editingRowIndex===rowIndex){
+                        <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type)" ></p-button>
+                        <p-button label="Cancelar" (onClick)="cancelEditing()"></p-button>
+                    }
+                    @else{
+                        <p-button icon="pi pi-cog" [rounded]="true" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
+                        <p-button icon="pi pi-trash" [rounded]="true" (onClick)="deleteOpportunity(opportunity.businessName,opportunity.id)"/>
+                    }
+                </td>
+                <td (click)="openRecordsDialog(opportunity.id)">
                     {{opportunity.ruc}}
                 </td>
                 <td>
@@ -100,10 +121,33 @@
                     {{opportunity.SfaNumber}}
                 </td>
                 <td>
-                    {{opportunity.type}}
+                    @if (editingRowIndex===rowIndex) {
+                        <p-dropdown [(ngModel)]="opportunity.type" [options]="opportunityTypes"></p-dropdown>
+                    }
+                    @else {
+                        {{opportunity.type}}
+                    }
+                    
                 </td>
                 <td>
-                    {{opportunity.product}}
+                    @if(editingRowIndex===rowIndex){
+                        <p-inputNumber
+                            [(ngModel)]="opportunity.amount"
+                            mode="decimal"
+                            [useGrouping]="false"/>
+                    }
+                    @else{
+                        {{opportunity.amount}}
+                    }
+                </td>
+                <td>
+                    @if(editingRowIndex===rowIndex){
+                        <p-dropdown [(ngModel)]="opportunity.product"[options]="products"></p-dropdown>
+                    }
+                    @else {
+                        {{opportunity.product}}
+                    }
+                    
                 </td>
                 <td>
                     {{opportunity.otherDetails}}
@@ -112,19 +156,39 @@
                     {{opportunity.createdAt|date:'dd/MM/yyyy'}}
                 </td>
                 <td>
-                    {{opportunity.state}}
+                    @if(editingRowIndex===rowIndex){
+                        <p-dropdown [(ngModel)]="opportunity.state" [options]="states"></p-dropdown>
+                    }
+                    @else {
+                        {{opportunity.state}}
+                    }
                 </td>
                 <td>
                     {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
                 </td>
                 <td>
-                    {{opportunity.commentary}}
+                    @if(editingRowIndex===rowIndex){
+                        <textarea pInputTextarea [(ngModel)]="opportunity.commentary"></textarea>
+                    }
+                    @else {
+                        {{opportunity.commentary}}
+                    }
                 </td>
                 <td>
-                    {{opportunity.contactName}}
+                    @if (editingRowIndex===rowIndex){
+                        <textarea pInputTextarea [(ngModel)]="opportunity.contactName"></textarea>
+                    }
+                    @else {
+                        {{opportunity.contactName}}
+                    }
                 </td>
                 <td>
-                    {{opportunity.contactNumber}}
+                    @if (editingRowIndex===rowIndex){
+                        <textarea pInputTextarea [(ngModel)]="opportunity.contactNumber"></textarea>
+                    }
+                    @else {
+                        {{opportunity.contactNumber}}
+                    }
                 </td>
                 
             </tr>

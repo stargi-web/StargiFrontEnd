@@ -72,6 +72,10 @@ export const routes: Routes = [
             {
                 path:'create-user',
                 component:SupervisorCreateMemberComponent
+            },
+            {
+                path:'create-opportunity',
+                component:ExecutiveCreateOpportunityComponent
             }
 
         ]

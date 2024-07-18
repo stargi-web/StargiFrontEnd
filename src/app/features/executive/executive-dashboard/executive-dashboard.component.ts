@@ -1,4 +1,3 @@
-import { config } from './../../../app.config.server';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
@@ -26,14 +25,28 @@ export class ExecutiveDashboardComponent implements OnInit {
   opportunities!:OpportunityModel[];
   editingRowIndex: number | null = null;
   loading: boolean=true;
+  products = [
+    { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
+    { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
+    { label: 'DBI-GPON', value: 'DBI-GPON' },
+    { label: 'Nube Pública', value: 'Nube Pública' },
+    { label: 'Antivirus', value: 'Antivirus' },
+    { label: 'Cloud Backup', value: 'Cloud Backup' },
+    { label: 'Central telefónica', value: 'Central telefónica' },
+    { label: 'Otros', value: 'Otros' }
+  ];
   states = [
-    { label: 'No contactado', value: 'No contactado' },
     { label: 'Potenciales', value: 'Potenciales' },
     { label: 'Prospecto', value: 'Prospecto' },
     { label: 'Prospecto calificado', value: 'Prospecto calificado' },
     { label: 'Prospecto desarrollado', value: 'Prospecto desarrollado' },
     { label: 'Cierre', value: 'Cierre' },
     { label: 'No cierre', value: 'No cierre' }
+  ];
+  opportunityTypes = [
+    { label: 'Básico', value: 'Básico' },
+    { label: 'Estandar', value: 'Estandar' },
+    { label: 'No estandar', value: 'No estandar' }
   ];
   constructor(public dialogService:DialogService,private opportunityService:OpportunityService){}
   ref:DynamicDialogRef|undefined;
@@ -61,8 +74,8 @@ export class ExecutiveDashboardComponent implements OnInit {
     this.editingRowIndex = rowIndex;
   }
 
-  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number) {
-    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount}).subscribe(
+  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string) {
+    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type}).subscribe(
       {
         next:response=>{
           alert(`${response.message}`);

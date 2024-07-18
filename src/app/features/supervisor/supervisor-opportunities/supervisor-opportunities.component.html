@@ -93,7 +93,7 @@
         <tr>
             <td>
                 @if(editingRowIndex===rowIndex){
-                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount)" *ngIf="editingRowIndex === rowIndex"></p-button>
+                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type)" *ngIf="editingRowIndex === rowIndex"></p-button>
                     <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
                 }
                 @else{
@@ -110,7 +110,13 @@
                 {{opportunity.SfaNumber}}
             </td>
             <td>
-                {{opportunity.type}}
+                @if (editingRowIndex===rowIndex) {
+                    <p-dropdown [(ngModel)]="opportunity.type" [options]="opportunityTypes"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.type}}
+                }
+                
             </td>
             <td>
                 @if(editingRowIndex===rowIndex){
@@ -122,10 +128,15 @@
                 @else{
                     {{opportunity.amount}}
                 }
-                
             </td>
             <td>
-                {{opportunity.product}}
+                @if(editingRowIndex===rowIndex){
+                    <p-dropdown [(ngModel)]="opportunity.product"[options]="products"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.product}}
+                }
+                
             </td>
             <td>
                 {{opportunity.otherDetails}}
