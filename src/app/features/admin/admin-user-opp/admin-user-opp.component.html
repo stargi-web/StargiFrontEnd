@@ -1,11 +1,12 @@
+<div class="card"></div>
 <p-table
     [value]="opportunities"
     [loading]="loading"
     [paginator]="true"
     [rows]="10"
     sortField="createdAt"
-    [sortOrder]="sort"
->
+    [sortOrder]="-1"
+    [scrollable]="true" scrollHeight="80vh">
     <ng-template pTemplate="header">
         <tr>
             <th>
@@ -22,7 +23,7 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
-                    Oportunidad SFA
+                    Num Opp Sfa
                     <p-columnFilter type="numeric" field="SfaNumber" display="menu"/>
                 </div>
             </th>
@@ -43,10 +44,12 @@
                     Detalles Producto
                 </div>
             </th>
-            <th>
+            <th pSortableColumn="createdAt">
                 <div class="flex align-items-center" style="min-width:10rem">
                     Creación
+                    <p-sortIcon field="createdAt"/>
                     <p-columnFilter type="date" field="createdAt" display="menu"/>
+                    
                 </div>
             </th>
             <th>

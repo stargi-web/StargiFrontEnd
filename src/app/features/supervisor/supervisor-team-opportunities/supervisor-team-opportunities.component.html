@@ -4,7 +4,10 @@
         [loading]="loading"
         [paginator]="true"
         [rows]="10"
-        [rowsPerPageOptions]="[10,15,20]">
+        [rowsPerPageOptions]="[10,15,20]"
+        sortField="createdAt"
+        [sortOrder]="-1"
+        [scrollable]="true" scrollHeight="80vh">
         <ng-template pTemplate="header">
             <tr>
                 <th>
@@ -32,7 +35,7 @@
                 </th>
                 <th>
                     <div class="flex align-items-center" style="min-width:10rem">
-                        Oportunidad SFA
+                        Num Opp Sfa
                         <p-columnFilter type="numeric" field="SfaNumber" display="menu"/>
                     </div>
                 </th>
@@ -59,10 +62,12 @@
                         Otros detalles
                     </div>
                 </th>
-                <th>
+                <th pSortableColumn="createdAt">
                     <div class="flex align-items-center" style="min-width:10rem">
                         Creación
+                        <p-sortIcon field="createdAt"/>
                         <p-columnFilter type="date" field="createdAt" display="menu"/>
+                        
                     </div>
                 </th>
                 <th>
