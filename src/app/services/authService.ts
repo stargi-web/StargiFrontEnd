@@ -37,14 +37,14 @@ export class AuthService{
         if (token) {
           const decodedToken: any = this.decodeToken(token);
           const role = decodedToken?.role || [];
-    
+          sessionStorage.setItem("role",role);
           if (role==='admin') {
             this.router.navigate(['/admin']);
           } else if (role==='user') {
             this.router.navigate(['/user']);
           } else if (role==='supervisor') {
             this.router.navigate(['/supervisor']); 
-          } else if (role==='executive') {
+          } else if (role==='executive'||role==='executivegpon') {
             this.router.navigate(['/executive']);
           } else {
             console.error('Rol no reconocido:', role);

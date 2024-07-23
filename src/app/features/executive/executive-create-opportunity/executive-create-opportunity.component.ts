@@ -31,16 +31,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     { label: 'Estandar', value: 'Estandar' },
     { label: 'No estandar', value: 'No estandar' }
   ];
-  products = [
-    { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
-    { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
-    { label: 'DBI-GPON', value: 'DBI-GPON' },
-    { label: 'Nube Pública', value: 'Nube Pública' },
-    { label: 'Antivirus', value: 'Antivirus' },
-    { label: 'Cloud Backup', value: 'Cloud Backup' },
-    { label: 'Central telefónica', value: 'Central telefónica' },
-    { label: 'Otros', value: 'Otros' }
-  ];
+  products! : any[];
   states = [
     
     { label: 'Potenciales', value: 'Potenciales' },
@@ -68,6 +59,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       commentary: ['',Validators.required],
       contactName:['',Validators.required],
       contactNumber:['',Validators.required],
+      units:['',Validators.required],
       userId:userId
     });
     this.errors = Object.keys(this.opportunityForm.controls).map(key => ({
@@ -76,6 +68,27 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     }));
   }
   ngOnInit(): void {
+    if(sessionStorage.getItem("role")==="executive"){
+      this.products=[
+        { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
+        { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
+        { label: 'DBI-GPON', value: 'DBI-GPON' },
+        { label: 'Nube Pública', value: 'Nube Pública' },
+        { label: 'Antivirus', value: 'Antivirus' },
+        { label: 'Cloud Backup', value: 'Cloud Backup' },
+        { label: 'Central telefónica', value: 'Central telefónica' },
+        { label: 'Otros', value: 'Otros' }
+      ];
+    }
+    else{
+      this.products=[
+        {label:'Venta',value:'Venta'},
+        {label:'Portabilidad',value:'Portabilidad'},
+        {label:'GPON',value:'GPON'},
+        {label:'DBI',value:'DBI'},
+        {label:'SVA',value:'SVA'}
+      ]
+    }
     
   }
   onSubmit() {

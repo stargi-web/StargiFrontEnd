@@ -32,6 +32,15 @@
         {{ getFieldErrorMessage('type') }}
       </div>
 
+      <label for="units">Unidades:</label>
+      <p-inputNumber
+          formControlName="units"
+          mode="decimal"
+          [useGrouping]="false"/>
+      <div *ngIf="isFieldInvalid('units')" class="error-message">
+        {{ getFieldErrorMessage('units') }}
+      </div>
+
       <label for="amount">Monto</label>
       <p-inputNumber
           formControlName="amount"
