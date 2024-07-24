@@ -65,6 +65,14 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Creación
+                    <p-sortIcon field="updatedAt"/>
+                    <p-columnFilter type="date" field="updatedAt" display="menu"/>
+                    
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Estado
                     <p-columnFilter type="text" field="state" display="menu"/>
                 </div>
@@ -148,6 +156,9 @@
             </td>
             <td>
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
+            </td>
+            <td>
+                {{opportunity.updatedAt|date:'dd/MM/yyyy'}}
             </td>
             @if (editingRowIndex===rowIndex) {
                 <td>

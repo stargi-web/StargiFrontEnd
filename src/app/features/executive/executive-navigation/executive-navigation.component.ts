@@ -15,7 +15,7 @@ export class ExecutiveNavigationComponent implements OnInit{
   ngOnInit(): void {
     this.items=[
       {
-        label:'Dashboard',
+        label:'Oportunidades',
         icon:'pi pi-home',
         command:()=>{
           this.router.navigate(['/executive/dashboard'])
