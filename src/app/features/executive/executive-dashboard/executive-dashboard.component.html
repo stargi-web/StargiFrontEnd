@@ -111,7 +111,6 @@
                 }
                 @else{
                     <p-button icon="pi pi-cog" [rounded]="true" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
-                    <p-button icon="pi pi-trash" [rounded]="true" (onClick)="deleteOpportunity(opportunity.businessName,opportunity.id)"/>
                 }
             </td>
             <td (click)="openRecordsDialog(opportunity.id)">
