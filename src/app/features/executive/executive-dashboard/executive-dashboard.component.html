@@ -107,6 +107,7 @@
             <td>
                 @if(editingRowIndex===rowIndex){
                     <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type)"></p-button>
+                    <p-button label="Cancelar" (onClick)="cancelEditing()"></p-button>
                 }
                 @else{
                     <p-button icon="pi pi-cog" [rounded]="true" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
