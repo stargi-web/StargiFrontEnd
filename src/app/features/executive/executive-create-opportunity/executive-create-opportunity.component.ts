@@ -27,10 +27,23 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
   errors!:FieldError[]
   opportunityForm: FormGroup;
   opportunityTypes = [
-    { label: 'Básico', value: 'Básico' },
+    { label: 'Básica', value: 'Básica' },
     { label: 'Estandar', value: 'Estandar' },
     { label: 'No estandar', value: 'No estandar' }
   ];
+  productTypes=[
+    {label:'Porta',value:'Porta'},
+    {label:'Venta',value:'Venta'},
+    {label:'Porta-Venta',value:'Porta-Venta'},
+    {label:'BAM',value:'BAM'},
+    {label:'Localizador',value:'Localizador'},
+    {label:'SMS',value:'SMS'},
+    {label:'Licencias Google',value:'Licencias Google'},
+    {label:'Licencias Microsoft',value:'Licencias Microsoft'},
+    {label:'GPON',value:'GPON'},
+    {label:'Fibra Plus',value:'Fibra Plus'},
+    {label:'Otros',value:'Otros'}
+  ]
   products! : any[];
   states = [
     
@@ -60,6 +73,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       contactName:['',Validators.required],
       contactNumber:['',Validators.required],
       units:['',Validators.required],
+      productType:['',Validators.required],
       userId:userId
     });
     this.errors = Object.keys(this.opportunityForm.controls).map(key => ({
@@ -68,28 +82,23 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     }));
   }
   ngOnInit(): void {
-    if(sessionStorage.getItem("role")==="executive"){
       this.products=[
         { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
         { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
+        { label:'DBI-Fija',value:'DBI-Fija'},
         { label: 'DBI-GPON', value: 'DBI-GPON' },
         { label: 'Nube Pública', value: 'Nube Pública' },
         { label: 'Antivirus', value: 'Antivirus' },
         { label: 'Cloud Backup', value: 'Cloud Backup' },
         { label: 'Central telefónica', value: 'Central telefónica' },
-        { label: 'Otros', value: 'Otros' }
-      ];
-    }
-    else{
-      this.products=[
         {label:'Venta',value:'Venta'},
         {label:'Portabilidad',value:'Portabilidad'},
         {label:'GPON',value:'GPON'},
         {label:'DBI',value:'DBI'},
-        {label:'SVA',value:'SVA'}
-      ]
-    }
-    
+        {label:'SVA',value:'SVA'},
+        {label:'Móvil',value:'Móvil'},
+        { label: 'Otros', value: 'Otros' }
+      ];
   }
   onSubmit() {
     if (this.opportunityForm.valid) {

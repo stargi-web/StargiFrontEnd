@@ -59,7 +59,13 @@
                 </th>
                 <th>
                     <div class="flex align-items-center" style="min-width:10rem">
-                        Otros detalles
+                        Tipo Producto
+                        <p-columnFilter type="text" field="productType" display="menu"/>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex align-items-center" style="min-width:10rem">
+                        Detalles Producto
                     </div>
                 </th>
                 <th pSortableColumn="createdAt">
@@ -153,6 +159,9 @@
                         {{opportunity.product}}
                     }
                     
+                </td>
+                <td>
+                    {{opportunity.productType}}
                 </td>
                 <td>
                     {{opportunity.otherDetails}}

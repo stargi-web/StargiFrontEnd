@@ -12,7 +12,7 @@
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Ruc
-                    <p-columnFilter type="numeric" field="ruc" display="menu"/>
+                    <p-columnFilter type="text" field="ruc" display="menu"/>
                 </div>
             </th>
             <th>
@@ -37,6 +37,12 @@
                 <div class="flex align-items-center" style="min-width:10rem">
                     Producto
                     <p-columnFilter type="text" field="product" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Tipo Producto
+                    <p-columnFilter type="text" field="productType" display="menu"/>
                 </div>
             </th>
             <th>
@@ -107,6 +113,9 @@
             </td>
             <td>
                 {{opportunity.product}}
+            </td>
+            <td>
+                {{opportunity.productType}}
             </td>
             <td>
                 {{opportunity.otherDetails}}

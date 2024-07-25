@@ -1,32 +1,25 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-box {
+  border: 1px solid #ccc; 
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+  border-radius: 8px;
+  background-color: #fff;
+}
+
 
 .p-field {
-    margin-bottom: 1rem;
-  }
-  
-  .p-field label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  .p-field input,
-  .p-field button {
-    width: 100%;
-  }
-  
-  .p-field input {
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  .p-field button {
-    margin-top: 1rem;
-  }
-  
-  .form-error {
-    color: red;
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem; 
+}
+
+.p-field label {
+  margin-bottom: 0.5rem;
+}

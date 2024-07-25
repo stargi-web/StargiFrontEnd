@@ -52,6 +52,12 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Tipo Producto
+                    <p-columnFilter type="text" field="productType" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Detalles producto
                 </div>
             </th>
@@ -65,10 +71,8 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
-                    Creación
-                    <p-sortIcon field="updatedAt"/>
-                    <p-columnFilter type="date" field="updatedAt" display="menu"/>
-                    
+                    Modificación
+                    <p-columnFilter type="date" field="updatedAt" display="menu"/>              
                 </div>
             </th>
             <th>
@@ -150,6 +154,9 @@
                     {{opportunity.product}}
                 }
                 
+            </td>
+            <td>
+                {{opportunity.productType}}
             </td>
             <td>
                 {{opportunity.otherDetails}}
