@@ -14,6 +14,9 @@ export class SupervisorNavigationComponent implements OnInit{
   items: MenuItem[] | undefined;
   name?:string;
   constructor(private router:Router,private userService:UserService){}
+  goToProfile(){
+    this.router.navigate(['/supervisor/profile']);
+  }
   ngOnInit(): void {
     this.name=String(sessionStorage.getItem('name'));
     const userId=Number(sessionStorage.getItem("userId"))

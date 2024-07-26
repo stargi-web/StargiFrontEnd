@@ -1,6 +1,6 @@
 <p-menubar [model]="items">
     <ng-template pTemplate="end">
-        <div class="flex align-items-center gap-2">
+        <div class="flex align-items-center gap-2" (click)="goToProfile()">
             <p>{{name}}</p>
         </div>
     </ng-template>

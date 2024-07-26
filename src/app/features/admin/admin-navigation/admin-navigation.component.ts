@@ -44,4 +44,7 @@ export class AdminNavigationComponent implements OnInit {
       
     ]
   }
+  goToProfile(){
+    this.router.navigate(['/admin/profile']);
+  }
 }
