@@ -12,8 +12,10 @@ import { UserService } from '../../../services/userService';
 })
 export class SupervisorNavigationComponent implements OnInit{
   items: MenuItem[] | undefined;
+  name?:string;
   constructor(private router:Router,private userService:UserService){}
   ngOnInit(): void {
+    this.name=String(sessionStorage.getItem('name'));
     const userId=Number(sessionStorage.getItem("userId"))
     this.userService.getLeadingTeamInfo(userId).subscribe(
       {
@@ -60,6 +62,7 @@ export class SupervisorNavigationComponent implements OnInit{
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('userId');
           sessionStorage.removeItem('teamId');
+          sessionStorage.removeItem('name');
           this.router.navigate(['/login'])
         }
       }

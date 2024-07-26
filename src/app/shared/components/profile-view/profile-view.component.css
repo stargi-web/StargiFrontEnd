@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user-details {
+    margin: 1rem 0;
+  }
+  
+  .password-change {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  p-card {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  

@@ -1,0 +1,20 @@
+<p-card>
+    <ng-template pTemplate="header">
+      <div class="header">
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+      </div>
+    </ng-template>
+    <div class="user-details">
+      <p><strong>Nombre de usuario:</strong> {{ user.userName }}</p>
+      <p><strong>Rol:</strong> {{ user.role }}</p>
+    </div>
+    <div class="password-change">
+      <p-password 
+        placeholder="Ingrese su nueva contraseña"
+        [(ngModel)]="password"></p-password>
+      <button pButton 
+        label="Change" 
+        icon="pi pi-check"
+        (click)="changePassword()" [disabled]="disable"></button>
+    </div>
+  </p-card>

@@ -12,8 +12,10 @@ import { MenubarModule } from 'primeng/menubar';
 })
 export class AdminNavigationComponent implements OnInit {
   items?:MenuItem[]
+  name?:string;
   constructor(private router:Router){}
   ngOnInit(): void {
+    this.name=String(sessionStorage.getItem('name'));
     this.items=[
       {
         label:'Usuarios',
@@ -35,6 +37,7 @@ export class AdminNavigationComponent implements OnInit {
         command:()=>{
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('userId');
+          sessionStorage.removeItem('name');
           this.router.navigate(['/login'])
         }
       }

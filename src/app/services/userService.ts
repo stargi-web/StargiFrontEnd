@@ -13,7 +13,12 @@ export class UserService{
     getUsers():Observable<any>{
         return this.httpClient.get(this.apiUrl);
     } 
-
+    getUserById(id:number):Observable<any>{
+        return this.httpClient.get(`${this.apiUrl}/${id}`);
+    }
+    changePassword(body:{userId:number,password:string}):Observable<any>{
+        return this.httpClient.patch(`${this.apiUrl}/password`,body);
+    }
     getUsersByTeamId(teamId:number):Observable<any>{
         return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
     }

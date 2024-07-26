@@ -10,9 +10,11 @@ import { MenubarModule } from 'primeng/menubar';
   styleUrl: './executive-navigation.component.css'
 })
 export class ExecutiveNavigationComponent implements OnInit{
+  name?:string;
   constructor(private router:Router){}
   items: MenuItem[] | undefined;
   ngOnInit(): void {
+    this.name=String(sessionStorage.getItem('name'));
     this.items=[
       {
         label:'Oportunidades',
@@ -34,10 +36,13 @@ export class ExecutiveNavigationComponent implements OnInit{
         command:()=>{
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('userId');
+          sessionStorage.removeItem('name');
           this.router.navigate(['/login'])
         }
       }
     ]
   }
-
+  goToProfile(){
+    this.router.navigate(['/executive/profile']);
+  }
 }

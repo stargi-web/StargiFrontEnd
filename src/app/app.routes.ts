@@ -13,6 +13,7 @@ import { SupervisorTeamMembersComponent } from './features/supervisor/supervisor
 import { SupervisorOpportunitiesComponent } from './features/supervisor/supervisor-opportunities/supervisor-opportunities.component';
 import { SupervisorCreateMemberComponent } from './features/supervisor/supervisor-create-member/supervisor-create-member.component';
 import { AdminViewTeamOpportunitiesComponent } from './features/admin/admin-view-team-opportunities/admin-view-team-opportunities.component';
+import { ProfileViewComponent } from './shared/components/profile-view/profile-view.component';
 
 export const routes: Routes = [
     {path:'',redirectTo:'/login',pathMatch:'full'},
@@ -28,6 +29,9 @@ export const routes: Routes = [
             {
                 path:'create-opportunity',
                 component:ExecutiveCreateOpportunityComponent
+            },
+            {
+                path:'profile',component:ProfileViewComponent
             }
         ]
     },
@@ -50,6 +54,9 @@ export const routes: Routes = [
             {
                 path:'team-opportunities/:teamId',
                 component:AdminViewTeamOpportunitiesComponent
+            },
+            {
+                path:'profile',component:ProfileViewComponent
             }
         ]
     },
@@ -76,6 +83,9 @@ export const routes: Routes = [
             {
                 path:'create-opportunity',
                 component:ExecutiveCreateOpportunityComponent
+            },
+            {
+                path:'profile',component:ProfileViewComponent
             }
 
         ]
