@@ -14,80 +14,50 @@ import { SupervisorOpportunitiesComponent } from './features/supervisor/supervis
 import { SupervisorCreateMemberComponent } from './features/supervisor/supervisor-create-member/supervisor-create-member.component';
 import { AdminViewTeamOpportunitiesComponent } from './features/admin/admin-view-team-opportunities/admin-view-team-opportunities.component';
 import { ProfileViewComponent } from './shared/components/profile-view/profile-view.component';
+import { roleGuard } from './core/guards/authGuard';
 
 export const routes: Routes = [
-    {path:'',redirectTo:'/login',pathMatch:'full'},
-    {path:'login',component:AuthComponent},
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: 'login', component: AuthComponent },
     {
-        path:'executive',
-        component:ExecutiveNavigationComponent,
-        children:[
-            {
-                path:'dashboard',
-                component:ExecutiveDashboardComponent
-            },
-            {
-                path:'create-opportunity',
-                component:ExecutiveCreateOpportunityComponent
-            },
-            {
-                path:'profile',component:ProfileViewComponent
-            }
+        path: 'executive',
+        component: ExecutiveNavigationComponent,
+        canActivate: [roleGuard],
+        data: { expectedRoles: ['executive', 'executivegpon'] },
+        children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Redirección por defecto
+            { path: 'dashboard', component: ExecutiveDashboardComponent },
+            { path: 'create-opportunity', component: ExecutiveCreateOpportunityComponent },
+            { path: 'profile', component: ProfileViewComponent }
         ]
     },
     {
-        path:'admin',
-        component:AdminNavigationComponent,
-        children:[
-            {
-                path:'users',
-                component:AdminUsersViewComponent
-            },
-            {
-                path:'users-opp/:userId',
-                component:AdminUserOppComponent
-            },
-            {
-                path:'teams-view',
-                component:AdminTeamsViewComponent
-            },
-            {
-                path:'team-opportunities/:teamId',
-                component:AdminViewTeamOpportunitiesComponent
-            },
-            {
-                path:'profile',component:ProfileViewComponent
-            }
+        path: 'admin',
+        component: AdminNavigationComponent,
+        canActivate: [roleGuard],
+        data: { expectedRoles: ['admin'] },
+        children: [
+            { path: '', redirectTo: 'users', pathMatch: 'full' }, // Redirección por defecto
+            { path: 'users', component: AdminUsersViewComponent },
+            { path: 'users-opp/:userId', component: AdminUserOppComponent },
+            { path: 'teams-view', component: AdminTeamsViewComponent },
+            { path: 'team-opportunities/:teamId', component: AdminViewTeamOpportunitiesComponent },
+            { path: 'profile', component: ProfileViewComponent }
         ]
     },
     {
-        path:'supervisor',
-        component:SupervisorNavigationComponent,
-        children:[
-            {
-                path:'team',
-                component:SupervisorTeamMembersComponent
-            },
-            {
-                path:'team-opportunities',
-                component:SupervisorTeamOpportunitiesComponent
-            },
-            {
-                path:'opportunities',
-                component:SupervisorOpportunitiesComponent
-            },
-            {
-                path:'create-user',
-                component:SupervisorCreateMemberComponent
-            },
-            {
-                path:'create-opportunity',
-                component:ExecutiveCreateOpportunityComponent
-            },
-            {
-                path:'profile',component:ProfileViewComponent
-            }
-
+        path: 'supervisor',
+        component: SupervisorNavigationComponent,
+        canActivate: [roleGuard],
+        data: { expectedRoles: ['supervisor'] },
+        children: [
+            { path: '', redirectTo: 'team', pathMatch: 'full' }, // Redirección por defecto
+            { path: 'team', component: SupervisorTeamMembersComponent },
+            { path: 'team-opportunities', component: SupervisorTeamOpportunitiesComponent },
+            { path: 'opportunities', component: SupervisorOpportunitiesComponent },
+            { path: 'create-user', component: SupervisorCreateMemberComponent },
+            { path: 'create-opportunity', component: ExecutiveCreateOpportunityComponent },
+            { path: 'profile', component: ProfileViewComponent }
         ]
     }
 ];

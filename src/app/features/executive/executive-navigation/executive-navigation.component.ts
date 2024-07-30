@@ -37,6 +37,7 @@ export class ExecutiveNavigationComponent implements OnInit{
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('userId');
           sessionStorage.removeItem('name');
+          sessionStorage.removeItem('role');
           this.router.navigate(['/login'])
         }
       }

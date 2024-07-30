@@ -65,6 +65,7 @@ export class SupervisorNavigationComponent implements OnInit{
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('userId');
           sessionStorage.removeItem('teamId');
+          sessionStorage.removeItem('role');
           sessionStorage.removeItem('name');
           this.router.navigate(['/login'])
         }
