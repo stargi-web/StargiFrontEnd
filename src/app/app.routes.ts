@@ -15,6 +15,7 @@ import { SupervisorCreateMemberComponent } from './features/supervisor/superviso
 import { AdminViewTeamOpportunitiesComponent } from './features/admin/admin-view-team-opportunities/admin-view-team-opportunities.component';
 import { ProfileViewComponent } from './shared/components/profile-view/profile-view.component';
 import { roleGuard } from './core/guards/authGuard';
+import { SupervisorCreateOppComponent } from './features/supervisor/supervisor-create-opp/supervisor-create-opp.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -56,7 +57,7 @@ export const routes: Routes = [
             { path: 'team-opportunities', component: SupervisorTeamOpportunitiesComponent },
             { path: 'opportunities', component: SupervisorOpportunitiesComponent },
             { path: 'create-user', component: SupervisorCreateMemberComponent },
-            { path: 'create-opportunity', component: ExecutiveCreateOpportunityComponent },
+            { path: 'create-opportunity', component: SupervisorCreateOppComponent },
             { path: 'profile', component: ProfileViewComponent }
         ]
     }

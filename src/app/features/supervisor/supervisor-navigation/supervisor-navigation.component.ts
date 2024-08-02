@@ -59,6 +59,13 @@ export class SupervisorNavigationComponent implements OnInit{
         }
       },
       {
+        label:'Registrar Oportunidad',
+        icon:'pi pi-plus-circle',
+        command:()=>{
+          this.router.navigate(['/supervisor/create-opportunity'])
+        }
+      },
+      {
         label:'Cerrar sesión',
         icon:'pi pi-sign-out',
         command:()=>{
