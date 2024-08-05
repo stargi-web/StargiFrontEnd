@@ -21,7 +21,7 @@ import { ConfirmDeleteOpportunityDialogComponent } from '../../../shared/compone
 })
 export class ExecutiveDashboardComponent implements OnInit {
 
-
+  urgentOpportunitiesCount: number = 0;
   opportunities!:OpportunityModel[];
   editingRowIndex: number | null = null;
   loading: boolean=true;
@@ -66,9 +66,26 @@ export class ExecutiveDashboardComponent implements OnInit {
                   opp.updatedAt=new Date(opp.updatedAt);
                   opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
                 })
+                this.calculateUrgentOpportunities();
             },error:error=>{console.error(error)}
         }
     )
+  }
+  calculateUrgentOpportunities() {
+    const today = new Date();
+    this.urgentOpportunitiesCount = this.opportunities.filter(opportunity => {
+      const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);
+      const timeDiff = estimatedClosingDate.getTime() - today.getTime();
+      const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return dayDiff <= 5;
+    }).length;
+  }
+  isUrgent(opportunity: OpportunityModel): boolean {
+    const today = new Date();
+    const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);
+    const timeDiff = estimatedClosingDate.getTime() - today.getTime();
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return dayDiff <= 5;
   }
   startEditing(rowIndex: number) {
     this.editingRowIndex = rowIndex;

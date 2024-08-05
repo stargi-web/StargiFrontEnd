@@ -109,7 +109,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
-        <tr>
+        <tr [ngClass]="{'urgent-row': isUrgent(opportunity)}">
             <td>
                 @if(editingRowIndex===rowIndex){
                     <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type)"></p-button>
@@ -208,3 +208,6 @@
     </ng-template>
 </p-table>
 
+<div class="floating-button" *ngIf="urgentOpportunitiesCount > 0">
+    <p-button icon="pi pi-exclamation-circle" label="{{urgentOpportunitiesCount}}" class="p-button-danger"></p-button>
+</div>
