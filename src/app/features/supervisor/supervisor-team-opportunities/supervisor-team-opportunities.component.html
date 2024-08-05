@@ -108,7 +108,7 @@
             </tr>
         </ng-template>
        <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
-            <tr>
+            <tr [ngClass]="{'urgent-row': isUrgent(opportunity)}">
                 <td>
                     {{opportunity.userAssigned}}
                 </td>
@@ -209,6 +209,9 @@
     
         </ng-template>
     </p-table>
+    <div class="floating-button" *ngIf="urgentOpportunitiesCount > 0">
+        <p-button icon="pi pi-exclamation-circle" label="{{urgentOpportunitiesCount}}" class="p-button-danger"></p-button>
+    </div>
 }
 @else {
     <p>No está asignado a ningún equipo</p>

@@ -48,6 +48,7 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
   ];
   constructor(public dialogService:DialogService,private opportunityService:OpportunityService){}
   ref:DynamicDialogRef|undefined;
+  urgentOpportunitiesCount: number = 0;
   ngOnInit(): void {
     this.teamId=Number(sessionStorage.getItem("teamId"));
     this.loadOpportunities();
@@ -61,6 +62,7 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
             
             this.opportunities=response;
             this.loading=false;
+            this.calculateUrgentOpportunities();
           },
           error:error=>{
             console.error(error);
@@ -68,6 +70,22 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
         }
       )
     }
+  }
+  calculateUrgentOpportunities() {
+    const today = new Date();
+    this.urgentOpportunitiesCount = this.opportunities.filter(opportunity => {
+      const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);
+      const timeDiff = estimatedClosingDate.getTime() - today.getTime();
+      const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return dayDiff <= 5;
+    }).length;
+  }
+  isUrgent(opportunity: OpportunityModel): boolean {
+    const today = new Date();
+    const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);
+    const timeDiff = estimatedClosingDate.getTime() - today.getTime();
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return dayDiff <= 5;
   }
   startEditing(rowIndex: number) {
     this.editingRowIndex = rowIndex;
