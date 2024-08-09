@@ -47,8 +47,14 @@
                 </th>
                 <th>
                     <div class="flex align-items-center" style="min-width:10rem">
+                        Unidades
+                        <p-columnFilter type="numeric" field="units" display="menu"/>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex align-items-center" style="min-width:10rem">
                         Monto
-                        <p-columnFilter type="numeric" field="type" display="menu"/>
+                        <p-columnFilter type="numeric" field="amount" display="menu"/>
                     </div>
                 </th>
                 <th>
@@ -73,6 +79,14 @@
                         Creación
                         <p-sortIcon field="createdAt"/>
                         <p-columnFilter type="date" field="createdAt" display="menu"/>
+                        
+                    </div>
+                </th>
+                <th >
+                    <div class="flex align-items-center" style="min-width:10rem">
+                        Modificado
+                        <p-sortIcon field="updatedAt"/>
+                        <p-columnFilter type="date" field="updatedAt" display="menu"/>
                         
                     </div>
                 </th>
@@ -114,7 +128,7 @@
                 </td>
                 <td>
                     @if(editingRowIndex===rowIndex){
-                        <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type)" ></p-button>
+                        <p-button label="Guardar" (onClick)="saveChanges(opportunity)" ></p-button>
                         <p-button label="Cancelar" (onClick)="cancelEditing()"></p-button>
                     }
                     @else{
@@ -123,13 +137,28 @@
                     }
                 </td>
                 <td (click)="openRecordsDialog(opportunity.id)">
-                    {{opportunity.ruc}}
+                    @if (editingRowIndex===rowIndex) {
+                        <input type="text" pInputText [(ngModel)]="opportunity.ruc"/>
+                    }
+                    @else {
+                        {{opportunity.ruc}}
+                    }
                 </td>
                 <td>
-                    {{opportunity.businessName}}
+                    @if (editingRowIndex===rowIndex) {
+                        <input type="text" pInputText [(ngModel)]="opportunity.businessName"/>
+                    }
+                    @else {
+                        {{opportunity.businessName}}
+                    }
                 </td>
                 <td>
-                    {{opportunity.SfaNumber}}
+                    @if (editingRowIndex===rowIndex) {
+                        <p-inputNumber [(ngModel)]="opportunity.SfaNumber"></p-inputNumber>
+                    }
+                    @else {
+                        {{opportunity.SfaNumber}}
+                    }
                 </td>
                 <td>
                     @if (editingRowIndex===rowIndex) {
@@ -138,7 +167,17 @@
                     @else {
                         {{opportunity.type}}
                     }
-                    
+                </td>
+                <td>
+                    @if(editingRowIndex===rowIndex){
+                        <p-inputNumber
+                            [(ngModel)]="opportunity.units"
+                            mode="decimal"
+                            [useGrouping]="false"/>
+                    }
+                    @else{
+                        {{opportunity.units}}
+                    }
                 </td>
                 <td>
                     @if(editingRowIndex===rowIndex){
@@ -153,21 +192,33 @@
                 </td>
                 <td>
                     @if(editingRowIndex===rowIndex){
-                        <p-dropdown [(ngModel)]="opportunity.product"[options]="products"></p-dropdown>
+                        <p-dropdown [(ngModel)]="opportunity.product" [options]="products"></p-dropdown>
                     }
                     @else {
                         {{opportunity.product}}
                     }
-                    
                 </td>
                 <td>
-                    {{opportunity.productType}}
+                    @if (editingRowIndex===rowIndex) {
+                        <p-dropdown [(ngModel)]="opportunity.productType" [options]="productTypes"></p-dropdown>
+                    }
+                    @else {
+                        {{opportunity.productType}}
+                    }
                 </td>
                 <td>
-                    {{opportunity.otherDetails}}
+                    @if (editingRowIndex===rowIndex) {
+                        <textarea pInputTextarea [(ngModel)]="opportunity.otherDetails"></textarea>
+                    }
+                    @else {
+                        {{opportunity.otherDetails}}
+                    }
                 </td>
                 <td>
                     {{opportunity.createdAt|date:'dd/MM/yyyy'}}
+                </td>
+                <td>
+                    {{opportunity.updatedAt|date:'dd/MM/yyyy'}}
                 </td>
                 <td>
                     @if(editingRowIndex===rowIndex){
@@ -178,7 +229,12 @@
                     }
                 </td>
                 <td>
-                    {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
+                    @if (editingRowIndex===rowIndex) {
+                        <p-calendar [(ngModel)]="opportunity.estimatedClosingDate" dateFormat="dd/mm/yy"/>
+                    }
+                    @else {
+                        {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
+                    }
                 </td>
                 <td>
                     @if(editingRowIndex===rowIndex){
@@ -190,7 +246,7 @@
                 </td>
                 <td>
                     @if (editingRowIndex===rowIndex){
-                        <textarea pInputTextarea [(ngModel)]="opportunity.contactName"></textarea>
+                        <input type="text" pInputText [(ngModel)]="opportunity.contactName"/>
                     }
                     @else {
                         {{opportunity.contactName}}
@@ -198,7 +254,7 @@
                 </td>
                 <td>
                     @if (editingRowIndex===rowIndex){
-                        <textarea pInputTextarea [(ngModel)]="opportunity.contactNumber"></textarea>
+                        <input type="text" pInputText [(ngModel)]="opportunity.contactNumber"/>
                     }
                     @else {
                         {{opportunity.contactNumber}}

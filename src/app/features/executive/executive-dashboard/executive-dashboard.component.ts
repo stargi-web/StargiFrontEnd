@@ -11,11 +11,14 @@ import { ExecutiveEditOpportunityComponent } from "../executive-edit-opportunity
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ExecutiveRecordsOppDialogComponent } from '../executive-records-opp-dialog/executive-records-opp-dialog.component';
 import { ConfirmDeleteOpportunityDialogComponent } from '../../../shared/components/confirm-delete-opportunity-dialog/confirm-delete-opportunity-dialog.component';
+import { InputText, InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
+import { opportunityTypes, products, productTypes, states } from '../../../shared/const/constantes';
 @Component({
   selector: 'app-executive-dashboard',
   providers:[DialogService],
   standalone: true,
-  imports: [InputNumberModule,TableModule, DropdownModule, FormsModule, CommonModule, ButtonModule, ExecutiveEditOpportunityComponent],
+  imports: [CalendarModule,InputNumberModule,TableModule, DropdownModule, FormsModule, CommonModule, ButtonModule, ExecutiveEditOpportunityComponent,InputTextModule],
   templateUrl: './executive-dashboard.component.html',
   styleUrl: './executive-dashboard.component.css'
 })
@@ -25,29 +28,10 @@ export class ExecutiveDashboardComponent implements OnInit {
   opportunities!:OpportunityModel[];
   editingRowIndex: number | null = null;
   loading: boolean=true;
-  products = [
-    { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
-    { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
-    { label: 'DBI-GPON', value: 'DBI-GPON' },
-    { label: 'Nube Pública', value: 'Nube Pública' },
-    { label: 'Antivirus', value: 'Antivirus' },
-    { label: 'Cloud Backup', value: 'Cloud Backup' },
-    { label: 'Central telefónica', value: 'Central telefónica' },
-    { label: 'Otros', value: 'Otros' }
-  ];
-  states = [
-    { label: 'Potenciales', value: 'Potenciales' },
-    { label: 'Prospecto', value: 'Prospecto' },
-    { label: 'Prospecto calificado', value: 'Prospecto calificado' },
-    { label: 'Prospecto desarrollado', value: 'Prospecto desarrollado' },
-    { label: 'Cierre', value: 'Cierre' },
-    { label: 'No cierre', value: 'No cierre' }
-  ];
-  opportunityTypes = [
-    { label: 'Básico', value: 'Básico' },
-    { label: 'Estandar', value: 'Estandar' },
-    { label: 'No estandar', value: 'No estandar' }
-  ];
+  opportunityTypes = opportunityTypes;
+  productTypes=productTypes;
+  products=products;
+  states = states;
   constructor(public dialogService:DialogService,private opportunityService:OpportunityService){}
   ref:DynamicDialogRef|undefined;
   ngOnInit(): void {
@@ -91,18 +75,39 @@ export class ExecutiveDashboardComponent implements OnInit {
     this.editingRowIndex = rowIndex;
   }
 
-  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string) {
-    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type}).subscribe(
+  saveChanges(opportunity: OpportunityModel) {
+    const editCommand: any = {
+      oppId: opportunity.id!,
+      ruc: opportunity.ruc.toString(),
+      businessName: opportunity.businessName,
+      sfaNumber: opportunity.SfaNumber,
+      oppSfaDateCreation: opportunity.oppSfaDateCreation,
+      type: opportunity.type,
+      product: opportunity.product,
+      productType:opportunity.productType,
+      otherDetails: opportunity.otherDetails,
+      amount: opportunity.amount!,
+      newClosingDate: opportunity.estimatedClosingDate,
+      newUnits: opportunity.units,  // Puedes ajustar este valor según sea necesario
+      newState: opportunity.state,
+      newCommentary: opportunity.commentary,
+      contactName: opportunity.contactName || '',
+      contactNumber: opportunity.contactNumber || '',
+    };
+  
+    this.opportunityService.editOpportunity(editCommand).subscribe(
       {
-        next:response=>{
+        next: response => {
           alert(`${response.message}`);
-          this.editingRowIndex=null;
+          this.editingRowIndex = null;
+          this.loadOpportunities();  // Recargar la lista de oportunidades
         },
-        error:error=>{console.error(error);this.editingRowIndex = null;}
-        
+        error: error => {
+          console.error(error);
+          this.editingRowIndex = null;
+        }
       }
     );
-    
   }
 
   cancelEditing() {
@@ -131,13 +136,17 @@ export class ExecutiveDashboardComponent implements OnInit {
     })
   }
   openRecordsDialog(oppId:number){
-    const config={
-      data:{
-        oppId
-      },
-      Headers:'Historial de cambios',
-      with:'60vw',
+    if(this.editingRowIndex==null){
+
+      const config={
+        data:{
+          oppId
+        },
+        Headers:'Historial de cambios',
+        with:'60vw',
+      }
+      this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
     }
-    this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
+    
   }
 }

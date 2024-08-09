@@ -44,7 +44,23 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     {label:'Fibra Plus',value:'Fibra Plus'},
     {label:'Otros',value:'Otros'}
   ]
-  products! : any[];
+  products=[
+    { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
+    { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
+    { label:'DBI-Fija',value:'DBI-Fija'},
+    { label: 'DBI-GPON', value: 'DBI-GPON' },
+    { label: 'Nube Pública', value: 'Nube Pública' },
+    { label: 'Antivirus', value: 'Antivirus' },
+    { label: 'Cloud Backup', value: 'Cloud Backup' },
+    { label: 'Central telefónica', value: 'Central telefónica' },
+    {label:'Venta',value:'Venta'},
+    {label:'Portabilidad',value:'Portabilidad'},
+    {label:'GPON',value:'GPON'},
+    {label:'DBI',value:'DBI'},
+    {label:'SVA',value:'SVA'},
+    {label:'Móvil',value:'Móvil'},
+    { label: 'Otros', value: 'Otros' }
+  ];
   states = [
     
     { label: 'Potenciales', value: 'Potenciales' },
@@ -82,23 +98,6 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     }));
   }
   ngOnInit(): void {
-      this.products=[
-        { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
-        { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
-        { label:'DBI-Fija',value:'DBI-Fija'},
-        { label: 'DBI-GPON', value: 'DBI-GPON' },
-        { label: 'Nube Pública', value: 'Nube Pública' },
-        { label: 'Antivirus', value: 'Antivirus' },
-        { label: 'Cloud Backup', value: 'Cloud Backup' },
-        { label: 'Central telefónica', value: 'Central telefónica' },
-        {label:'Venta',value:'Venta'},
-        {label:'Portabilidad',value:'Portabilidad'},
-        {label:'GPON',value:'GPON'},
-        {label:'DBI',value:'DBI'},
-        {label:'SVA',value:'SVA'},
-        {label:'Móvil',value:'Móvil'},
-        { label: 'Otros', value: 'Otros' }
-      ];
   }
   onSubmit() {
     if (this.opportunityForm.valid) {

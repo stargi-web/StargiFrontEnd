@@ -2,10 +2,11 @@ export interface OpportunityModel{
     id?:number,
     ruc:number,
     businessName:string,
-    sfaNumber:number,
+    SfaNumber:number,
     oppSfaDateCreation:Date|string,
     type:string,
     product:string,
+    productType:string,
     otherDetails:string,
     createdAt:Date|string,
     updatedAt:Date|string
@@ -16,4 +17,5 @@ export interface OpportunityModel{
     contactNumber?:string,
     userAssigned?:string,
     amount?:number
+    units:number
 }

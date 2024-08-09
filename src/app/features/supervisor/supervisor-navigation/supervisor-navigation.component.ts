@@ -38,31 +38,46 @@ export class SupervisorNavigationComponent implements OnInit{
         }
       },
       {
-        label:'Oportunidades del equipo',
+        label:'Oportunidades',
         icon:'pi pi-folder',
-        command:()=>{
-          this.router.navigate(['/supervisor/team-opportunities'])
-        }
+        items:[
+          {
+            label:'Oportunidades del equipo',
+            icon:'pi pi-folder',
+            command:()=>{
+              this.router.navigate(['/supervisor/team-opportunities'])
+            }
+          },
+          {
+            label:'Mis oportunidades',
+            icon:'pi pi-file',
+            command:()=>{
+              this.router.navigate(['/supervisor/opportunities'])
+            }
+          },
+          {
+            label:'Registrar Oportunidad',
+            icon:'pi pi-plus-circle',
+            command:()=>{
+              this.router.navigate(['/supervisor/create-opportunity'])
+            }
+          },
+        ]
       },
-      {
-        label:'Mis oportunidades',
-        icon:'pi pi-file',
-        command:()=>{
-          this.router.navigate(['/supervisor/opportunities'])
-        }
-      },
+      
       {
         label:'Crear usuario',
-        icon:'pi pi-file',
+        icon:'pi pi-user-plus',
         command:()=>{
           this.router.navigate(['/supervisor/create-user'])
         }
       },
+      
       {
-        label:'Registrar Oportunidad',
+        label:'Bases',
         icon:'pi pi-plus-circle',
         command:()=>{
-          this.router.navigate(['/supervisor/create-opportunity'])
+          this.router.navigate(['/supervisor/bases'])
         }
       },
       {
