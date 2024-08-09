@@ -1,14 +1,19 @@
-<div class="card"></div>
 <p-table
     [value]="opportunities"
+    [rows]="10"
+    [rowsPerPageOptions]="[10,15,20]"
     [loading]="loading"
     [paginator]="true"
-    [rows]="10"
     sortField="createdAt"
     [sortOrder]="-1"
     [scrollable]="true" scrollHeight="80vh">
     <ng-template pTemplate="header">
         <tr>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Acción                   
+                </div>
+            </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Ruc
@@ -35,6 +40,18 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Unidades
+                    <p-columnFilter type="numeric" field="units" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Monto
+                    <p-columnFilter type="numeric" field="amount" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Producto
                     <p-columnFilter type="text" field="product" display="menu"/>
                 </div>
@@ -47,7 +64,7 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
-                    Detalles Producto
+                    Detalles producto
                 </div>
             </th>
             <th pSortableColumn="createdAt">
@@ -55,7 +72,6 @@
                     Creación
                     <p-sortIcon field="createdAt"/>
                     <p-columnFilter type="date" field="createdAt" display="menu"/>
-                    
                 </div>
             </th>
             <th>
@@ -63,7 +79,6 @@
                     Modificado
                     <p-sortIcon field="updatedAt"/>
                     <p-columnFilter type="date" field="updatedAt" display="menu"/>
-                    
                 </div>
             </th>
             <th>
@@ -97,28 +112,95 @@
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-opportunity>
-        <tr>
+    <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
+        <tr [ngClass]="{'urgent-row': isUrgent(opportunity)}">
+            <td>
+                @if(editingRowIndex===rowIndex){
+                    <p-button label="Guardar" (onClick)="saveChanges(opportunity)"></p-button>
+                    <p-button label="Cancelar" (onClick)="cancelEditing()"></p-button>
+                }
+                @else{
+                    <p-button icon="pi pi-cog" [rounded]="true" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" (onClick)="deleteOpportunity(opportunity.businessName,opportunity.id)"/>
+                }
+            </td>
             <td (click)="openRecordsDialog(opportunity.id)">
-                {{opportunity.ruc}}
+                @if (editingRowIndex===rowIndex) {
+                    <input type="text" pInputText [(ngModel)]="opportunity.ruc"/>
+                }
+                @else {
+                    {{opportunity.ruc}}
+                }
             </td>
             <td>
-                {{opportunity.businessName}}
+                @if (editingRowIndex===rowIndex) {
+                    <input type="text" pInputText [(ngModel)]="opportunity.businessName"/>
+                }
+                @else {
+                    {{opportunity.businessName}}
+                }
             </td>
             <td>
-                {{opportunity.SfaNumber}}
+                @if (editingRowIndex===rowIndex) {
+                    <p-inputNumber [(ngModel)]="opportunity.SfaNumber"/>
+                }
+                @else {
+                    {{opportunity.SfaNumber}}
+                }
             </td>
             <td>
-                {{opportunity.type}}
+                @if (editingRowIndex===rowIndex) {
+                    <p-dropdown [(ngModel)]="opportunity.type" [options]="opportunityTypes"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.type}}
+                }
             </td>
             <td>
-                {{opportunity.product}}
+                @if(editingRowIndex===rowIndex){
+                    <p-inputNumber
+                        [(ngModel)]="opportunity.units"
+                        mode="decimal"
+                        [useGrouping]="false"/>
+                }
+                @else{
+                    {{opportunity.units}}
+                }
             </td>
             <td>
-                {{opportunity.productType}}
+                @if(editingRowIndex===rowIndex){
+                    <p-inputNumber
+                        [(ngModel)]="opportunity.amount"
+                        mode="decimal"
+                        [useGrouping]="false"/>
+                }
+                @else{
+                    {{opportunity.amount}}
+                }
             </td>
             <td>
-                {{opportunity.otherDetails}}
+                @if(editingRowIndex===rowIndex){
+                    <p-dropdown [(ngModel)]="opportunity.product" [options]="products"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.product}}
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex) {
+                    <p-dropdown [(ngModel)]="opportunity.productType" [options]="productTypes"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.productType}}
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex) {
+                    <textarea pInputTextarea [(ngModel)]="opportunity.otherDetails"></textarea>
+                }
+                @else {
+                    {{opportunity.otherDetails}}
+                }
             </td>
             <td>
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
@@ -127,22 +209,49 @@
                 {{opportunity.updatedAt|date:'dd/MM/yyyy'}}
             </td>
             <td>
-                {{opportunity.state}}
+                @if(editingRowIndex===rowIndex){
+                    <p-dropdown [(ngModel)]="opportunity.state" [options]="states"></p-dropdown>
+                }
+                @else {
+                    {{opportunity.state}}
+                }
             </td>
             <td>
-                {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
+                @if (editingRowIndex===rowIndex) {
+                    <p-calendar [(ngModel)]="opportunity.estimatedClosingDate" dateFormat="dd/mm/yy"></p-calendar>
+                }
+                @else {
+                    {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}
+                }
             </td>
             <td>
-                {{opportunity.commentary}}
+                @if(editingRowIndex===rowIndex){
+                    <textarea pInputTextarea [(ngModel)]="opportunity.commentary"></textarea>
+                }
+                @else {
+                    {{opportunity.commentary}}
+                }
             </td>
             <td>
-                {{opportunity.contactName}}
+                @if (editingRowIndex===rowIndex){
+                    <input type="text" pInputText [(ngModel)]="opportunity.contactName"/>
+                }
+                @else {
+                    {{opportunity.contactName}}
+                }
             </td>
             <td>
-                {{opportunity.contactNumber}}
+                @if (editingRowIndex===rowIndex){
+                    <input type="text" pInputText [(ngModel)]="opportunity.contactNumber"/>
+                }
+                @else {
+                    {{opportunity.contactNumber}}
+                }
             </td>
-            
         </tr>
-
     </ng-template>
 </p-table>
+
+<div class="floating-button" *ngIf="urgentOpportunitiesCount > 0">
+    <p-button icon="pi pi-exclamation-circle" label="{{urgentOpportunitiesCount}}" class="p-button-danger"></p-button>
+</div>

@@ -9,4 +9,8 @@ p-menubar {
     position: relative;
     z-index: 1000; /* Un número alto para asegurarte de que esté por encima de otros elementos */
   }
+.p-dropdown-panel,
+.p-calendar-panel {
+  z-index: 9999 !important;
+}
   
