@@ -17,6 +17,8 @@ import { ProfileViewComponent } from './shared/components/profile-view/profile-v
 import { roleGuard } from './core/guards/authGuard';
 import { SupervisorCreateOppComponent } from './features/supervisor/supervisor-create-opp/supervisor-create-opp.component';
 import { SupervisorViewBasesComponent } from './features/supervisor/supervisor-view-bases/supervisor-view-bases.component';
+import { AdminViewBasesComponent } from './features/admin/admin-view-bases/admin-view-bases.component';
+import { AdminBaseDetailsComponent } from './features/admin/admin-base-details/admin-base-details.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -44,7 +46,9 @@ export const routes: Routes = [
             { path: 'users-opp/:userId', component: AdminUserOppComponent },
             { path: 'teams-view', component: AdminTeamsViewComponent },
             { path: 'team-opportunities/:teamId', component: AdminViewTeamOpportunitiesComponent },
-            { path: 'profile', component: ProfileViewComponent }
+            { path: 'profile', component: ProfileViewComponent },
+            {path:'bases',component:AdminViewBasesComponent},
+            {path:'base-detail/:id',component:AdminBaseDetailsComponent}
         ]
     },
     {

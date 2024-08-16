@@ -15,4 +15,7 @@ export class ClientCollectionService{
     createCollection(userId:number,name:string){
         return this.httpClient.post<any>(`${this.apiUrl}`,{userId,name});
     }
+    getAllCollections(){
+        return this.httpClient.get<any>(`${this.apiUrl}`);
+    }
 }

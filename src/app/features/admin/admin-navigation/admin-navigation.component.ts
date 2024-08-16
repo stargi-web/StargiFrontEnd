@@ -32,6 +32,13 @@ export class AdminNavigationComponent implements OnInit {
         }
       },
       {
+        label:'Bases',
+        icon:'pi pi-users',
+        command:()=>{
+          this.router.navigate(['/admin/bases']);
+        }
+      },
+      {
         label:'Cerrar sesión',
         icon:'pi pi-sign-out',
         command:()=>{

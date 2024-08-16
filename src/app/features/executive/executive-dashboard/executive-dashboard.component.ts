@@ -88,7 +88,7 @@ export class ExecutiveDashboardComponent implements OnInit {
       otherDetails: opportunity.otherDetails,
       amount: opportunity.amount!,
       newClosingDate: opportunity.estimatedClosingDate,
-      newUnits: opportunity.units,  // Puedes ajustar este valor según sea necesario
+      newUnits: opportunity.units, 
       newState: opportunity.state,
       newCommentary: opportunity.commentary,
       contactName: opportunity.contactName || '',
@@ -100,7 +100,7 @@ export class ExecutiveDashboardComponent implements OnInit {
         next: response => {
           alert(`${response.message}`);
           this.editingRowIndex = null;
-          this.loadOpportunities();  // Recargar la lista de oportunidades
+          this.loadOpportunities();  
         },
         error: error => {
           console.error(error);
