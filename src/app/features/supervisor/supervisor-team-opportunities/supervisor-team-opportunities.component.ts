@@ -22,6 +22,8 @@ import { CalendarModule } from 'primeng/calendar';
   styleUrl: './supervisor-team-opportunities.component.css'
 })
 export class SupervisorTeamOpportunitiesComponent implements OnInit{
+  private readonly NEAR_CLOSING_DAYS = 7;
+
   opportunities!:OpportunityModel[];
   teamId!:number
   editingRowIndex: number | null = null;
@@ -62,6 +64,16 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
         }
       )
     }
+  }
+  isNearClosingDate(opportunity: OpportunityModel): boolean {
+    const today = new Date(); // Fecha actual
+    const closingDate = new Date(opportunity.estimatedClosingDate); 
+
+    
+    const diffInTime = closingDate.getTime() - today.getTime();
+    const diffInDays = Math.ceil(diffInTime / (1000 * 3600 * 24)); 
+
+    return diffInDays <= this.NEAR_CLOSING_DAYS;
   }
   calculateUrgentOpportunities() {
     const today = new Date();

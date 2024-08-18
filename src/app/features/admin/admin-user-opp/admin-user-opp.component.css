@@ -20,4 +20,10 @@
   .status-count {
     font-size: 1.2rem;
   }
-  
+  .urgent-row {
+    background-color: rgba(255, 255, 0, 0.245); 
+}
+
+.no-close-row {
+    background-color: rgba(255, 0, 0, 0.2); 
+}

@@ -125,7 +125,10 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
-        <tr [ngClass]="{'urgent-row': isUrgent(opportunity)}">
+        <tr [ngClass]="{
+            'urgent-row': isNearClosingDate(opportunity) && opportunity.state !== 'No cierre',
+            'no-close-row': opportunity.state === 'No cierre' 
+        }">
             <td>
                 @if(editingRowIndex===rowIndex){
                     <p-button label="Guardar" (onClick)="saveChanges(opportunity)"></p-button>

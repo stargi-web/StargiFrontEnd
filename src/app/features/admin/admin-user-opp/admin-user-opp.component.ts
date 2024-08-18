@@ -26,6 +26,8 @@ export class AdminUserOppComponent implements OnInit{
   editingRowIndex: number | null = null;
   urgentOpportunitiesCount: number = 0;
   sort=-1
+  private readonly NEAR_CLOSING_DAYS = 7;
+
   opportunities!:OpportunityModel[];
   loading=true;
   userId?:number;
@@ -56,6 +58,16 @@ export class AdminUserOppComponent implements OnInit{
         this.loading=false;
       },error:error=>console.error(error)
     })
+  }
+  isNearClosingDate(opportunity: OpportunityModel): boolean {
+    const today = new Date(); // Fecha actual
+    const closingDate = new Date(opportunity.estimatedClosingDate); 
+
+    
+    const diffInTime = closingDate.getTime() - today.getTime();
+    const diffInDays = Math.ceil(diffInTime / (1000 * 3600 * 24)); 
+
+    return diffInDays <= this.NEAR_CLOSING_DAYS;
   }
   calculateOpportunityStateSummary() {
     const stateCounts ={

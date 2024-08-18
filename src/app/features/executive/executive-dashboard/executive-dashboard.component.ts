@@ -23,7 +23,7 @@ import { opportunityTypes, products, productTypes, states } from '../../../share
   styleUrl: './executive-dashboard.component.css'
 })
 export class ExecutiveDashboardComponent implements OnInit {
-
+  private readonly NEAR_CLOSING_DAYS = 7;
   urgentOpportunitiesCount: number = 0;
   opportunities!:OpportunityModel[];
   editingRowIndex: number | null = null;
@@ -54,6 +54,16 @@ export class ExecutiveDashboardComponent implements OnInit {
             },error:error=>{console.error(error)}
         }
     )
+  }
+  isNearClosingDate(opportunity: OpportunityModel): boolean {
+    const today = new Date(); // Fecha actual
+    const closingDate = new Date(opportunity.estimatedClosingDate); 
+
+    
+    const diffInTime = closingDate.getTime() - today.getTime();
+    const diffInDays = Math.ceil(diffInTime / (1000 * 3600 * 24)); 
+
+    return diffInDays <= this.NEAR_CLOSING_DAYS;
   }
   calculateUrgentOpportunities() {
     const today = new Date();
