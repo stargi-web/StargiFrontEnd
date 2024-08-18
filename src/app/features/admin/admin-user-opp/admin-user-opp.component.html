@@ -7,6 +7,18 @@
     sortField="createdAt"
     [sortOrder]="-1"
     [scrollable]="true" scrollHeight="80vh">
+    <ng-template pTemplate="caption">
+        <div class="status-summary">
+          <div class="status-item" *ngFor="let status of opportunityStateSummary">
+            <div class="status-sigla">{{ status.sigla }}</div>
+            <div class="status-count">{{ status.count }}</div>
+          </div>
+          <div class="status-item">
+            <div class="status-sigla">Total</div>
+            <div class="status-count">{{ totalOpportunities }}</div>
+          </div>
+        </div>
+      </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th>

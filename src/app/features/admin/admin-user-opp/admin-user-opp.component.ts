@@ -33,6 +33,8 @@ export class AdminUserOppComponent implements OnInit{
   products=products;
   productTypes=productTypes;
   states=states;
+  opportunityStateSummary: { sigla: string, count: number }[] = [];
+  totalOpportunities = 0;
   constructor(public dialogService:DialogService,private route:ActivatedRoute,private opportunityService:OpportunityService,private oppRecordService:OpportunityRecordService){}
   ref:DynamicDialogRef|undefined;
   ngOnInit(): void {
@@ -50,11 +52,39 @@ export class AdminUserOppComponent implements OnInit{
           opp.updatedAt=new Date(opp.updatedAt);
           opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
         })
+        this.calculateOpportunityStateSummary();
         this.loading=false;
       },error:error=>console.error(error)
     })
   }
+  calculateOpportunityStateSummary() {
+    const stateCounts ={
+      "No contactado":0,
+      "Potenciales":0,
+      "Prospecto":0,
+      "Prospecto calificado":0,
+      "Prospecto desarrollado":0,
+      "Cierre":0,
+      "No cierre":0
+    };
 
+    this.opportunities.forEach(opportunity => {
+      stateCounts[opportunity.state as keyof typeof stateCounts]++;
+    });
+
+    this.opportunityStateSummary = [
+      { sigla: 'NC', count: stateCounts['No contactado'] },
+      { sigla: 'PO', count: stateCounts.Potenciales },
+      { sigla: 'PR', count: stateCounts.Prospecto },
+      { sigla: 'PC', count: stateCounts['Prospecto calificado'] },
+      { sigla: 'PD', count: stateCounts['Prospecto desarrollado'] },
+      { sigla: 'C', count: stateCounts.Cierre },
+      { sigla: 'NoC', count: stateCounts['No cierre'] }
+    ];
+
+    this.totalOpportunities = this.opportunities.length;
+  }
+  
   calculateUrgentOpportunities() {
     const today = new Date();
     this.urgentOpportunitiesCount = this.opportunities.filter(opportunity => {
