@@ -1,0 +1,9 @@
+<div class="card-container">
+    @for (collection of collections; track $index) {
+        <div class="card" (click)="viewBaseClientsAssigned(collection.id)">
+            <h3>{{ collection.name }}</h3>
+            <p>ID: {{ collection.id }}</p>
+          </div>
+    }
+
+</div>

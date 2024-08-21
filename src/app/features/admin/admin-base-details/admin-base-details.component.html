@@ -4,6 +4,38 @@
         [loading]="loading"
         [paginator]="true"
         [scrollable]="true" scrollHeight="80vh">
+
+        <ng-template pTemplate="caption">
+            <div class="caption-container">
+                <button pButton type="button" icon="pi pi-cog" class="p-button-rounded p-button-secondary"
+                        (click)="toggleEditMode()" [disabled]="editMode"></button>
+    
+                <button pButton type="button" icon="pi pi-check" class="p-button-rounded p-button-success"
+                        [disabled]="!editMode" (click)="assignClients()" style="margin-left: 10px;"></button>
+    
+                <button pButton type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"
+                        [disabled]="!editMode" (click)="cancelEditMode()" style="margin-left: 10px;"></button>
+    
+                        <p-multiSelect 
+                        [options]="groupedUsers" 
+                        [group]="true" 
+                        [(ngModel)]="selectedUsers" 
+                        placeholder="Seleccione los usuarios" 
+                        scrollHeight="250px" 
+                        [disabled]="!editMode">
+                            <ng-template let-group pTemplate="group">
+                                <div class="flex align-items-center">
+                                    
+                                    <span>{{ group.label }}</span>
+                                </div>
+                            </ng-template>
+                    </p-multiSelect>
+    
+                <p-inputNumber [(ngModel)]="clientCount" [min]="1" [max]="clients?.length"
+                               [disabled]="!editMode" placeholder="Cantidad de clientes" >
+                </p-inputNumber>
+            </div>
+        </ng-template>
     <ng-template pTemplate="header">
       <tr>
         @for (col of cols; track $index) {

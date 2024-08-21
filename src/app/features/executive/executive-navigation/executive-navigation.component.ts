@@ -31,6 +31,15 @@ export class ExecutiveNavigationComponent implements OnInit{
         }
       },
       {
+        label:'Bases',
+        icon:'pi pi-book',
+        command:()=>{
+          this.router.navigate(['/executive/bases'])
+        }
+      },
+      
+      
+      {
         label:'Cerrar sesión',
         icon:'pi pi-sign-out',
         command:()=>{

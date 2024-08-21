@@ -19,6 +19,8 @@ import { SupervisorCreateOppComponent } from './features/supervisor/supervisor-c
 import { SupervisorViewBasesComponent } from './features/supervisor/supervisor-view-bases/supervisor-view-bases.component';
 import { AdminViewBasesComponent } from './features/admin/admin-view-bases/admin-view-bases.component';
 import { AdminBaseDetailsComponent } from './features/admin/admin-base-details/admin-base-details.component';
+import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
+import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -32,7 +34,9 @@ export const routes: Routes = [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Redirección por defecto
             { path: 'dashboard', component: ExecutiveDashboardComponent },
             { path: 'create-opportunity', component: ExecutiveCreateOpportunityComponent },
-            { path: 'profile', component: ProfileViewComponent }
+            { path: 'profile', component: ProfileViewComponent },
+            {path:'bases',component:ViewAssignedCollectionsComponent},
+            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent}
         ]
     },
     {
@@ -64,7 +68,8 @@ export const routes: Routes = [
             { path: 'create-user', component: SupervisorCreateMemberComponent },
             { path: 'create-opportunity', component: SupervisorCreateOppComponent },
             { path: 'profile', component: ProfileViewComponent },
-            {path:'bases',component:SupervisorViewBasesComponent}
+            {path:'bases',component:ViewAssignedCollectionsComponent},
+            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent}
         ]
     }
 ];

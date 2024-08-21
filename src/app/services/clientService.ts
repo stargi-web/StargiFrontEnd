@@ -26,4 +26,7 @@ export class ClientService{
 
         return this.httpClient.post(`${this.apiUrl}`, formData, { headers });
     }
+    assingClientsToUsers(body:any){
+        return this.httpClient.patch<any>(`${this.apiUrl}/assignClientsToUsers`,body);
+    }
 }

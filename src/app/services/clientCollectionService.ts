@@ -18,4 +18,7 @@ export class ClientCollectionService{
     getAllCollections(){
         return this.httpClient.get<any>(`${this.apiUrl}`);
     }
+    getCollectionsByAssignedUser(userId:number){
+        return this.httpClient.get<any>(`${this.apiUrl}/collections-by-user/${userId}`);
+    }
 }
