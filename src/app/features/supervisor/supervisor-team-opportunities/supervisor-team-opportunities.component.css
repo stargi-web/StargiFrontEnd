@@ -10,3 +10,32 @@
 .no-close-row {
     background-color: rgba(255, 0, 0, 0.2); 
 }
+.overdue-yellow {
+    background-color: rgba(255, 255, 0, 0.245);
+  }
+  
+  .overdue-red {
+    background-color: rgba(255, 0, 0, 0.195);
+  }
+  .status-summary {
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+  }
+  
+  .status-item {
+    text-align: center;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+  }
+  
+  .status-sigla {
+    font-weight: bold;
+  }
+  
+  .status-count {
+    font-size: 1.2rem;
+  }

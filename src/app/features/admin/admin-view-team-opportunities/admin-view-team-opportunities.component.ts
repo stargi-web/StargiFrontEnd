@@ -38,6 +38,20 @@ loading=true;
       }
     )
   }
+  getRowClass(opportunity: any): string {
+    const creationDate = new Date(opportunity.oppSfaDateCreation);
+    const today = new Date();
+    const diffInTime = today.getTime() - creationDate.getTime();
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+    if (diffInDays > 28) {
+        return 'overdue-red';
+    } else if (diffInDays > 25) {
+        return 'overdue-yellow';
+    } else {
+        return '';
+    }
+}
   openRecordsDialog(oppId: number) {
     const config={
       data:{

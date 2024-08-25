@@ -35,6 +35,9 @@ export class OpportunityService{
     deleteOpportunity(oppId:number):Observable<any>{
         return this.httpClient.delete(`${this.apiUrl}/${oppId}`);
     }
+    changeUser(body:{userId:number,opportunityId:number}):Observable<any>{
+        return this.httpClient.patch(`${this.apiUrl}/change-user`,body);
+    }
     private handleError(error:HttpErrorResponse){
         if(error.status===0){
           console.error('Se ha producio un error ', error.error);

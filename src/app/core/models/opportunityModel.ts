@@ -9,7 +9,8 @@ export interface OpportunityModel{
     productType:string,
     otherDetails:string,
     createdAt:Date|string,
-    updatedAt:Date|string
+    updatedAt:Date|string,
+    nextInteraction:Date|string|null,
     state:string,
     estimatedClosingDate:Date|string,
     commentary:string,

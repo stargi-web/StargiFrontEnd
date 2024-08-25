@@ -14,20 +14,25 @@ import { FormsModule } from '@angular/forms';
 import { opportunityTypes, products, productTypes, states } from '../../../shared/const/constantes';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
+import { UserService } from '../../../services/userService';
+import { SelectItemGroup } from 'primeng/api';
+import { MultiSelectModule } from 'primeng/multiselect';
 @Component({
   selector: 'app-admin-user-opp',
   providers:[DialogService],
   standalone: true,
-  imports: [InputTextModule,DropdownModule,FormsModule,CalendarModule,InputNumberModule,TableModule,CommonModule],
+  imports: [MultiSelectModule,InputTextModule,DropdownModule,FormsModule,CalendarModule,InputNumberModule,TableModule,CommonModule],
   templateUrl: './admin-user-opp.component.html',
   styleUrl: './admin-user-opp.component.css'
 })
 export class AdminUserOppComponent implements OnInit{
+  assignUserMode=false;
+  groupedUsers!:SelectItemGroup[];
+  selectedUser!:any;
   editingRowIndex: number | null = null;
   urgentOpportunitiesCount: number = 0;
   sort=-1
   private readonly NEAR_CLOSING_DAYS = 7;
-
   opportunities!:OpportunityModel[];
   loading=true;
   userId?:number;
@@ -37,11 +42,39 @@ export class AdminUserOppComponent implements OnInit{
   states=states;
   opportunityStateSummary: { sigla: string, count: number }[] = [];
   totalOpportunities = 0;
-  constructor(public dialogService:DialogService,private route:ActivatedRoute,private opportunityService:OpportunityService,private oppRecordService:OpportunityRecordService){}
+  constructor(private userService:UserService,public dialogService:DialogService,private route:ActivatedRoute,private opportunityService:OpportunityService,private oppRecordService:OpportunityRecordService){}
   ref:DynamicDialogRef|undefined;
   ngOnInit(): void {
     this.userId=Number(this.route.snapshot.paramMap.get('userId'));
+    this.groupedUsers=[
+      {
+        label:'Ejecutivos',
+        value:'executives',
+        items:[]
+      },
+      {
+        label:'Supervisores',
+        value:'supervisor',
+        items:[]
+      }
+    ]
+    this.loadUsers();
     this.loadOpportunities();
+  }
+  loadUsers(){
+    this.userService.getUsers().subscribe({
+      next:response=>{
+        response.map((user: any)=>{
+          if(user.role==="executive"){
+            this.groupedUsers[0].items.push({label:`${user.firstName} ${user.lastName}`,value:user.id})
+          }
+          else{
+            this.groupedUsers[1].items.push({label:`${user.firstName} ${user.lastName}`,value:user.id})
+          }
+        })
+      },
+      error:error=>console.error(error)
+    })
   }
   loadOpportunities(){
     if(this.userId)
@@ -53,11 +86,32 @@ export class AdminUserOppComponent implements OnInit{
           opp.createdAt=new Date(opp.createdAt);
           opp.updatedAt=new Date(opp.updatedAt);
           opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
+          if(opp.nextInteraction){
+            opp.nextInteraction=new Date(opp.nextInteraction);
+          }
+          
         })
         this.calculateOpportunityStateSummary();
         this.loading=false;
       },error:error=>console.error(error)
     })
+  }
+  enableEditUserMode(){
+    this.assignUserMode=true;
+  }
+  disableEditUserMode(){
+    this.assignUserMode=false;
+  }
+  changeUser(userId:number,oppId:number){
+    this.opportunityService.changeUser({userId:userId,opportunityId:oppId}).subscribe(
+      {
+        next:response=>{
+          alert(response.message)
+        },
+        error:error=>console.error(error)
+      }
+    )
+    this.assignUserMode=false;
   }
   isNearClosingDate(opportunity: OpportunityModel): boolean {
     const today = new Date(); // Fecha actual
@@ -96,6 +150,20 @@ export class AdminUserOppComponent implements OnInit{
 
     this.totalOpportunities = this.opportunities.length;
   }
+  getRowClass(opportunity: any): string {
+    const creationDate = new Date(opportunity.oppSfaDateCreation);
+    const today = new Date();
+    const diffInTime = today.getTime() - creationDate.getTime();
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+    if (diffInDays > 28) {
+        return 'overdue-red';
+    } else if (diffInDays > 25) {
+        return 'overdue-yellow';
+    } else {
+        return '';
+    }
+}
   
   calculateUrgentOpportunities() {
     const today = new Date();
@@ -135,6 +203,7 @@ export class AdminUserOppComponent implements OnInit{
       newCommentary: opportunity.commentary,
       contactName: opportunity.contactName || '',
       contactNumber: opportunity.contactNumber || '',
+      nextInteraction:opportunity.nextInteraction
     };
   
     this.opportunityService.editOpportunity(editCommand).subscribe(

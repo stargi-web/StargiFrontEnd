@@ -7,6 +7,18 @@
     sortField="createdAt"
     [sortOrder]="-1"
     [scrollable]="true" scrollHeight="80vh">
+    <ng-template pTemplate="caption">
+        <div class="status-summary">
+          <div class="status-item" *ngFor="let status of opportunityStateSummary">
+            <div class="status-sigla">{{ status.sigla }}</div>
+            <div class="status-count">{{ status.count }}</div>
+          </div>
+          <div class="status-item">
+            <div class="status-sigla">Total</div>
+            <div class="status-count">{{ totalOpportunities }}</div>
+          </div>
+        </div>
+      </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th>
@@ -30,6 +42,12 @@
                 <div class="flex align-items-center" style="min-width:10rem">
                     Num Opp Sfa
                     <p-columnFilter type="numeric" field="SfaNumber" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Creación Sfa
+                    <p-columnFilter type="date" field="oppSfaDateCreation" display="menu"/>
                 </div>
             </th>
             <th>
@@ -89,6 +107,12 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Prox. Interacción
+                    <p-columnFilter type="date" field="nextInteraction" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Cierre
                     <p-columnFilter type="date" field="estimatedClosingDate" display="menu"/>
                 </div>
@@ -96,6 +120,7 @@
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Comentario
+                    <p-columnFilter type="text" field="commentary" display="menu"/>
                 </div>
             </th>
             <th>
@@ -113,10 +138,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
-        <tr [ngClass]="{
-            'urgent-row': isNearClosingDate(opportunity) && opportunity.state !== 'No cierre',
-            'no-close-row': opportunity.state === 'No cierre' 
-        }">
+        <tr [ngClass]="getRowClass(opportunity)">
             <td>
                 @if(editingRowIndex===rowIndex){
                     <p-button label="Guardar" (onClick)="saveChanges(opportunity)"></p-button>
@@ -148,6 +170,14 @@
                 }
                 @else {
                     {{opportunity.SfaNumber}}
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex) {
+                    <p-calendar [(ngModel)]="opportunity.oppSfaDateCreation" dateFormat="dd/mm/yy"></p-calendar>
+                }
+                @else {
+                    {{opportunity.oppSfaDateCreation|date:'dd/MM/yyyy'}}
                 }
             </td>
             <td>
@@ -216,6 +246,14 @@
                 }
                 @else {
                     {{opportunity.state}}
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex) {
+                    <p-calendar [(ngModel)]="opportunity.nextInteraction" appendTo="body" dateFormat="dd/mm/yy"></p-calendar>
+                }
+                @else {
+                    {{opportunity.nextInteraction|date:'dd/MM/yyyy'}}
                 }
             </td>
             <td>

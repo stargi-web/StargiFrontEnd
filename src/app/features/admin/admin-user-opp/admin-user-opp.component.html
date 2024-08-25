@@ -28,10 +28,25 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Asignado
+                    @if (assignUserMode) {
+                        
+                    }
+                    @else {
+                        
+                    }
+                    
+                    
+                    <p-columnFilter type="text" field="userAssigned" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Ruc
                     <p-columnFilter type="text" field="ruc" display="menu"/>
                 </div>
             </th>
+            
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Nombre
@@ -42,6 +57,12 @@
                 <div class="flex align-items-center" style="min-width:10rem">
                     Num Opp Sfa
                     <p-columnFilter type="numeric" field="SfaNumber" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Creación Sfa
+                    <p-columnFilter type="date" field="oppSfaDateCreation" display="menu"/>
                 </div>
             </th>
             <th>
@@ -101,6 +122,12 @@
             </th>
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
+                    Prox. Interacción
+                    <p-columnFilter type="date" field="nextInteraction" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
                     Cierre
                     <p-columnFilter type="date" field="estimatedClosingDate" display="menu"/>
                 </div>
@@ -108,6 +135,7 @@
             <th>
                 <div class="flex align-items-center" style="min-width:10rem">
                     Comentario
+                    <p-columnFilter type="text" field="commentary" display="menu"/>
                 </div>
             </th>
             <th>
@@ -125,10 +153,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
-        <tr [ngClass]="{
-            'urgent-row': isNearClosingDate(opportunity) && opportunity.state !== 'No cierre',
-            'no-close-row': opportunity.state === 'No cierre' 
-        }">
+        <tr [ngClass]="getRowClass(opportunity)">
             <td>
                 @if(editingRowIndex===rowIndex){
                     <p-button label="Guardar" (onClick)="saveChanges(opportunity)"></p-button>
@@ -138,6 +163,29 @@
                     <p-button icon="pi pi-cog" [rounded]="true" (onClick)="startEditing(rowIndex)" *ngIf="editingRowIndex !== rowIndex"></p-button>
                     <p-button icon="pi pi-trash" [rounded]="true" (onClick)="deleteOpportunity(opportunity.businessName,opportunity.id)"/>
                 }
+            </td>
+            <td>
+                @if(assignUserMode){
+                    <p-dropdown 
+                        [options]="groupedUsers" 
+                        [(ngModel)]="selectedUser" 
+                        placeholder="Seleccione un usuario" 
+                        [group]="true"
+                        appendTo="body">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex align-items-center">
+                               
+                                <span>{{ group.label }}</span>
+                            </div>
+                        </ng-template>
+                </p-dropdown>
+                <i class="pi pi-save" style="cursor: pointer; margin-left: 0.5rem;" (click)="changeUser(selectedUser,opportunity.id)" ></i>
+                <i class="pi pi-times" style="cursor: pointer; margin-left: 0.5rem;" (click)="disableEditUserMode()" ></i>
+                }
+                @else {
+                    {{opportunity.userAssigned}}<i class="pi pi-cog" style="cursor: pointer; margin-left: 0.5rem;" (click)="enableEditUserMode()" ></i>
+                }
+                
             </td>
             <td (click)="openRecordsDialog(opportunity.id)">
                 @if (editingRowIndex===rowIndex) {
@@ -165,7 +213,15 @@
             </td>
             <td>
                 @if (editingRowIndex===rowIndex) {
-                    <p-dropdown [(ngModel)]="opportunity.type" [options]="opportunityTypes"></p-dropdown>
+                    <p-calendar [(ngModel)]="opportunity.oppSfaDateCreation" appendTo="body" dateFormat="dd/mm/yy"></p-calendar>
+                }
+                @else {
+                    {{opportunity.oppSfaDateCreation|date:'dd/MM/yyyy'}}
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex) {
+                    <p-dropdown [(ngModel)]="opportunity.type" appendTo="body" [options]="opportunityTypes"></p-dropdown>
                 }
                 @else {
                     {{opportunity.type}}
@@ -195,7 +251,7 @@
             </td>
             <td>
                 @if(editingRowIndex===rowIndex){
-                    <p-dropdown [(ngModel)]="opportunity.product" [options]="products"></p-dropdown>
+                    <p-dropdown [(ngModel)]="opportunity.product" appendTo="body" [options]="products"></p-dropdown>
                 }
                 @else {
                     {{opportunity.product}}
@@ -203,7 +259,7 @@
             </td>
             <td>
                 @if (editingRowIndex===rowIndex) {
-                    <p-dropdown [(ngModel)]="opportunity.productType" [options]="productTypes"></p-dropdown>
+                    <p-dropdown [(ngModel)]="opportunity.productType" appendTo="body" [options]="productTypes"></p-dropdown>
                 }
                 @else {
                     {{opportunity.productType}}
@@ -225,7 +281,7 @@
             </td>
             <td>
                 @if(editingRowIndex===rowIndex){
-                    <p-dropdown [(ngModel)]="opportunity.state" [options]="states"></p-dropdown>
+                    <p-dropdown [(ngModel)]="opportunity.state" appendTo="body" [options]="states"></p-dropdown>
                 }
                 @else {
                     {{opportunity.state}}
@@ -233,7 +289,15 @@
             </td>
             <td>
                 @if (editingRowIndex===rowIndex) {
-                    <p-calendar [(ngModel)]="opportunity.estimatedClosingDate" dateFormat="dd/mm/yy"></p-calendar>
+                    <p-calendar [(ngModel)]="opportunity.nextInteraction" appendTo="body" dateFormat="dd/mm/yy"></p-calendar>
+                }
+                @else {
+                    {{opportunity.nextInteraction|date:'dd/MM/yyyy'}}
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex) {
+                    <p-calendar [(ngModel)]="opportunity.estimatedClosingDate" appendTo="body" dateFormat="dd/mm/yy"></p-calendar>
                 }
                 @else {
                     {{opportunity.estimatedClosingDate|date:'dd/MM/yyyy'}}

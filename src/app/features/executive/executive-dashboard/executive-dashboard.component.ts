@@ -32,11 +32,54 @@ export class ExecutiveDashboardComponent implements OnInit {
   productTypes=productTypes;
   products=products;
   states = states;
+  opportunityStateSummary: { sigla: string, count: number }[] = [];
+  totalOpportunities = 0;
   constructor(public dialogService:DialogService,private opportunityService:OpportunityService){}
   ref:DynamicDialogRef|undefined;
   ngOnInit(): void {
     this.loadOpportunities();
   }
+  calculateOpportunityStateSummary() {
+    const stateCounts ={
+      "No contactado":0,
+      "Potenciales":0,
+      "Prospecto":0,
+      "Prospecto calificado":0,
+      "Prospecto desarrollado":0,
+      "Cierre":0,
+      "No cierre":0
+    };
+
+    this.opportunities.forEach(opportunity => {
+      stateCounts[opportunity.state as keyof typeof stateCounts]++;
+    });
+
+    this.opportunityStateSummary = [
+      { sigla: 'NC', count: stateCounts['No contactado'] },
+      { sigla: 'PO', count: stateCounts.Potenciales },
+      { sigla: 'PR', count: stateCounts.Prospecto },
+      { sigla: 'PC', count: stateCounts['Prospecto calificado'] },
+      { sigla: 'PD', count: stateCounts['Prospecto desarrollado'] },
+      { sigla: 'C', count: stateCounts.Cierre },
+      { sigla: 'NoC', count: stateCounts['No cierre'] }
+    ];
+
+    this.totalOpportunities = this.opportunities.length;
+  }
+  getRowClass(opportunity: any): string {
+    const creationDate = new Date(opportunity.oppSfaDateCreation);
+    const today = new Date();
+    const diffInTime = today.getTime() - creationDate.getTime();
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+    if (diffInDays > 28) {
+        return 'overdue-red';
+    } else if (diffInDays > 25) {
+        return 'overdue-yellow';
+    } else {
+        return '';
+    }
+}
   loadOpportunities(){
     const userId=Number(sessionStorage.getItem("userId"));
     this.opportunityService.getOpportunitiesByUserId(userId).subscribe(
@@ -49,8 +92,12 @@ export class ExecutiveDashboardComponent implements OnInit {
                   opp.createdAt=new Date(opp.createdAt);
                   opp.updatedAt=new Date(opp.updatedAt);
                   opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
+                  if(opp.nextInteraction){
+                    opp.nextInteraction=new Date(opp.nextInteraction);
+                  }
                 })
                 this.calculateUrgentOpportunities();
+                this.calculateOpportunityStateSummary();
             },error:error=>{console.error(error)}
         }
     )
@@ -103,6 +150,7 @@ export class ExecutiveDashboardComponent implements OnInit {
       newCommentary: opportunity.commentary,
       contactName: opportunity.contactName || '',
       contactNumber: opportunity.contactNumber || '',
+      nextInteraction:opportunity.nextInteraction
     };
   
     this.opportunityService.editOpportunity(editCommand).subscribe(
