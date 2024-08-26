@@ -1,36 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { OpportunityService } from '../../../services/opportunityService';
-import { OpportunityModel } from '../../../core/models/opportunityModel';
-import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ExecutiveRecordsOppDialogComponent } from '../../executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { OpportunityModel } from '../../../core/models/opportunityModel';
+import { OpportunityRecordService } from '../../../services/opportunityRecordService';
+import { OpportunityService } from '../../../services/opportunityService';
+import { UserService } from '../../../services/userService';
+import { ConfirmDeleteOpportunityDialogComponent } from '../../../shared/components/confirm-delete-opportunity-dialog/confirm-delete-opportunity-dialog.component';
 import { opportunityTypes, products, productTypes, states } from '../../../shared/const/constantes';
-import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
-import { ConfirmDeleteOpportunityDialogComponent } from '../../../shared/components/confirm-delete-opportunity-dialog/confirm-delete-opportunity-dialog.component';
-import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { UserService } from '../../../services/userService';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
+
 @Component({
-  selector: 'app-admin-view-team-opportunities',
+  selector: 'app-admin-view-all-opportunities',
   providers:[DialogService],
   standalone: true,
-  imports: [InputNumberModule,FormsModule,ButtonModule,TableModule,CommonModule,CalendarModule,DropdownModule],
-  templateUrl: './admin-view-team-opportunities.component.html',
-  styleUrl: './admin-view-team-opportunities.component.css'
+  imports: [MultiSelectModule,InputTextModule,DropdownModule,FormsModule,CalendarModule,InputNumberModule,TableModule,CommonModule],
+  templateUrl: './admin-view-all-opportunities.component.html',
+  styleUrl: './admin-view-all-opportunities.component.css'
 })
-export class AdminViewTeamOpportunitiesComponent implements OnInit{
+export class AdminViewAllOpportunitiesComponent implements OnInit{
   assignUserMode=false;
-  indexAssignUserMode=0;
   groupedUsers!:SelectItemGroup[];
   selectedUser!:any;
   editingRowIndex: number | null = null;
   urgentOpportunitiesCount: number = 0;
   sort=-1
+  private readonly NEAR_CLOSING_DAYS = 7;
   opportunities!:OpportunityModel[];
   loading=true;
   userId?:number;
@@ -40,11 +43,9 @@ export class AdminViewTeamOpportunitiesComponent implements OnInit{
   states=states;
   opportunityStateSummary: { sigla: string, count: number }[] = [];
   totalOpportunities = 0;
-  teamId!:number;
-  constructor(private userService:UserService,public dialogService:DialogService,private opportunityService:OpportunityService,private route:ActivatedRoute){}
+  constructor(private userService:UserService,public dialogService:DialogService,private route:ActivatedRoute,private opportunityService:OpportunityService,private oppRecordService:OpportunityRecordService){}
   ref:DynamicDialogRef|undefined;
   ngOnInit(): void {
-    this.teamId=Number(this.route.snapshot.paramMap.get('teamId'));
     this.groupedUsers=[
       {
         label:'Ejecutivos',
@@ -59,8 +60,6 @@ export class AdminViewTeamOpportunitiesComponent implements OnInit{
     ]
     this.loadUsers();
     this.loadOpportunities();
-    
-    //.
   }
   loadUsers(){
     this.userService.getUsers().subscribe({
@@ -77,9 +76,28 @@ export class AdminViewTeamOpportunitiesComponent implements OnInit{
       error:error=>console.error(error)
     })
   }
-  enableEditUserMode(index:number){
+  loadOpportunities(){
+ 
+    this.opportunityService.getAllOpportunities().subscribe({
+      next:response=>{
+        this.opportunities=response;
+        this.opportunities.forEach(opp=>{
+          opp.oppSfaDateCreation=new Date(opp.oppSfaDateCreation);
+          opp.createdAt=new Date(opp.createdAt);
+          opp.updatedAt=new Date(opp.updatedAt);
+          opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
+          if(opp.nextInteraction){
+            opp.nextInteraction=new Date(opp.nextInteraction);
+          }
+          
+        })
+        this.calculateOpportunityStateSummary();
+        this.loading=false;
+      },error:error=>console.error(error)
+    })
+  }
+  enableEditUserMode(){
     this.assignUserMode=true;
-    this.indexAssignUserMode=index;
   }
   disableEditUserMode(){
     this.assignUserMode=false;
@@ -95,41 +113,15 @@ export class AdminViewTeamOpportunitiesComponent implements OnInit{
     )
     this.assignUserMode=false;
   }
-  loadOpportunities(){
-    this.opportunityService.getOpportunitiesByTeamId(this.teamId).subscribe(
-      {
-        next:response=>{
-          this.opportunities=response;
-          this.calculateOpportunityStateSummary();
-          this.loading=false;
-        },
-        error:error=>console.error(error)
-      }
-    )
-  }
-  getRowClass(opportunity: any): string {
-    const creationDate = new Date(opportunity.oppSfaDateCreation);
-    const today = new Date();
-    const diffInTime = today.getTime() - creationDate.getTime();
-    const diffInDays = diffInTime / (1000 * 3600 * 24);
+  isNearClosingDate(opportunity: OpportunityModel): boolean {
+    const today = new Date(); // Fecha actual
+    const closingDate = new Date(opportunity.estimatedClosingDate); 
 
-    if (diffInDays > 28) {
-        return 'overdue-red';
-    } else if (diffInDays > 25) {
-        return 'overdue-yellow';
-    } else {
-        return '';
-    }
-}
-  openRecordsDialog(oppId: number) {
-    const config={
-      data:{
-        oppId
-      },
-      Headers:'Historial de cambios',
-      with:'60vw',
-    }
-    this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
+    
+    const diffInTime = closingDate.getTime() - today.getTime();
+    const diffInDays = Math.ceil(diffInTime / (1000 * 3600 * 24)); 
+
+    return diffInDays <= this.NEAR_CLOSING_DAYS;
   }
   calculateOpportunityStateSummary() {
     const stateCounts ={
@@ -157,6 +149,37 @@ export class AdminViewTeamOpportunitiesComponent implements OnInit{
     ];
 
     this.totalOpportunities = this.opportunities.length;
+  }
+  getRowClass(opportunity: any): string {
+    const creationDate = new Date(opportunity.oppSfaDateCreation);
+    const today = new Date();
+    const diffInTime = today.getTime() - creationDate.getTime();
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+
+    if (diffInDays > 28) {
+        return 'overdue-red';
+    } else if (diffInDays > 25) {
+        return 'overdue-yellow';
+    } else {
+        return '';
+    }
+}
+  
+  calculateUrgentOpportunities() {
+    const today = new Date();
+    this.urgentOpportunitiesCount = this.opportunities.filter(opportunity => {
+      const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);
+      const timeDiff = estimatedClosingDate.getTime() - today.getTime();
+      const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return dayDiff <= 5;
+    }).length;
+  }
+  isUrgent(opportunity: OpportunityModel): boolean {
+    const today = new Date();
+    const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);
+    const timeDiff = estimatedClosingDate.getTime() - today.getTime();
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return dayDiff <= 5;
   }
   startEditing(rowIndex: number) {
     this.editingRowIndex = rowIndex;
@@ -222,5 +245,18 @@ export class AdminViewTeamOpportunitiesComponent implements OnInit{
         )
       }
     })
+  }
+  openRecordsDialog(oppId:number) {
+    if(this.editingRowIndex==null){
+
+      const config={
+        data:{
+          oppId
+        },
+        Headers:'Historial de cambios',
+        with:'60vw',
+      }
+      this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
+    }
   }
 }

@@ -21,6 +21,7 @@ import { AdminViewBasesComponent } from './features/admin/admin-view-bases/admin
 import { AdminBaseDetailsComponent } from './features/admin/admin-base-details/admin-base-details.component';
 import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
+import { AdminViewAllOpportunitiesComponent } from './features/admin/admin-view-all-opportunities/admin-view-all-opportunities.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -51,6 +52,7 @@ export const routes: Routes = [
             { path: 'teams-view', component: AdminTeamsViewComponent },
             { path: 'team-opportunities/:teamId', component: AdminViewTeamOpportunitiesComponent },
             { path: 'profile', component: ProfileViewComponent },
+            {path:'opportunities',component:AdminViewAllOpportunitiesComponent},
             {path:'bases',component:AdminViewBasesComponent},
             {path:'base-detail/:id',component:AdminBaseDetailsComponent}
         ]

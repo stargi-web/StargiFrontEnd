@@ -72,4 +72,5 @@ export class AdminTeamsViewComponent implements OnInit {
   openTeamOppView(teamId:number){
     this.router.navigate([`/admin/team-opportunities/${teamId}`])
   }
+
 }

@@ -17,6 +17,9 @@ export class OpportunityService{
             }),catchError(this.handleError)
         )
     }
+    getAllOpportunities(){
+        return this.httpClient.get<any>(`${this.apiUrl}`);
+    }
     getOpportunitiesByTeamId(teamId:number):Observable<any>{
         return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
     }

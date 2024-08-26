@@ -1,4 +1,4 @@
-@if (teamId) {
+
     <p-table
         [value]="opportunities"
         [loading]="loading"
@@ -309,7 +309,4 @@
     <div class="floating-button" *ngIf="urgentOpportunitiesCount > 0">
         <p-button icon="pi pi-exclamation-circle" label="{{urgentOpportunitiesCount}}" class="p-button-danger"></p-button>
     </div>
-}
-@else {
-    <p>No está asignado a ningún equipo</p>
-}
+

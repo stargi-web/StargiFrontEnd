@@ -25,6 +25,13 @@ export class AdminNavigationComponent implements OnInit {
         }
       },
       {
+        label:'Oportunidades',
+        icon:'pi pi-envelope',
+        command:()=>{
+          this.router.navigate(['/admin/opportunities'])
+        }
+      },
+      {
         label:'Equipos',
         icon:'pi pi-users',
         command:()=>{
