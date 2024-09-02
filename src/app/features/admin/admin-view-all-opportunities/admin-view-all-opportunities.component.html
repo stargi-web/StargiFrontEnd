@@ -157,7 +157,7 @@
                 }
             </td>
             <td>
-                @if(assignUserMode){
+                @if(assignUserMode&&indexAssignUserMode===rowIndex){
                     <p-dropdown 
                         [options]="groupedUsers" 
                         [(ngModel)]="selectedUser" 
@@ -175,7 +175,7 @@
                 <i class="pi pi-times" style="cursor: pointer; margin-left: 0.5rem;" (click)="disableEditUserMode()" ></i>
                 }
                 @else {
-                    {{opportunity.userAssigned}}<i class="pi pi-cog" style="cursor: pointer; margin-left: 0.5rem;" (click)="enableEditUserMode()" ></i>
+                    {{opportunity.userAssigned}}<i class="pi pi-cog" style="cursor: pointer; margin-left: 0.5rem;" (click)="enableEditUserMode(rowIndex)" ></i>
                 }
                 
             </td>

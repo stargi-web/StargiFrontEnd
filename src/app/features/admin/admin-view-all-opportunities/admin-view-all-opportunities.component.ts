@@ -29,6 +29,7 @@ import { TableModule } from 'primeng/table';
 export class AdminViewAllOpportunitiesComponent implements OnInit{
   assignUserMode=false;
   groupedUsers!:SelectItemGroup[];
+  indexAssignUserMode=0;
   selectedUser!:any;
   editingRowIndex: number | null = null;
   urgentOpportunitiesCount: number = 0;
@@ -96,8 +97,9 @@ export class AdminViewAllOpportunitiesComponent implements OnInit{
       },error:error=>console.error(error)
     })
   }
-  enableEditUserMode(){
+  enableEditUserMode(index:number){
     this.assignUserMode=true;
+    this.indexAssignUserMode=index;
   }
   disableEditUserMode(){
     this.assignUserMode=false;

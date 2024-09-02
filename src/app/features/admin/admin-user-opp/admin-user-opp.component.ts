@@ -27,6 +27,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 })
 export class AdminUserOppComponent implements OnInit{
   assignUserMode=false;
+  indexAssignUserMode=0;
   groupedUsers!:SelectItemGroup[];
   selectedUser!:any;
   editingRowIndex: number | null = null;
@@ -96,8 +97,9 @@ export class AdminUserOppComponent implements OnInit{
       },error:error=>console.error(error)
     })
   }
-  enableEditUserMode(){
+  enableEditUserMode(index:number){
     this.assignUserMode=true;
+    this.indexAssignUserMode=index;
   }
   disableEditUserMode(){
     this.assignUserMode=false;
