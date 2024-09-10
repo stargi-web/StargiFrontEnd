@@ -42,3 +42,17 @@ export const opportunityTypes = [
     { label: 'Cierre', value: 'Cierre' },
     { label: 'No cierre', value: 'No cierre' }
   ];
+  export const offers=[
+    {label:'Ninguna',value:'Ninguna'},
+    {label:'Winback 1RB(50% Captura)',value:'Winback 1RB(50% Captura)'},
+    {label:'Winback 2RB(50% Captura)',value:'Winback 2RB(50% Captura)'},
+    {label:'Winback 1RB(6 Captura)',value:'Winback 1RB(6 Captura)'},
+    {label:'Winback 2RB(6 Captura)',value:'Winback 1RB(6 Captura)'},
+    {label:'Descuento de Totalización: 50%',value:'Descuento de Totalización: 50%'},
+    {label:'Descuento de Totalización: 6',value:'Descuento de Totalización: 6'},
+    {label:'Escalera: Promo 20%x12',value:'Escalera: Promo 20%x12'},
+    {label:'Escalera: Promo 30%x12',value:'Escalera: Promo 30%x12'},
+    {label:'Escalera: Promo 40%x12',value:'Escalera: Promo 40%x12'},
+    {label:'Escalera: Promo 50%x12',value:'Escalera: Promo 50%x12'},
+    {label:'Mesa de precios',value:'Mesa de precios'}
+  ]

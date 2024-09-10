@@ -75,6 +75,11 @@
       <div *ngIf="isFieldInvalid('state')" class="error-message">
         {{ getFieldErrorMessage('state') }}
       </div>
+      <label for="offer">Promoción</label>
+      <p-dropdown id="offer" [options]="offers" formControlName="offer" required></p-dropdown>
+      <div *ngIf="isFieldInvalid('offer')" class="error-message">
+        {{ getFieldErrorMessage('offer') }}
+      </div>
 
       <label for="estimatedClosingDate">Fecha de Cierre Estimada</label>
       <p-calendar id="estimatedClosingDate" formControlName="estimatedClosingDate" dateFormat="yy-mm-dd" required></p-calendar>

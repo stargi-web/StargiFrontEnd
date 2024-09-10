@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OpportunityService } from '../../../services/opportunityService';
 import { CommonModule } from '@angular/common';
+import { offers } from '../../../shared/const/constantes';
 interface FieldError{
   field:string,
   message:string
@@ -70,6 +71,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
     { label: 'Cierre', value: 'Cierre' },
     { label: 'No cierre', value: 'No cierre' }
   ];
+  offers=offers;
   disable=false;
 
   constructor(private fb: FormBuilder,private opportunityService:OpportunityService) {
@@ -90,6 +92,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       contactNumber:['',Validators.required],
       units:['',Validators.required],
       productType:['',Validators.required],
+      offer:['',Validators.required],
       userId:userId
     });
     this.errors = Object.keys(this.opportunityForm.controls).map(key => ({
