@@ -47,7 +47,10 @@ export class AuthService{
             this.router.navigate(['/supervisor']); 
           } else if (role==='executive'||role==='executivegpon') {
             this.router.navigate(['/executive']);
-          } else {
+          }
+          else if (role==='HHRR') {
+            this.router.navigate(['/hhrr']);   
+          }  else {
             console.error('Rol no reconocido:', role);
           }
         } else {
