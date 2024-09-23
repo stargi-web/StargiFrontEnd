@@ -32,6 +32,12 @@
                     <p-columnFilter type="text" field="role" display="menu"/>               
                 </div>
             </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Eliminar               
+                </div>
+            </th>
+            
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-user>
@@ -47,6 +53,9 @@
             </td>
             <td>
                 {{user.role}}
+            </td>
+            <td>
+                <p-button icon="pi pi-trash" [rounded]="true" (onClick)="deleteUser(user.id,groupedUsers)"/>
             </td>
         </tr>
     </ng-template>

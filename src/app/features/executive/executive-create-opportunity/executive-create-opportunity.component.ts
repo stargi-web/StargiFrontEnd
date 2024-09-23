@@ -74,6 +74,7 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
   offers=offers;
   disable=false;
 
+
   constructor(private fb: FormBuilder,private opportunityService:OpportunityService) {
     const userId=Number(sessionStorage.getItem("userId"));
     this.opportunityForm = this.fb.group({
@@ -100,6 +101,28 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       message: ''
     }));
   }
+  buildForm(){
+    const userId=Number(sessionStorage.getItem("userId"));
+    this.opportunityForm = this.fb.group({
+      ruc: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      businessName: ['', Validators.required],
+      SfaNumber: ['', Validators.required],
+      oppSfaDateCreation: ['', Validators.required],
+      type: ['', Validators.required],
+      amount:['',Validators.required],
+      product: ['', Validators.required],
+      otherDetails: ['',Validators.required],
+      state: ['', Validators.required],
+      estimatedClosingDate: ['', Validators.required],
+      commentary: ['',Validators.required],
+      contactName:['',Validators.required],
+      contactNumber:['',Validators.required],
+      units:['',Validators.required],
+      productType:['',Validators.required],
+      offer:['',Validators.required],
+      userId:userId
+    });
+  }
   ngOnInit(): void {
   }
   onSubmit() {
@@ -110,10 +133,11 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
         next: response => {
           alert("Creación exitosa");
           this.opportunityForm.reset();
+          this.buildForm();
           this.disable=false;
           this.errors.forEach(error => error.message = '');
         },
-        error: error => console.error(error)
+        error: error => {console.error(error),this.disable=false}
       });
     } else {
       this.disable=false;

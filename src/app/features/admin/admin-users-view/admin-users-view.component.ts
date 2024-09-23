@@ -3,19 +3,40 @@ import { TableModule } from 'primeng/table';
 import { UserModel } from '../../../core/models/userModel';
 import { UserService } from '../../../services/userService';
 import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AdminConfirmationDeleteUserComponent } from '../admin-confirmation-delete-user/admin-confirmation-delete-user.component';
+import { style } from '@angular/animations';
+import { SelectItemGroup } from 'primeng/api';
 @Component({
   selector: 'app-admin-users-view',
   standalone: true,
-  imports: [TableModule],
+  providers:[DialogService],
+  imports: [TableModule,ButtonModule],
   templateUrl: './admin-users-view.component.html',
   styleUrl: './admin-users-view.component.css'
 })
 export class AdminUsersViewComponent implements OnInit {
+  groupedUsers!:SelectItemGroup[];
 
   users!:UserModel[];
   loading=true;
-  constructor(private userService:UserService,private router:Router){}
+  constructor(public dialogService:DialogService,private userService:UserService,private router:Router){}
+  ref:DynamicDialogRef|undefined;
+
   ngOnInit() {
+    this.groupedUsers = [
+      {
+        label: 'Ejecutivos',
+        value: 'executives',
+        items: []
+      },
+      {
+        label: 'Supervisores',
+        value: 'supervisors',
+        items: []
+      },
+    ];
     this.loadUsers();
   }
   loadUsers(){
@@ -24,6 +45,19 @@ export class AdminUsersViewComponent implements OnInit {
         next:(response)=>{
         this.users=response;
         this.loading=false;
+        response.map((user: any) => {
+          if (user.role === 'executive') {
+            this.groupedUsers[0].items.push({
+              label: `${user.firstName} ${user.lastName}`,
+              value: user.id,
+            });
+          } else {
+            this.groupedUsers[1].items.push({
+              label: `${user.firstName} ${user.lastName}`,
+              value: user.id,
+            });
+          }
+        });
       },
       error:error=>console.error(error)
       }
@@ -31,5 +65,18 @@ export class AdminUsersViewComponent implements OnInit {
   }
   viewOpportunities(userId:number) {
     this.router.navigate([`/admin/users-opp/${userId}`])
+  }
+
+  deleteUser(userId:number,groupedUsers:any){
+    const config={
+      data:{
+        userId,
+        groupedUsers
+      },
+      style:{
+        height:'800px'
+      }
     }
+    this.ref=this.dialogService.open(AdminConfirmationDeleteUserComponent,config);
+  }
 }

@@ -22,6 +22,7 @@ import { AdminBaseDetailsComponent } from './features/admin/admin-base-details/a
 import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
 import { AdminViewAllOpportunitiesComponent } from './features/admin/admin-view-all-opportunities/admin-view-all-opportunities.component';
+import { RrhhSurverysComponent } from './features/rrhh/rrhh-surverys/rrhh-surverys.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -72,6 +73,16 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileViewComponent },
             {path:'bases',component:ViewAssignedCollectionsComponent},
             {path:'base/:baseId/clients',component:ViewAssignedClientsComponent}
+        ]
+    },
+    {
+        path:'HHRR',
+        component: SupervisorNavigationComponent,
+        canActivate: [roleGuard],
+        data:{expectedRoles:['HHRR']},
+        children:[
+            {path:'',redirectTo:'encuestas',pathMatch:'full'},
+            {path:'encuestas',component:RrhhSurverysComponent}
         ]
     }
 ];

@@ -41,6 +41,10 @@ export class OpportunityService{
     changeUser(body:{userId:number,opportunityId:number}):Observable<any>{
         return this.httpClient.patch(`${this.apiUrl}/change-user`,body);
     }
+    changeAllOppToNewUser(body:{userId:number,newUserId:number}){
+        console.log(body)
+        return this.httpClient.patch<any>(`${this.apiUrl}/migrate-opps-to-other-executive`,body);
+    }
     private handleError(error:HttpErrorResponse){
         if(error.status===0){
           console.error('Se ha producio un error ', error.error);

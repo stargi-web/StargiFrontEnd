@@ -49,7 +49,7 @@ export class AuthService{
             this.router.navigate(['/executive']);
           }
           else if (role==='HHRR') {
-            this.router.navigate(['/hhrr']);   
+            this.router.navigate(['/HHRR']);   
           }  else {
             console.error('Rol no reconocido:', role);
           }
