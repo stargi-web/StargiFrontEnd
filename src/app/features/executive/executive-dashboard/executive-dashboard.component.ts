@@ -150,7 +150,8 @@ export class ExecutiveDashboardComponent implements OnInit {
       newCommentary: opportunity.commentary,
       contactName: opportunity.contactName || '',
       contactNumber: opportunity.contactNumber || '',
-      nextInteraction:opportunity.nextInteraction
+      nextInteraction:opportunity.nextInteraction,
+      userId:Number(sessionStorage.getItem('userId'))
     };
   
     this.opportunityService.editOpportunity(editCommand).subscribe(

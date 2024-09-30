@@ -118,7 +118,8 @@ export class SupervisorOpportunitiesComponent implements OnInit{
   }
 
   saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string) {
-    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type}).subscribe(
+    const userId=Number(sessionStorage.getItem('userId'))
+    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type,userId}).subscribe(
       {
         next:response=>{
           alert(`${response.message}`);

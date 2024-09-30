@@ -32,6 +32,12 @@
                         <p-columnFilter type="text" field="role" display="menu"/>               
                     </div>
                 </th>
+                <th>
+                    <div class="flex align-items-center" style="min-width:10rem">
+                        Última Actividad
+                        <p-columnFilter type="date" field="lastActivityDate" display="menu"/>               
+                    </div>
+                </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
@@ -47,6 +53,9 @@
                 </td>
                 <td>
                     {{user.role}}
+                </td>
+                <td>
+                    {{user.lastActivityDate|date:'dd/MM/yyyy'}}
                 </td>
             </tr>
         </ng-template>

@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { UserService } from '../../../services/userService';
 import { UserModel } from '../../../core/models/userModel';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-supervisor-team-members',
   standalone: true,
-  imports: [TableModule],
+  imports: [TableModule,CommonModule],
   templateUrl: './supervisor-team-members.component.html',
   styleUrl: './supervisor-team-members.component.css'
 })

@@ -3,5 +3,6 @@ export interface UserModel{
     firstName:string,
     lastName:string,
     userName:string,
-    role:string
+    role:string,
+    lastActivityDate?:Date
 }
