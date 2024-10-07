@@ -119,19 +119,18 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
     }).length;
   }
   getRowClass(opportunity: any): string {
-    const creationDate = new Date(opportunity.oppSfaDateCreation);
     const today = new Date();
-    const diffInTime = today.getTime() - creationDate.getTime();
-    const diffInDays = diffInTime / (1000 * 3600 * 24);
+    const oppSfaDateCreation = new Date(opportunity.oppSfaDateCreation);
+    const dayDiff = Math.ceil((today.getTime() - oppSfaDateCreation.getTime()) / (1000 * 3600 * 24));
 
-    if (diffInDays > 28) {
-        return 'overdue-red';
-    } else if (diffInDays > 25) {
-        return 'overdue-yellow';
+    if (dayDiff > 28) {
+      return 'red-row';
+    } else if (dayDiff > 25) {
+      return 'yellow-row';
     } else {
-        return '';
+      return '';
     }
-}
+  }
   isUrgent(opportunity: OpportunityModel): boolean {
     const today = new Date();
     const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);

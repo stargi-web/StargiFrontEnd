@@ -11,9 +11,11 @@ import { MenubarModule } from 'primeng/menubar';
 })
 export class ExecutiveNavigationComponent implements OnInit{
   name?:string;
+  
   constructor(private router:Router){}
   items: MenuItem[] | undefined;
   ngOnInit(): void {
+    const isMobile = window.innerWidth <= 768;
     this.name=String(sessionStorage.getItem('name'));
     this.items=[
       {
@@ -37,7 +39,15 @@ export class ExecutiveNavigationComponent implements OnInit{
           this.router.navigate(['/executive/bases'])
         }
       },
-      
+      ...(isMobile ? [] : [
+        {
+          label: 'Registrar Asistencia(BETA)',
+          icon: 'pi pi-calendar',
+          command: () => {
+            this.router.navigate(['/executive/register-attendance']);
+          }
+        }
+      ]),
       
       {
         label:'Cerrar sesión',

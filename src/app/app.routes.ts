@@ -23,6 +23,7 @@ import { ViewAssignedCollectionsComponent } from './shared/components/view-assig
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
 import { AdminViewAllOpportunitiesComponent } from './features/admin/admin-view-all-opportunities/admin-view-all-opportunities.component';
 import { RrhhSurverysComponent } from './features/rrhh/rrhh-surverys/rrhh-surverys.component';
+import { ExecutiveRegisterAttendanceComponent } from './features/executive/executive-register-attendance/executive-register-attendance.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -38,7 +39,8 @@ export const routes: Routes = [
             { path: 'create-opportunity', component: ExecutiveCreateOpportunityComponent },
             { path: 'profile', component: ProfileViewComponent },
             {path:'bases',component:ViewAssignedCollectionsComponent},
-            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent}
+            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent},
+            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent}
         ]
     },
     {

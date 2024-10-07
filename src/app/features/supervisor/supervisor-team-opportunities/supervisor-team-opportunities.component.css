@@ -39,3 +39,10 @@
   .status-count {
     font-size: 1.2rem;
   }
+  .yellow-row {
+    background-color: yellow !important;
+  }
+  
+  .red-row {
+    background-color: red !important;
+  }
