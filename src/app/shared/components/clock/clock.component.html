@@ -1,8 +1,16 @@
-<div class="clock">
-    <div class="clock-face">
-      <div class="hand hour-hand"></div>
-      <div class="hand minute-hand"></div>
-      <div class="hand second-hand"></div>
-    </div>
+<div class="clock-display">
+  <div class="clock-weekdays-block">
+    <span *ngFor="let day of days" [class.active]="day === getDay()">{{ day }}</span>
   </div>
-  
+
+  <div class="clock-time">
+    <span>{{ getHours() }}</span>
+    <span>:</span>
+    <span>{{ getMinutes() }}</span>
+    <span>:</span>
+    <span>{{ getSeconds() }}</span>
+    <span class="clock-meridian">{{ getAmPm() }}</span>
+  </div>
+
+  <div class="clock-date">{{ getFormattedDate() }}</div>
+</div>

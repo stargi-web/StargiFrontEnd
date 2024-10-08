@@ -74,7 +74,8 @@ export const routes: Routes = [
             { path: 'create-opportunity', component: SupervisorCreateOppComponent },
             { path: 'profile', component: ProfileViewComponent },
             {path:'bases',component:ViewAssignedCollectionsComponent},
-            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent}
+            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent},
+            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent}
         ]
     },
     {
@@ -84,7 +85,8 @@ export const routes: Routes = [
         data:{expectedRoles:['HHRR']},
         children:[
             {path:'',redirectTo:'encuestas',pathMatch:'full'},
-            {path:'encuestas',component:RrhhSurverysComponent}
+            {path:'encuestas',component:RrhhSurverysComponent},
+            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent}
         ]
     }
 ];

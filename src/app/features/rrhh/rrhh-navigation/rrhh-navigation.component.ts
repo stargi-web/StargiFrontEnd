@@ -13,8 +13,10 @@ import { MenubarModule } from 'primeng/menubar';
 export class RrhhNavigationComponent implements OnInit{
   name?:string;
   items: MenuItem[] | undefined;
+  
   constructor(private router:Router){}
   ngOnInit(): void {
+    const isMobile = window.innerWidth <= 768;
     this.name=String(sessionStorage.getItem('name'));
     this.items=[
       {
@@ -24,6 +26,15 @@ export class RrhhNavigationComponent implements OnInit{
           this.router.navigate(['/rrhh/encuestas'])
         }
       },
+      ...(isMobile ? [] : [
+        {
+          label: 'Registrar Asistencia(BETA)',
+          icon: 'pi pi-calendar',
+          command: () => {
+            this.router.navigate(['/executive/register-attendance']);
+          }
+        }
+      ]),
         
       {
         label:'Cerrar sesión',

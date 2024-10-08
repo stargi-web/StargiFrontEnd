@@ -1,36 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-clock',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './clock.component.html',
   styleUrl: './clock.component.css'
 })
 export class ClockComponent implements OnInit {
+  currentTime: Date = new Date();
+  days: string[] = ['DOM', 'LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
+
   ngOnInit(): void {
-    this.updateClock();
-    setInterval(() => this.updateClock(), 1000);
+    setInterval(() => {
+      this.currentTime = new Date();
+    }, 1000);
   }
 
-  updateClock() {
-    const now = new Date();
-    const secondHand = document.querySelector('.second-hand');
-    const minuteHand = document.querySelector('.minute-hand');
-    const hourHand = document.querySelector('.hour-hand');
+  to2Digit(num: number): string {
+    return num < 10 ? `0${num}` : `${num}`;
+  }
 
-    if (secondHand && minuteHand && hourHand) {
-      const seconds = now.getSeconds();
-      const secondsDegrees = ((seconds / 60) * 360) + 90;
-      secondHand.setAttribute('style', `transform: rotate(${secondsDegrees}deg)`);
+  getHours(): string {
+    const hours = this.currentTime.getHours();
+    return this.to2Digit(hours > 12 ? hours - 12 : hours);
+  }
 
-      const minutes = now.getMinutes();
-      const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
-      minuteHand.setAttribute('style', `transform: rotate(${minutesDegrees}deg)`);
+  getMinutes(): string {
+    return this.to2Digit(this.currentTime.getMinutes());
+  }
 
-      const hours = now.getHours();
-      const hoursDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
-      hourHand.setAttribute('style', `transform: rotate(${hoursDegrees}deg)`);
-    }
+  getSeconds(): string {
+    return this.to2Digit(this.currentTime.getSeconds());
+  }
+
+  getAmPm(): string {
+    return this.currentTime.getHours() >= 12 ? 'PM' : 'AM';
+  }
+
+  getDay(): string {
+    return this.days[this.currentTime.getDay()];
+  }
+
+  getFormattedDate(): string {
+    return this.currentTime.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   }
 }

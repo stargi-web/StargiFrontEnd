@@ -18,6 +18,7 @@ export class SupervisorNavigationComponent implements OnInit{
     this.router.navigate(['/supervisor/profile']);
   }
   ngOnInit(): void {
+    const isMobile = window.innerWidth <= 768;
     this.name=String(sessionStorage.getItem('name'));
     const userId=Number(sessionStorage.getItem("userId"))
     this.userService.getLeadingTeamInfo(userId).subscribe(
@@ -80,6 +81,15 @@ export class SupervisorNavigationComponent implements OnInit{
           this.router.navigate(['/supervisor/bases'])
         }
       },
+      ...(isMobile ? [] : [
+        {
+          label: 'Registrar Asistencia(BETA)',
+          icon: 'pi pi-calendar',
+          command: () => {
+            this.router.navigate(['/executive/register-attendance']);
+          }
+        }
+      ]),
       {
         label:'Cerrar sesión',
         icon:'pi pi-sign-out',
