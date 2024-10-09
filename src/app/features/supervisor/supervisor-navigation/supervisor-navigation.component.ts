@@ -86,7 +86,7 @@ export class SupervisorNavigationComponent implements OnInit{
           label: 'Registrar Asistencia(BETA)',
           icon: 'pi pi-calendar',
           command: () => {
-            this.router.navigate(['/executive/register-attendance']);
+            this.router.navigate(['/supervisor/register-attendance']);
           }
         }
       ]),
