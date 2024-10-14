@@ -24,6 +24,9 @@ import { ViewAssignedClientsComponent } from './shared/components/view-assigned-
 import { AdminViewAllOpportunitiesComponent } from './features/admin/admin-view-all-opportunities/admin-view-all-opportunities.component';
 import { RrhhSurverysComponent } from './features/rrhh/rrhh-surverys/rrhh-surverys.component';
 import { ExecutiveRegisterAttendanceComponent } from './features/executive/executive-register-attendance/executive-register-attendance.component';
+import { RrhhUsersAttendacesComponent } from './features/rrhh/rrhh-users-attendaces/rrhh-users-attendaces.component';
+import { RrhhNavigationComponent } from './features/rrhh/rrhh-navigation/rrhh-navigation.component';
+import { RrhhUserAttendancesDetailsComponent } from './features/rrhh/rrhh-user-attendances-details/rrhh-user-attendances-details.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -80,13 +83,15 @@ export const routes: Routes = [
     },
     {
         path:'HHRR',
-        component: SupervisorNavigationComponent,
+        component: RrhhNavigationComponent,
         canActivate: [roleGuard],
         data:{expectedRoles:['HHRR']},
         children:[
             {path:'',redirectTo:'encuestas',pathMatch:'full'},
             {path:'encuestas',component:RrhhSurverysComponent},
-            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent}
+            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
+            {path:'users-attendances',component:RrhhUsersAttendacesComponent},
+            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent}
         ]
     }
 ];

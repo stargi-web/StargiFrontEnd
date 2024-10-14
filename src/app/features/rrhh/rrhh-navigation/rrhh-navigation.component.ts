@@ -23,7 +23,14 @@ export class RrhhNavigationComponent implements OnInit{
         label:'Encuestas',
         icon:'pi pi-home',
         command:()=>{
-          this.router.navigate(['/rrhh/encuestas'])
+          this.router.navigate(['/HHRR/encuestas'])
+        }
+      },
+      {
+        label:'Asistencias de Usuarios',
+        icon:'pi pi-home',
+        command:()=>{
+          this.router.navigate(['/HHRR/users-attendances'])
         }
       },
       ...(isMobile ? [] : [
@@ -31,7 +38,7 @@ export class RrhhNavigationComponent implements OnInit{
           label: 'Registrar Asistencia(BETA)',
           icon: 'pi pi-calendar',
           command: () => {
-            this.router.navigate(['/executive/register-attendance']);
+            this.router.navigate(['/HHRR/register-attendance']);
           }
         }
       ]),
