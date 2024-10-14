@@ -13,7 +13,8 @@ export class CustomCalendarComponent {
   @Input() endDate!: Date;
   @Input() attendances: Date[] = [];
 
-  currentMonthDays: Date[] = [];
+  currentMonthDays:  (Date | null)[] = [];
+  weekdays: string[] = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
 
   ngOnInit() {
     this.generateCalendarDays();
@@ -23,11 +24,20 @@ export class CustomCalendarComponent {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth();
+    
     const firstDayOfMonth = new Date(year, month, 1);
+    
     const lastDayOfMonth = new Date(year, month + 1, 0);
-
+  
+    const startDayOfWeek = firstDayOfMonth.getDay();
+  
     this.currentMonthDays = [];
-
+  
+    const blanks = (startDayOfWeek === 0) ? 6 : startDayOfWeek - 1; 
+    for (let i = 0; i < blanks; i++) {
+      this.currentMonthDays.push(null); 
+    }
+  
     for (let day = firstDayOfMonth.getDate(); day <= lastDayOfMonth.getDate(); day++) {
       this.currentMonthDays.push(new Date(year, month, day));
     }

@@ -1,10 +1,17 @@
 <div class="calendar">
-    <div class="calendar-header">
-      <h3>{{ currentMonthDays[0]?.toLocaleString('default', { month: 'long' }) }} {{ currentMonthDays[0]?.getFullYear() }}</h3>
-    </div>
-    <div class="calendar-body">
-      <div *ngFor="let day of currentMonthDays" [ngClass]="getDayClass(day)" class="calendar-day">
-        {{ day.getDate() }}
-      </div>
+  <div class="calendar-header">
+    <h3>{{ currentMonthDays[0]?.toLocaleString('default', { month: 'long' }) }} {{ currentMonthDays[0]?.getFullYear() }}</h3>
+  </div>
+  
+  <div class="calendar-weekdays">
+    <div *ngFor="let day of weekdays" class="calendar-weekday">
+      {{ day }}
     </div>
   </div>
+
+  <div class="calendar-body">
+    <div *ngFor="let day of currentMonthDays" [ngClass]="day ? getDayClass(day) : 'blank-day'" class="calendar-day">
+      {{ day ? day.getDate() : '' }}
+    </div>
+  </div>
+</div>
