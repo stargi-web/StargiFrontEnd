@@ -87,7 +87,7 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data:{expectedRoles:['HHRR']},
         children:[
-            {path:'',redirectTo:'encuestas',pathMatch:'full'},
+            {path:'',redirectTo:'users-attendances',pathMatch:'full'},
             {path:'encuestas',component:RrhhSurverysComponent},
             {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
             {path:'users-attendances',component:RrhhUsersAttendacesComponent},

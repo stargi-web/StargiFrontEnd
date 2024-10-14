@@ -19,13 +19,7 @@ export class RrhhNavigationComponent implements OnInit{
     const isMobile = window.innerWidth <= 768;
     this.name=String(sessionStorage.getItem('name'));
     this.items=[
-      {
-        label:'Encuestas',
-        icon:'pi pi-home',
-        command:()=>{
-          this.router.navigate(['/HHRR/encuestas'])
-        }
-      },
+
       {
         label:'Asistencias de Usuarios',
         icon:'pi pi-home',
