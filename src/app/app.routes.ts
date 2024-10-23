@@ -79,7 +79,9 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileViewComponent },
             {path:'bases',component:ViewAssignedCollectionsComponent},
             {path:'base/:baseId/clients',component:ViewAssignedClientsComponent},
-            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent}
+            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
+            {path:'users-attendances',component:RrhhUsersAttendacesComponent},
+            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent}
         ]
     },
     {

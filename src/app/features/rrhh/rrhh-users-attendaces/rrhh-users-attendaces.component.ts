@@ -4,7 +4,7 @@ import { AttendanceService } from '../../../services/attendanceService';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 
@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 export class RrhhUsersAttendacesComponent implements OnInit{
   users:any;
   loading=true;
-  constructor(private userService:UserService,private router:Router){}
+  constructor(private userService:UserService,private router:Router,private route:ActivatedRoute){}
 
 
   ngOnInit(): void {
@@ -38,7 +38,8 @@ export class RrhhUsersAttendacesComponent implements OnInit{
   }
   
   goToAttendances(userId:number){
-    this.router.navigate([`/HHRR/user-attendaces-details/`, userId]);
+    const currentPath= this.router.url.split('/')[1];
+    this.router.navigate([`/${currentPath}/user-attendaces-details/`, userId]);
   }
 
   goToMonthlyAttendanceSummary() {

@@ -75,10 +75,10 @@ export class SupervisorNavigationComponent implements OnInit{
       },
       
       {
-        label:'Bases',
-        icon:'pi pi-plus-circle',
+        label:'Asistencias de Usuarios',
+        icon:'pi pi-home',
         command:()=>{
-          this.router.navigate(['/supervisor/bases'])
+          this.router.navigate(['/supervisor/users-attendances'])
         }
       },
       ...(isMobile ? [] : [
