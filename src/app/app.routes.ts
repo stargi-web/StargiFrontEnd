@@ -27,6 +27,7 @@ import { ExecutiveRegisterAttendanceComponent } from './features/executive/execu
 import { RrhhUsersAttendacesComponent } from './features/rrhh/rrhh-users-attendaces/rrhh-users-attendaces.component';
 import { RrhhNavigationComponent } from './features/rrhh/rrhh-navigation/rrhh-navigation.component';
 import { RrhhUserAttendancesDetailsComponent } from './features/rrhh/rrhh-user-attendances-details/rrhh-user-attendances-details.component';
+import { RrhhMonthlyAttendanceSummaryComponent } from './features/rrhh/rrhh-monthly-attendance-summary/rrhh-monthly-attendance-summary.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -91,7 +92,8 @@ export const routes: Routes = [
             {path:'encuestas',component:RrhhSurverysComponent},
             {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
             {path:'users-attendances',component:RrhhUsersAttendacesComponent},
-            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent}
+            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent},
+            {path:'monthly-attendance-summary',component:RrhhMonthlyAttendanceSummaryComponent}
         ]
     }
 ];

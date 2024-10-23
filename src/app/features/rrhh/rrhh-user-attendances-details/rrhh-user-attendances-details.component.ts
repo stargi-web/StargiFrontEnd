@@ -23,6 +23,7 @@ export class RrhhUserAttendancesDetailsComponent implements OnInit{
   constructor(private attendanceService:AttendanceService,private route: ActivatedRoute){
 
   }
+
   ngOnInit(): void {
     this.userId = Number(this.route.snapshot.paramMap.get('userId'));
   }

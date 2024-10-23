@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th *ngFor="let day of weekdays">{{ day | date:'dd' }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of attendanceData">
+      <td>{{ user.firstName }} {{ user.lastName }}</td>
+      <td *ngFor="let day of weekdays" [ngClass]="getAttendanceStatus(user, day).class">
+        {{ getAttendanceStatus(user, day).status }}
+      </td>
+    </tr>
+  </tbody>
+</table>

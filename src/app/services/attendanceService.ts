@@ -14,4 +14,7 @@ export class AttendanceService{
     getAttendancesByUserAndDates(userId:number,startDate:string,endDate:string){
         return this.httpClient.get<any>(`${this.apiUrl}/user/${userId}/dates?startDate=${startDate}&endDate=${endDate}`);
     }
+    getAttendanceSummaryByRole(month:number,year:number){
+        return this.httpClient.get<any>(`${this.apiUrl}/by-role?month=${month}&year=${year}`);
+    }
 }
