@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.filters {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.table-container {
+  flex-grow: 1;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #f4f4f4;
+  position: sticky;
+  top: 0;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+button {
+  align-self: start;
+}

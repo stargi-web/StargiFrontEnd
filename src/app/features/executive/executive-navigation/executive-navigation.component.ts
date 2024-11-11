@@ -26,22 +26,22 @@ export class ExecutiveNavigationComponent implements OnInit{
         }
       },
       {
+        label:'Oportunidades v2 (Beta)',
+        icon:'pi pi-home',
+        command:()=>{
+          this.router.navigate(['/executive/opportunities-view'])
+        }
+      },
+      {
         label:'Registrar Oportunidad',
         icon:'pi pi-plus-circle',
         command:()=>{
           this.router.navigate(['/executive/create-opportunity'])
         }
       },
-      {
-        label:'Bases',
-        icon:'pi pi-book',
-        command:()=>{
-          this.router.navigate(['/executive/bases'])
-        }
-      },
       ...(isMobile ? [] : [
         {
-          label: 'Registrar Asistencia(BETA)',
+          label: 'Registrar Asistencia',
           icon: 'pi pi-calendar',
           command: () => {
             this.router.navigate(['/executive/register-attendance']);

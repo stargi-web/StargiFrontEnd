@@ -28,6 +28,7 @@ import { RrhhUsersAttendacesComponent } from './features/rrhh/rrhh-users-attenda
 import { RrhhNavigationComponent } from './features/rrhh/rrhh-navigation/rrhh-navigation.component';
 import { RrhhUserAttendancesDetailsComponent } from './features/rrhh/rrhh-user-attendances-details/rrhh-user-attendances-details.component';
 import { RrhhMonthlyAttendanceSummaryComponent } from './features/rrhh/rrhh-monthly-attendance-summary/rrhh-monthly-attendance-summary.component';
+import { ExecutiveOpportunitiesViewComponent } from './features/executive/executive-opportunities-view/executive-opportunities-view.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -44,7 +45,8 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileViewComponent },
             {path:'bases',component:ViewAssignedCollectionsComponent},
             {path:'base/:baseId/clients',component:ViewAssignedClientsComponent},
-            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent}
+            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
+            {path:'opportunities-view',component:ExecutiveOpportunitiesViewComponent}
         ]
     },
     {

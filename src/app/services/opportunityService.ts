@@ -20,6 +20,9 @@ export class OpportunityService{
     getAllOpportunities(){
         return this.httpClient.get<any>(`${this.apiUrl}`);
     }
+    getAllOpportunitiesPaginated(page:number,limit:number,filter:any){
+        return this.httpClient.post<any>(`${this.apiUrl}/filter/${page}/page/${limit}/limit`,filter);
+    }
     getOpportunitiesByTeamId(teamId:number):Observable<any>{
         return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
     }
