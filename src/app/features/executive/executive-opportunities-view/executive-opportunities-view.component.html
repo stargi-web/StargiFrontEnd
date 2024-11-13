@@ -5,11 +5,23 @@
       <label for="ruc">RUC</label>
       <input type="text" id="ruc" pInputText [(ngModel)]="filters.ruc" placeholder="Ingrese RUC"/>
     </div>
+    
     <div class="filter-item">
       <label for="businessName">Nombre del Negocio</label>
       <input type="text" id="businessName" pInputText [(ngModel)]="filters.businessName" placeholder="Ingrese Nombre"/>
     </div>
+    <div class="filter-item">
+      <label for="states">Nombre del Negocio</label>
+      <p-multiSelect 
+        id="states"
+        [options]="stateOptions" 
+        [(ngModel)]="selectedOptions" 
+        placeholder="Seleccionar estado" 
+        optionLabel="label">
+      </p-multiSelect>
+    </div>
     <button pButton label="Aplicar Filtros" (click)="applyFilters()"></button>
+    
   </div>
 <div class="pagination-controls">
     <p-dropdown 
