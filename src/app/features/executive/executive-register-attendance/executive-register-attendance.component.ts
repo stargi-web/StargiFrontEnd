@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { ClockComponent } from '../../../shared/components/clock/clock.component';
 import { AttendanceService } from '../../../services/attendanceService';
 import { ButtonModule } from 'primeng/button';
+import { AttendanceMonthSummaryComponent } from '../../../shared/components/attendance-month-summary/attendance-month-summary.component';
 
 @Component({
   selector: 'app-executive-register-attendance',
   standalone: true,
-  imports: [ClockComponent,ButtonModule],
+  imports: [ClockComponent,ButtonModule,AttendanceMonthSummaryComponent],
   templateUrl: './executive-register-attendance.component.html',
   styleUrl: './executive-register-attendance.component.css'
 })

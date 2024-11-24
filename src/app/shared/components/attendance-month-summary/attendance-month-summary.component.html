@@ -1,0 +1,12 @@
+<div class="attendance-summary">
+    <div class="day" *ngFor="let day of weekDaysInMonth" pTooltip="{{ generateTooltip(day.date) }}">
+      <div class="day-number">{{ day.date | date: 'dd' }}</div>
+      <div
+        class="attendance-box"
+        [ngClass]="getAttendanceClass(day.date)"
+      >
+        {{ getAttendanceLetter(day.date) }}
+      </div>
+    </div>
+  </div>
+  
