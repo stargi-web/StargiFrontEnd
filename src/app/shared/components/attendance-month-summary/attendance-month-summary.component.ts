@@ -50,6 +50,10 @@ export class AttendanceMonthSummaryComponent implements OnInit {
   }
 
   getAttendanceClass(date: Date): string {
+    const today = new Date();
+    if (date > today) {
+      return ''; 
+    }
     const attendance = this.attendances.find(
       (att) => att.toDateString() === date.toDateString()
     );
@@ -67,6 +71,10 @@ export class AttendanceMonthSummaryComponent implements OnInit {
   }
 
   getAttendanceLetter(date: Date): string {
+    const today = new Date();
+    if (date > today) {
+      return ''; 
+    }
     const attendance = this.attendances.find(
       (att) => att.toDateString() === date.toDateString()
     );
