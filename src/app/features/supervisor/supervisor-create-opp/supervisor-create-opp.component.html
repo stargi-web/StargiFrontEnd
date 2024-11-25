@@ -57,18 +57,7 @@
         {{ getFieldErrorMessage('product') }}
       </div>
 
-      <label for="productType">Tipo de producto</label>
-      <p-dropdown id="productType" [options]="productTypes" formControlName="productType" required></p-dropdown>
-      <div *ngIf="isFieldInvalid('productType')" class="error-message">
-        {{ getFieldErrorMessage('productType') }}
-      </div>
 
-
-      <label for="otherDetails">Detalles Adicionales</label>
-      <textarea pInputTextarea id="otherDetails" formControlName="otherDetails"></textarea>
-      <div *ngIf="isFieldInvalid('otherDetail')" class="error-message">
-        {{ getFieldErrorMessage('otherDetail') }}
-      </div>
 
       <label for="state">Estado</label>
       <p-dropdown id="state" [options]="states" formControlName="state" required></p-dropdown>

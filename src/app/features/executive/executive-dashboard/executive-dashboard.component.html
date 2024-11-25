@@ -74,17 +74,7 @@
                     <p-columnFilter type="text" field="product" display="menu"/>
                 </div>
             </th>
-            <th>
-                <div class="flex align-items-center" style="min-width:10rem">
-                    Tipo Producto
-                    <p-columnFilter type="text" field="productType" display="menu"/>
-                </div>
-            </th>
-            <th>
-                <div class="flex align-items-center" style="min-width:10rem">
-                    Detalles producto
-                </div>
-            </th>
+
             <th pSortableColumn="createdAt">
                 <div class="flex align-items-center" style="min-width:10rem">
                     Creación
@@ -133,6 +123,12 @@
                 <div class="flex align-items-center" style="min-width:10rem">
                     Teléfono
                     <p-columnFilter type="text" field="contactNumber" display="menu"/>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Email
+                    <p-columnFilter type="text" field="email" display="menu"/>
                 </div>
             </th>
         </tr>
@@ -218,22 +214,7 @@
                     {{opportunity.product}}
                 }
             </td>
-            <td>
-                @if (editingRowIndex===rowIndex) {
-                    <p-dropdown [(ngModel)]="opportunity.productType" [options]="productTypes"></p-dropdown>
-                }
-                @else {
-                    {{opportunity.productType}}
-                }
-            </td>
-            <td>
-                @if (editingRowIndex===rowIndex) {
-                    <textarea pInputTextarea [(ngModel)]="opportunity.otherDetails"></textarea>
-                }
-                @else {
-                    {{opportunity.otherDetails}}
-                }
-            </td>
+
             <td>
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
             </td>
@@ -286,6 +267,14 @@
                 }
                 @else {
                     {{opportunity.contactNumber}}
+                }
+            </td>
+            <td>
+                @if (editingRowIndex===rowIndex){
+                    <input type="text" pInputText [(ngModel)]="opportunity.email"/>
+                }
+                @else {
+                    {{opportunity.email}}
                 }
             </td>
         </tr>

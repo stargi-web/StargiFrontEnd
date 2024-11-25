@@ -85,14 +85,13 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       type: ['', Validators.required],
       amount:['',Validators.required],
       product: ['', Validators.required],
-      otherDetails: ['',Validators.required],
       state: ['', Validators.required],
       estimatedClosingDate: ['', Validators.required],
       commentary: ['',Validators.required],
       contactName:['',Validators.required],
       contactNumber:['',Validators.required],
+      email:['',Validators.required],
       units:['',Validators.required],
-      productType:['',Validators.required],
       offer:['',Validators.required],
       userId:userId
     });
@@ -111,14 +110,13 @@ export class ExecutiveCreateOpportunityComponent implements OnInit {
       type: ['', Validators.required],
       amount:['',Validators.required],
       product: ['', Validators.required],
-      otherDetails: ['',Validators.required],
       state: ['', Validators.required],
       estimatedClosingDate: ['', Validators.required],
       commentary: ['',Validators.required],
       contactName:['',Validators.required],
       contactNumber:['',Validators.required],
+      email:['',Validators.required],
       units:['',Validators.required],
-      productType:['',Validators.required],
       offer:['',Validators.required],
       userId:userId
     });

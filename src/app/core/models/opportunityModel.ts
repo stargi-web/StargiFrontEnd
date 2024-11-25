@@ -6,8 +6,6 @@ export interface OpportunityModel{
     oppSfaDateCreation:Date|string,
     type:string,
     product:string,
-    productType:string,
-    otherDetails:string,
     createdAt:Date|string,
     updatedAt:Date|string,
     nextInteraction:Date|string|null,
@@ -19,5 +17,6 @@ export interface OpportunityModel{
     userAssigned?:string,
     amount?:number,
     units:number,
-    offer?:string
+    offer?:string,
+    email?:string
 }

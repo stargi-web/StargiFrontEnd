@@ -18,7 +18,7 @@ import { opportunityTypes, products, productTypes, states } from '../../../share
   selector: 'app-executive-dashboard',
   providers:[DialogService],
   standalone: true,
-  imports: [CalendarModule,InputNumberModule,TableModule, DropdownModule, FormsModule, CommonModule, ButtonModule, ExecutiveEditOpportunityComponent,InputTextModule],
+  imports: [CalendarModule,InputNumberModule,TableModule, DropdownModule, FormsModule, CommonModule, ButtonModule, InputTextModule],
   templateUrl: './executive-dashboard.component.html',
   styleUrl: './executive-dashboard.component.css'
 })
@@ -141,8 +141,6 @@ export class ExecutiveDashboardComponent implements OnInit {
       oppSfaDateCreation: opportunity.oppSfaDateCreation,
       type: opportunity.type,
       product: opportunity.product,
-      productType:opportunity.productType,
-      otherDetails: opportunity.otherDetails,
       amount: opportunity.amount!,
       newClosingDate: opportunity.estimatedClosingDate,
       newUnits: opportunity.units, 
@@ -151,9 +149,11 @@ export class ExecutiveDashboardComponent implements OnInit {
       contactName: opportunity.contactName || '',
       contactNumber: opportunity.contactNumber || '',
       nextInteraction:opportunity.nextInteraction,
+      email:opportunity.email,
       userId:Number(sessionStorage.getItem('userId'))
     };
   
+    console.log(editCommand);
     this.opportunityService.editOpportunity(editCommand).subscribe(
       {
         next: response => {

@@ -117,9 +117,9 @@ export class SupervisorOpportunitiesComponent implements OnInit{
     this.editingRowIndex = rowIndex;
   }
 
-  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string) {
+  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string,email:string) {
     const userId=Number(sessionStorage.getItem('userId'))
-    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type,userId}).subscribe(
+    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type,userId,email}).subscribe(
       {
         next:response=>{
           alert(`${response.message}`);

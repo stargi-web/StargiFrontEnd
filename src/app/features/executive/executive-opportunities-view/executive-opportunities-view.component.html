@@ -49,8 +49,6 @@
           <th>Fecha de Creación SFA</th>
           <th>Tipo</th>
           <th>Producto</th>
-          <th>Tipo de Producto</th>
-          <th>Otros Detalles</th>
           <th>Fecha de Creación</th>
           <th>Fecha de Modificación</th>
           <th>Próxima Interacción</th>
@@ -59,6 +57,7 @@
           <th>Comentario</th>
           <th>Nombre del Contacto</th>
           <th>Número de Contacto</th>
+          <th>Email</th>
           <th>Usuario Asignado</th>
           <th>Monto</th>
           <th>Unidades</th>
@@ -74,8 +73,6 @@
           <td>{{ opportunity.oppSfaDateCreation | date: 'dd/MM/yyyy' }}</td>
           <td>{{ opportunity.type }}</td>
           <td>{{ opportunity.product }}</td>
-          <td>{{ opportunity.productType }}</td>
-          <td>{{ opportunity.otherDetails }}</td>
           <td>{{ opportunity.createdAt | date: 'dd/MM/yyyy' }}</td>
           <td>{{ opportunity.updatedAt | date: 'dd/MM/yyyy' }}</td>
           <td>{{ opportunity.nextInteraction ? (opportunity.nextInteraction | date: 'dd/MM/yyyy') : '-' }}</td>
@@ -84,6 +81,7 @@
           <td>{{ opportunity.commentary }}</td>
           <td>{{ opportunity.contactName || '-' }}</td>
           <td>{{ opportunity.contactNumber || '-' }}</td>
+          <td>{{opportunity.email}}</td>
           <td>{{ opportunity.userAssigned || '-' }}</td>
           <td>{{ opportunity.amount || '-' }}</td>
           <td>{{ opportunity.units }}</td>

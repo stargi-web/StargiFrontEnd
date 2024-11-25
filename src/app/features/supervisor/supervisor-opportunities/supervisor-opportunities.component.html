@@ -68,17 +68,6 @@
                     <p-columnFilter type="text" field="product" display="menu"/>
                 </div>
             </th>
-            <th>
-                <div class="flex align-items-center" style="min-width:10rem">
-                    Tipo Producto
-                    <p-columnFilter type="text" field="productType" display="menu"/>
-                </div>
-            </th>
-            <th>
-                <div class="flex align-items-center" style="min-width:10rem">
-                    Detalles producto
-                </div>
-            </th>
             <th pSortableColumn="createdAt">
                 <div class="flex align-items-center" style="min-width:10rem">
                     Creación
@@ -129,13 +118,19 @@
                     <p-columnFilter type="text" field="contactNumber" display="menu"/>
                 </div>
             </th>
+            <th>
+                <div class="flex align-items-center" style="min-width:10rem">
+                    Email
+                    <p-columnFilter type="text" field="email" display="menu"/>
+                </div>
+            </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
         <tr [ngClass]="getRowClass(opportunity)">
             <td>
                 @if(editingRowIndex===rowIndex){
-                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type)" *ngIf="editingRowIndex === rowIndex"></p-button>
+                    <p-button label="Guardar" (onClick)="saveChanges(opportunity.id,opportunity.state,opportunity.commentary,opportunity.contactName,opportunity.contactNumber,opportunity.amount,opportunity.product,opportunity.type,opportunity.email)" *ngIf="editingRowIndex === rowIndex"></p-button>
                     <p-button label="Cancelar" (onClick)="cancelEditing()" *ngIf="editingRowIndex === rowIndex"></p-button>
                 }
                 @else{
@@ -187,12 +182,6 @@
                     {{opportunity.product}}
                 }
                 
-            </td>
-            <td>
-                {{opportunity.productType}}
-            </td>
-            <td>
-                {{opportunity.otherDetails}}
             </td>
             <td>
                 {{opportunity.createdAt|date:'dd/MM/yyyy'}}
@@ -254,7 +243,15 @@
                 <td>
                     {{opportunity.contactNumber}}
                 </td>
-            } 
+            }
+            <td>
+                @if (editingRowIndex===rowIndex){
+                    <input type="text" pInputText [(ngModel)]="opportunity.email"/>
+                }
+                @else {
+                    {{opportunity.email}}
+                }
+            </td> 
         </tr>
     </ng-template>
 </p-table>

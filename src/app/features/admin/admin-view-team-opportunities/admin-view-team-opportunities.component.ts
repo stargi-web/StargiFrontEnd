@@ -171,8 +171,6 @@ export class AdminViewTeamOpportunitiesComponent implements OnInit{
       oppSfaDateCreation: opportunity.oppSfaDateCreation,
       type: opportunity.type,
       product: opportunity.product,
-      productType:opportunity.productType,
-      otherDetails: opportunity.otherDetails,
       amount: opportunity.amount!,
       newClosingDate: opportunity.estimatedClosingDate,
       newUnits: opportunity.units,  
