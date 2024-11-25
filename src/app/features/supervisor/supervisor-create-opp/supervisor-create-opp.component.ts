@@ -69,6 +69,7 @@ export class SupervisorCreateOppComponent implements OnInit{
       contactName:['',Validators.required],
       contactNumber:['',Validators.required],
       units:['',Validators.required],
+      email:['',Validators.required],
       userId:userId
     });
     this.errors = Object.keys(this.opportunityForm.controls).map(key => ({

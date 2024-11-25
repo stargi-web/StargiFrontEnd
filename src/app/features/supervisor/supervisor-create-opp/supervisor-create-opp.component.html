@@ -88,6 +88,11 @@
       <div *ngIf="isFieldInvalid('contactNumber')" class="error-message">
         {{ getFieldErrorMessage('contactNumber') }}
       </div>
+      <label for="email">Email</label>
+      <input pInputText type="text" id="email" formControlName="email" required>
+      <div *ngIf="isFieldInvalid('email')" class="error-message">
+        {{ getFieldErrorMessage('email') }}
+      </div>
 
     <button pButton type="submit" label="Crear Oportunidad" [disabled]="disable"></button>
   </form>
