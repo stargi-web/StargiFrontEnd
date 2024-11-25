@@ -25,6 +25,13 @@ export class AdminNavigationComponent implements OnInit {
         }
       },
       {
+        label:'Crear Usuario',
+        icon:'pi pi-user',
+        command:()=>{
+          this.router.navigate(['/admin/create-user'])
+        }
+      },
+      {
         label:'Oportunidades',
         icon:'pi pi-envelope',
         command:()=>{

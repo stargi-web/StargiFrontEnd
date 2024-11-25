@@ -29,6 +29,7 @@ import { RrhhNavigationComponent } from './features/rrhh/rrhh-navigation/rrhh-na
 import { RrhhUserAttendancesDetailsComponent } from './features/rrhh/rrhh-user-attendances-details/rrhh-user-attendances-details.component';
 import { RrhhMonthlyAttendanceSummaryComponent } from './features/rrhh/rrhh-monthly-attendance-summary/rrhh-monthly-attendance-summary.component';
 import { ExecutiveOpportunitiesViewComponent } from './features/executive/executive-opportunities-view/executive-opportunities-view.component';
+import { AdminCreateUserComponent } from './features/admin/admin-create-user/admin-create-user.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -63,7 +64,8 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileViewComponent },
             {path:'opportunities',component:AdminViewAllOpportunitiesComponent},
             {path:'bases',component:AdminViewBasesComponent},
-            {path:'base-detail/:id',component:AdminBaseDetailsComponent}
+            {path:'base-detail/:id',component:AdminBaseDetailsComponent},
+            {path:'create-user',component:AdminCreateUserComponent}
         ]
     },
     {
