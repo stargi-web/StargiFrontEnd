@@ -30,6 +30,7 @@ import { RrhhUserAttendancesDetailsComponent } from './features/rrhh/rrhh-user-a
 import { RrhhMonthlyAttendanceSummaryComponent } from './features/rrhh/rrhh-monthly-attendance-summary/rrhh-monthly-attendance-summary.component';
 import { ExecutiveOpportunitiesViewComponent } from './features/executive/executive-opportunities-view/executive-opportunities-view.component';
 import { AdminCreateUserComponent } from './features/admin/admin-create-user/admin-create-user.component';
+import { AttendanceTableComponent } from './features/rrhh/attendance-table/attendance-table.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -99,7 +100,7 @@ export const routes: Routes = [
             {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
             {path:'users-attendances',component:RrhhUsersAttendacesComponent},
             {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent},
-            {path:'monthly-attendance-summary',component:RrhhMonthlyAttendanceSummaryComponent}
+            {path:'monthly-attendance-summary',component:AttendanceTableComponent}
         ]
     }
 ];

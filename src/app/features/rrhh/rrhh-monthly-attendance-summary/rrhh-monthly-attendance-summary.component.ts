@@ -60,6 +60,10 @@ export class RrhhMonthlyAttendanceSummaryComponent implements OnInit {
       });
     });
   }
+  convertToLocalDate(date: Date): string {
+    const localDate = new Date(date.toLocaleString('en-US', { timeZone: 'America/Lima' }));
+    return localDate.toISOString();
+  }
 
   getAttendanceStatus(user: AttendanceData, date: Date): { status: string, class: string } {
     const today = new Date();

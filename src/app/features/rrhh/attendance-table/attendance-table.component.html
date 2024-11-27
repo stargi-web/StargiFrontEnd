@@ -1,0 +1,27 @@
+<table>
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <ng-container *ngFor="let day of weekdays">
+          <th>{{ day | date: 'dd/MM' }}</th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of attendanceData">
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        
+        <ng-container *ngFor="let day of weekdays">
+          <td
+            [pTooltip]="getTooltipText(user, day)"
+            tooltipPosition="top"
+            (click)="openJustificationDialog(user, day)"
+            [ngClass]="getAttendanceClass(user, day)"
+          >
+            {{ getAttendanceLabel(user, day) }}
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+  

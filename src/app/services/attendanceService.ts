@@ -17,4 +17,7 @@ export class AttendanceService{
     getAttendanceSummaryByRole(month:number,year:number){
         return this.httpClient.get<any>(`${this.apiUrl}/by-role?month=${month}&year=${year}`);
     }
+    justifyAttendance(id: number) {
+        return this.httpClient.patch(`${this.apiUrl}/${id}/justify`, null);
+      }
 }

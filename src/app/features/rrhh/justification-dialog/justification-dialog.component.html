@@ -1,0 +1,7 @@
+<div>
+    <p>¿Confirmar justificación para <strong>{{ user.firstName }} {{ user.lastName }}</strong> el día <strong>{{ date | date: 'dd/MM/yyyy' }}</strong>?</p>
+    <div class="p-dialog-footer">
+      <button pButton label="Sí" class="p-button-primary" (click)="confirm()"></button>
+      <button pButton label="No" class="p-button-secondary" (click)="cancel()"></button>
+    </div>
+  </div>
