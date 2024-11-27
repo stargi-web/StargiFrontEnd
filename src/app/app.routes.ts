@@ -100,7 +100,8 @@ export const routes: Routes = [
             {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
             {path:'users-attendances',component:RrhhUsersAttendacesComponent},
             {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent},
-            {path:'monthly-attendance-summary',component:AttendanceTableComponent}
+            {path:'monthly-attendance-summary',component:AttendanceTableComponent},
+            {path:'create-user',component:AdminCreateUserComponent}
         ]
     }
 ];

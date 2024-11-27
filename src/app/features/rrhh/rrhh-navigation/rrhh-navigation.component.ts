@@ -27,6 +27,13 @@ export class RrhhNavigationComponent implements OnInit{
           this.router.navigate(['/HHRR/users-attendances'])
         }
       },
+      {
+        label:'Crear Usuario',
+        icon:'pi pi-user',
+        command:()=>{
+          this.router.navigate(['/HHRR/create-user'])
+        }
+      },
       ...(isMobile ? [] : [
         {
           label: 'Registrar Asistencia(BETA)',
