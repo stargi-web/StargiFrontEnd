@@ -58,7 +58,7 @@ export class AttendanceTableComponent implements OnInit{
     });
   }
   private adjustToLimaTimezone(date: Date): Date {
-    const utcOffset = -10 * 60; 
+    const utcOffset = -5 * 60; 
     const localOffset = date.getTimezoneOffset(); 
     const totalOffset = utcOffset + localOffset;
   
