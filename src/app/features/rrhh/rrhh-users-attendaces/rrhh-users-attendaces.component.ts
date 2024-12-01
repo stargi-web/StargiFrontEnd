@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { CommonModule } from '@angular/common';
 export class RrhhUsersAttendacesComponent implements OnInit{
   users:any;
   loading=true;
-  constructor(private userService:UserService,private router:Router,private route:ActivatedRoute){}
+  constructor(private userService:UserService,private router:Router,private route:ActivatedRoute,private attendanceService:AttendanceService){}
 
 
   ngOnInit(): void {
@@ -44,5 +45,17 @@ export class RrhhUsersAttendacesComponent implements OnInit{
 
   goToMonthlyAttendanceSummary() {
     this.router.navigate(['/HHRR/monthly-attendance-summary']);
+  }
+  downloadExcel(){
+    const month=11;
+    const year=2024;
+    this.attendanceService.getAttendanceExcelFile(month, year).subscribe(
+      (response: Blob) => {
+        saveAs(response, 'attendance.xlsx'); 
+      },
+      (error) => {
+        console.error('Error al descargar el archivo Excel', error);
+      }
+    );
   }
 }

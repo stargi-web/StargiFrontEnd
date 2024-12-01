@@ -1,5 +1,6 @@
 <div class="p-d-flex p-jc-end">
   <button pButton type="button" label="Ver Resumen Mensual" (click)="goToMonthlyAttendanceSummary()" class="p-button-primary"></button>
+  <button pButton type="button" label="Descargar Excel" (click)="downloadExcel()" class="p-button-info" style="margin-left: 10px;"></button>
 </div>
 
 <p-table [value]="users" [loading]="loading">

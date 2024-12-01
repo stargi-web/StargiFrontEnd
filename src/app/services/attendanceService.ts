@@ -20,4 +20,9 @@ export class AttendanceService{
     justifyAttendance(id: number) {
         return this.httpClient.patch(`${this.apiUrl}/${id}/justify`, null);
       }
+    getAttendanceExcelFile(month:number,year:number){
+        return this.httpClient.get(`${this.apiUrl}/generate-excel?month=${month}&year=${year}`, {
+            responseType: 'blob'  // Esto indica que la respuesta será un archivo binario
+          });
+    }
 }
