@@ -8,6 +8,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AdminConfirmationDeleteUserComponent } from '../admin-confirmation-delete-user/admin-confirmation-delete-user.component';
 import { style } from '@angular/animations';
 import { SelectItemGroup } from 'primeng/api';
+import { OpportunityService } from '../../../services/opportunityService';
+import { DeleteUserDialogComponent } from '../../../shared/components/delete-user-dialog/delete-user-dialog.component';
 @Component({
   selector: 'app-admin-users-view',
   standalone: true,
@@ -21,7 +23,7 @@ export class AdminUsersViewComponent implements OnInit {
 
   users!:UserModel[];
   loading=true;
-  constructor(public dialogService:DialogService,private userService:UserService,private router:Router){}
+  constructor(public dialogService:DialogService,private userService:UserService,private router:Router,private oppService:OpportunityService){}
   ref:DynamicDialogRef|undefined;
 
   ngOnInit() {
@@ -71,12 +73,12 @@ export class AdminUsersViewComponent implements OnInit {
     const config={
       data:{
         userId,
-        groupedUsers
       },
       style:{
         height:'800px'
       }
     }
-    this.ref=this.dialogService.open(AdminConfirmationDeleteUserComponent,config);
+    this.ref=this.dialogService.open(DeleteUserDialogComponent,config);
   }
+
 }

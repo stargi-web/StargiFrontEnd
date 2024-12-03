@@ -45,8 +45,10 @@ export class OpportunityService{
         return this.httpClient.patch(`${this.apiUrl}/change-user`,body);
     }
     changeAllOppToNewUser(body:{userId:number,newUserId:number}){
-        console.log(body)
         return this.httpClient.patch<any>(`${this.apiUrl}/migrate-opps-to-other-executive`,body);
+    }
+    deleteUser(userId:Number){
+        return this.httpClient.delete<any>(`${this.apiUrl}/${userId}/user`);
     }
     private handleError(error:HttpErrorResponse){
         if(error.status===0){
