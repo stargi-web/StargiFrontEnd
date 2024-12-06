@@ -1,47 +1,51 @@
 <div class="container">
-  <div class="filters">
-    <h3>Filtros</h3>
-    <div class="filter-item">
-      <label for="ruc">RUC</label>
-      <input type="text" id="ruc" pInputText [(ngModel)]="filters.ruc" placeholder="Ingrese RUC"/>
+  <div class="filters-pagination">
+    <div class="pagination-controls">
+      <p-dropdown 
+        [options]="pageSizeOptions" 
+        [(ngModel)]="pageSize" 
+        placeholder="Tamaño de página">
+      </p-dropdown>
+
+      <p-inputNumber 
+        [(ngModel)]="currentPage" 
+        [min]="1" 
+        [max]="totalPages" 
+        placeholder="Página">
+      </p-inputNumber>
+      <button (click)="updatePage()">Actualizar</button>
     </div>
-    
-    <div class="filter-item">
-      <label for="businessName">Nombre del Negocio</label>
-      <input type="text" id="businessName" pInputText [(ngModel)]="filters.businessName" placeholder="Ingrese Nombre"/>
+
+    <div class="filters">
+      <h3>Filtros</h3>
+      <div class="filter-item">
+        <label for="ruc">RUC</label>
+        <input type="text" id="ruc" pInputText [(ngModel)]="filters.ruc" placeholder="Ingrese RUC"/>
+      </div>
+      
+      <div class="filter-item">
+        <label for="businessName">Nombre del Negocio</label>
+        <input type="text" id="businessName" pInputText [(ngModel)]="filters.businessName" placeholder="Ingrese Nombre"/>
+      </div>
+      <div class="filter-item">
+        <label for="states">Estados</label>
+        <p-multiSelect 
+          id="states"
+          [options]="stateOptions" 
+          [(ngModel)]="selectedOptions" 
+          placeholder="Seleccionar estado" 
+          optionLabel="label">
+        </p-multiSelect>
+      </div>
+      <button pButton label="Aplicar Filtros" (click)="applyFilters()"></button>
     </div>
-    <div class="filter-item">
-      <label for="states">Nombre del Negocio</label>
-      <p-multiSelect 
-        id="states"
-        [options]="stateOptions" 
-        [(ngModel)]="selectedOptions" 
-        placeholder="Seleccionar estado" 
-        optionLabel="label">
-      </p-multiSelect>
-    </div>
-    <button pButton label="Aplicar Filtros" (click)="applyFilters()"></button>
-    
   </div>
-<div class="pagination-controls">
-    <p-dropdown 
-      [options]="pageSizeOptions" 
-      [(ngModel)]="pageSize" 
-      placeholder="Tamaño de página">
-    </p-dropdown>
-  
-    <p-inputNumber 
-      [(ngModel)]="currentPage" 
-      [min]="1" 
-      [max]="totalPages" 
-      placeholder="Página" >
-    </p-inputNumber>
-    <button (click)="updatePage()">Actualizar</button>
-  </div>
-<div class="table-container">
+
+  <div class="table-container">
     <table>
       <thead>
         <tr>
+          <th>Asignado</th>
           <th>ID</th>
           <th>RUC</th>
           <th>Nombre del Negocio</th>
@@ -66,6 +70,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let opportunity of opportunities">
+          <td>{{opportunity.userAssigned}}</td>
           <td>{{ opportunity.id }}</td>
           <td>{{ opportunity.ruc }}</td>
           <td>{{ opportunity.businessName }}</td>
@@ -90,5 +95,4 @@
       </tbody>
     </table>
   </div>
-
-  
+</div>

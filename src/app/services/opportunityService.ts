@@ -23,9 +23,16 @@ export class OpportunityService{
     getAllOpportunitiesPaginated(page:number,limit:number,filter:any){
         return this.httpClient.post<any>(`${this.apiUrl}/filter/${page}/page/${limit}/limit`,filter);
     }
+    getOpportunitiesByTeamIdPaginatedAndFiltered(teamId:number,page:number,limit:number,filter:any){
+        return this.httpClient.post<any>(`${this.apiUrl}/${teamId}/team/filter/${page}/page/${limit}/limit`,filter);
+    }
+    getOpportunitiesByUserIdPaginatedAndFiltered(userId:number,page:number,limit:number,filter:any){
+        return this.httpClient.post<any>(`${this.apiUrl}/${userId}/user/${page}/page/${limit}/limit`,filter);
+    }
     getOpportunitiesByTeamId(teamId:number):Observable<any>{
         return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
     }
+
     createOpportunity(body:any){
         console.log("Entrando al servicio de creación");
         return this.httpClient.post<any>(

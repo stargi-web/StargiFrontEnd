@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { OpportunityFilters } from '../../../core/models/filters';
 import { ButtonModule } from 'primeng/button';
 import {MultiSelectModule } from 'primeng/multiselect';
+import { ActivatedRoute } from '@angular/router';
 interface SelectedOptions{
   value:string,
   label:string
@@ -27,6 +28,7 @@ export class ExecutiveOpportunitiesViewComponent implements OnInit{
   opportunities!:OpportunityModel[];
   pageSizeOptions = [{ label: '10', value: 10 }, { label: '15', value: 15 }, { label: '20', value: 20 }];
   filters: OpportunityFilters = {};
+  role!: string;
   stateOptions = [
     { label: 'No contactado', value: 'No contactado' },
     { label: 'Potenciales', value: 'Potenciales' },
@@ -37,22 +39,62 @@ export class ExecutiveOpportunitiesViewComponent implements OnInit{
     { label: 'No cierre', value: 'No cierre' }
   ];
   selectedOptions?:SelectedOptions[];
-  constructor(private opportunityService:OpportunityService){}
+  constructor(private opportunityService:OpportunityService,private route: ActivatedRoute){}
   ngOnInit(): void {
-    this.loadOpporunities();
+    this.role = this.route.snapshot.url[0]?.path || '';
+    this.loadOpportunities();
   }
   updatePage() {
-    this.loadOpporunities();
+    this.loadOpportunities();
   }
-  loadOpporunities(){
-    this.opportunityService.getAllOpportunitiesPaginated(this.currentPage,this.pageSize,this.filters).subscribe(
-      {
-        next:response=>{
-          this.totalPages=response.totalPages;
-          this.opportunities=response.data;
-        }
+  loadOpportunities() {
+    const userId = Number(sessionStorage.getItem('userId'));
+    const teamId = Number(sessionStorage.getItem('teamId'));
+    const filters = this.filters;
+
+    if (this.role === 'executive') {
+      // Llamada para el rol "executive"
+      this.opportunityService
+        .getOpportunitiesByUserIdPaginatedAndFiltered(userId, this.currentPage, this.pageSize, filters)
+        .subscribe({
+          next: (response) => {
+            this.totalPages = response.totalPages;
+            this.opportunities = response.data;
+          },
+        });
+    } else if (this.role === 'supervisor') {
+      if (teamId) {
+        // Si existe "teamId" en el sessionStorage
+        this.opportunityService
+          .getOpportunitiesByTeamIdPaginatedAndFiltered(teamId, this.currentPage, this.pageSize, filters)
+          .subscribe({
+            next: (response) => {
+              this.totalPages = response.totalPages;
+              this.opportunities = response.data;
+            },
+          });
+      } else {
+        // Si no existe "teamId", usar el endpoint de "executive"
+        this.opportunityService
+          .getOpportunitiesByUserIdPaginatedAndFiltered(userId, this.currentPage, this.pageSize, filters)
+          .subscribe({
+            next: (response) => {
+              this.totalPages = response.totalPages;
+              this.opportunities = response.data;
+            },
+          });
       }
-    )
+    } else if (this.role === 'admin') {
+      // Llamada para el rol "admin"
+      this.opportunityService
+        .getAllOpportunitiesPaginated(this.currentPage, this.pageSize, filters)
+        .subscribe({
+          next: (response) => {
+            this.totalPages = response.totalPages;
+            this.opportunities = response.data;
+          },
+        });
+    }
   }
   applyFilters() {
     const filtersToApply: OpportunityFilters = {};
@@ -70,7 +112,7 @@ export class ExecutiveOpportunitiesViewComponent implements OnInit{
 
   this.filters = filtersToApply;
   this.currentPage = 1;  
-  this.loadOpporunities();
+  this.loadOpportunities();
   }
   
 

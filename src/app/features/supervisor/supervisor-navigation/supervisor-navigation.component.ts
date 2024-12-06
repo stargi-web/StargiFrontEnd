@@ -50,6 +50,13 @@ export class SupervisorNavigationComponent implements OnInit{
             }
           },
           {
+            label:'Oportunidades del equipo v2',
+            icon:'pi pi-folder',
+            command:()=>{
+              this.router.navigate(['/supervisor/view-team-opp'])
+            }
+          },
+          {
             label:'Mis oportunidades',
             icon:'pi pi-file',
             command:()=>{

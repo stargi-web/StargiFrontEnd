@@ -3,11 +3,11 @@
   gap: 20px;
 }
 
-.filters {
-  width: 200px;
+.filters-pagination {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: column; /* Coloca la paginación y los filtros en una columna */
+  gap: 20px; /* Espaciado entre la paginación y los filtros */
+  width: 250px; /* Ajusta el ancho según sea necesario */
 }
 
 .table-container {

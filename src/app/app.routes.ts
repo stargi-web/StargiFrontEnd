@@ -82,11 +82,10 @@ export const routes: Routes = [
             { path: 'create-user', component: SupervisorCreateMemberComponent },
             { path: 'create-opportunity', component: SupervisorCreateOppComponent },
             { path: 'profile', component: ProfileViewComponent },
-            {path:'bases',component:ViewAssignedCollectionsComponent},
-            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent},
             {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
             {path:'users-attendances',component:RrhhUsersAttendacesComponent},
-            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent}
+            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent},
+            {path:'view-team-opp',component:ExecutiveOpportunitiesViewComponent}
         ]
     },
     {
