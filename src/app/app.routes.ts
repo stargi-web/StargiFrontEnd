@@ -31,6 +31,7 @@ import { RrhhMonthlyAttendanceSummaryComponent } from './features/rrhh/rrhh-mont
 import { ExecutiveOpportunitiesViewComponent } from './features/executive/executive-opportunities-view/executive-opportunities-view.component';
 import { AdminCreateUserComponent } from './features/admin/admin-create-user/admin-create-user.component';
 import { AttendanceTableComponent } from './features/rrhh/attendance-table/attendance-table.component';
+import { FileStorageComponent } from './shared/components/file-storage/file-storage.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -66,6 +67,7 @@ export const routes: Routes = [
             {path:'opportunities',component:AdminViewAllOpportunitiesComponent},
             {path:'bases',component:AdminViewBasesComponent},
             {path:'base-detail/:id',component:AdminBaseDetailsComponent},
+            {path:'files',component:FileStorageComponent},
             {path:'create-user',component:AdminCreateUserComponent}
         ]
     },

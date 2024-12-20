@@ -1,0 +1,32 @@
+<p>file-storage works!</p>
+<!-- File Storage Component -->
+<div class="file-storage-container">
+    <h2>Gestión de Archivos y Carpetas</h2>
+  
+    <!-- Sección para mostrar las carpetas -->
+    <div class="folders-section">
+      <h3>Carpetas Principales</h3>
+      <ul>
+        <li *ngFor="let folder of folders">
+          {{ folder.name }}
+        </li>
+      </ul>
+    </div>
+
+
+  <div>
+    <h1>Subir archivo a Firebase Storage</h1>
+  
+    <!-- Formulario para seleccionar archivo -->
+    <input type="file" (change)="uploadFile($event)" />
+  
+    <!-- Mostrar el progreso de la carga -->
+    <div *ngIf="uploadProgress > 0 && uploadProgress < 100">
+      <p>Progreso de carga: {{ uploadProgress }}%</p>
+    </div>
+  
+    <!-- Mostrar la URL de descarga cuando termine la carga -->
+    <div *ngIf="uploadURL">
+      <p>Archivo cargado con éxito!</p>
+      <a [href]="uploadURL" target="_blank">Ver archivo</a>
+    </div>

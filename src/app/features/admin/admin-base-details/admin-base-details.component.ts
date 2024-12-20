@@ -23,7 +23,7 @@ export class AdminBaseDetailsComponent implements OnInit{
   uploadedFiles: any[] = [];
   disable=false;
   cols!: any[];
-  clients!: any[];
+  clients: any[] = [];
   loading=true;
   collectionId!:number;
   userId!:number;
