@@ -1,20 +1,45 @@
-.file-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
+.file-storage-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
   }
   
-  .folder {
+  .folders-section {
+    margin-top: 20px;
+  }
+  
+  .folders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 16px;
+  }
+  
+  .folder-item {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-align: center;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
   }
   
-  .folder i {
-    font-size: 24px;
-    margin-bottom: 5px;
+  .folder-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
+  
+  .folder-icon {
+    font-size: 36px;
+    color: #007bff; /* Cambia el color si es necesario */
+    margin-bottom: 8px;
+  }
+  
+  .folder-name {
+    font-size: 14px;
+    color: #333;
+  }
+  

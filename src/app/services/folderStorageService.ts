@@ -32,4 +32,10 @@ export class FolderStorageService {
   getParentFoldersByUser(userId: number): Observable<Folder[]> {
     return this.http.get<Folder[]>(`${this.apiUrl}/parent/user/${userId}`);
   }
+
+
+  getChildrenFoldersByFolderId(folderId: number): Observable<Folder[]> {
+    return this.http.get<Folder[]>(`${this.apiUrl}/children/${folderId}`);
+  }
+
 }
