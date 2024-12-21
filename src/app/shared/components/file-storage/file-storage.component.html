@@ -1,25 +1,41 @@
+<p-toast></p-toast> <!-- Agregar en la plantilla principal -->
 <div class="file-storage-container">
-    <h2>Gestión de Archivos y Carpetas</h2>
-  
-    <!-- Botón para regresar -->
-    <button *ngIf="folderHistory.length > 0" (click)="goBack()">Regresar</button>
-  
-    <!-- Formulario para crear una carpeta -->
-    <div class="create-folder-section">
-      <input
-        type="text"
-        [(ngModel)]="newFolderName"
-        placeholder="Nombre de la nueva carpeta"
-      />
-      <button (click)="createFolder()">Crear Carpeta</button>
-    </div>
-  
-    <!-- Sección para mostrar las carpetas -->
+  <!-- Botones para crear carpeta y subir archivo -->
+   
+  <p-button icon="pi pi-arrow-left" (onClick)="goBack()"/>
+  <p-fileUpload 
+    mode="basic" 
+    chooseIcon="pi pi-upload" 
+    maxFileSize="1000000" 
+    (onSelect)="uploadOnFileSelect($event)" 
+    [auto]="true" 
+    chooseLabel="Subir Archivo" />
+
+    <!-- Botón Crear Carpeta con Icono -->
+  <p-button *ngIf="!isCreatingFolder" label="Crear Carpeta" icon="pi pi-folder" (click)="startFolderCreation()"></p-button>
+
+  <!-- Formulario para crear la carpeta (aparece cuando isCreatingFolder es true) -->
+  <div *ngIf="isCreatingFolder" class="folder-creation-form">
+    <input type="text" pInputText [(ngModel)]="newFolderName" placeholder="Nombre de la carpeta" />
+    <p-button label="Confirmar" icon="pi pi-check" (click)="confirmFolderCreation()"></p-button>
+    <p-button label="Cancelar" icon="pi pi-times" (click)="cancelFolderCreation()"></p-button>
+  </div>
+
+    
+  <!-- Contenedor scrollable para archivos y carpetas -->
+  <div class="folders-files-container">
+    <!-- Sección de carpetas y archivos -->
     <div class="folders-section">
-      <h3 *ngIf="folderHistory.length === 0">Carpetas Principales</h3>
-      <h3 *ngIf="folderHistory.length > 0">
-        Carpetas en {{ folderHistory[folderHistory.length - 1].name }} ID: {{ folderHistory[folderHistory.length - 1].id }}
-      </h3>
+      <!-- Título que cambia según el historial de carpetas -->
+      <div *ngIf="folderHistory.length === 0">
+      </div>
+      <div *ngIf="folderHistory.length > 0">
+        <h3>
+          Contenido en {{ folderHistory[folderHistory.length - 1].name }} (ID: {{ folderHistory[folderHistory.length - 1].id }})
+        </h3>
+      </div>
+
+      <!-- Grid de carpetas -->
       <div class="folders-grid">
         <div
           class="folder-item"
@@ -28,25 +44,15 @@
         >
           <i class="pi pi-folder folder-icon"></i>
           <span class="folder-name">{{ folder.name }}</span>
-         
+        </div>
+
+        <!-- Grid de archivos -->
+        <div class="file-item" *ngFor="let file of files" (click)="downloadFile(file)">
+          <i class="pi pi-file file-icon"></i>
+          <span class="file-name">{{ file.fileName }}</span>
+          <span class="file-size">({{ file.fileSize }})</span>
         </div>
       </div>
     </div>
   </div>
-  
-  <div>
-    <h1>Subir archivo a Firebase Storage</h1>
-  
-    <!-- Formulario para seleccionar archivo -->
-    <input type="file" (change)="uploadFile($event)" />
-  
-    <!-- Mostrar el progreso de la carga -->
-    <div *ngIf="uploadProgress > 0 && uploadProgress < 100">
-      <p>Progreso de carga: {{ uploadProgress }}%</p>
-    </div>
-  
-    <!-- Mostrar la URL de descarga cuando termine la carga -->
-    <div *ngIf="uploadURL">
-      <p>Archivo cargado con éxito!</p>
-      <a [href]="uploadURL" target="_blank">Ver archivo</a>
-    </div>
+</div>

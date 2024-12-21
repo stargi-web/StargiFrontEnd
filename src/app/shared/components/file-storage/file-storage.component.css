@@ -1,45 +1,118 @@
 .file-storage-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .folders-section {
-    margin-top: 20px;
-  }
-  
-  .folders-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 16px;
-  }
-  
-  .folder-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 10px;
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    cursor: pointer;
-  }
-  
-  .folder-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
-  
-  .folder-icon {
-    font-size: 36px;
-    color: #007bff; /* Cambia el color si es necesario */
-    margin-bottom: 8px;
-  }
-  
-  .folder-name {
-    font-size: 14px;
-    color: #333;
-  }
-  
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  position: relative; /* Para el posicionamiento de los botones */
+}
+
+.folders-section {
+  margin-top: 20px;
+}
+
+.folders-files-container {
+  width: 100%;
+  max-height: 500px; /* Ajusta la altura que prefieras */
+  overflow-y: auto; /* Solo hace scroll en esta sección */
+  background-color: #ffffff; /* Fondo blanco para el contenedor */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+}
+
+.folders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.folder-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.folder-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.folder-icon {
+  font-size: 36px;
+  color: #007bff; /* Cambia el color si es necesario */
+  margin-bottom: 8px;
+}
+
+.folder-name {
+  font-size: 14px;
+  color: #333;
+}
+
+.file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.file-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.file-icon {
+  font-size: 2rem;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+}
+
+.file-name {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.file-size {
+  font-size: 0.8rem;
+  color: gray;
+  margin-top: 0.2rem;
+}
+
+.action-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+
+
+.folder-creation-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.folder-creation-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.folder-creation-form input {
+  width: 200px;
+}
