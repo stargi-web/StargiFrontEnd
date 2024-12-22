@@ -46,7 +46,7 @@ export class FileStorageComponent implements OnInit {
 
   //UI
   isCreatingFolder: boolean = false; // Estado para controlar la visibilidad del input
-  isAdminParent: boolean = true;
+  isAdminParent: boolean = false;
 
   constructor(
     private folderService: FolderStorageService,
@@ -61,6 +61,7 @@ export class FileStorageComponent implements OnInit {
     console.log('Rol del usuario: ', this.userRole);
     if (this.userRole === 'admin') {
       this.adminLoadAllUserFolders();
+      this.isAdminParent = true;
     } else {
       this.folderService
         .getParentFoldersByUser(this.userId)
