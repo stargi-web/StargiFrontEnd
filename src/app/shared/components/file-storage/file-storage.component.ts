@@ -14,6 +14,7 @@ import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
+import { UserService } from '../../../services/userService';
 
 @Component({
   selector: 'app-file-storage',
@@ -40,31 +41,62 @@ export class FileStorageComponent implements OnInit {
   userId = Number(sessionStorage.getItem('userId'));
   selectedFile: any;
 
+  userRole: string = '';
+  adminUsersFolders: any = [];
+
   //UI
   isCreatingFolder: boolean = false; // Estado para controlar la visibilidad del input
+  isAdminParent: boolean = true;
 
   constructor(
     private folderService: FolderStorageService,
     private fileService: FileStorageService,
+    private userService: UserService,
     private storage: Storage,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
-    this.folderService
-      .getParentFoldersByUser(this.userId)
-      .subscribe((data: Folder[]) => {
-        this.folders = data; // Asignamos las carpetas principales
-      });
+    this.userRole = sessionStorage.getItem('role') || '';
+    console.log('Rol del usuario: ', this.userRole);
+    if (this.userRole === 'admin') {
+      this.adminLoadAllUserFolders();
+    } else {
+      this.folderService
+        .getParentFoldersByUser(this.userId)
+        .subscribe((data: Folder[]) => {
+          this.folders = data; // Asignamos las carpetas principales
+        });
+    }
+  }
+
+  adminLoadAllUserFolders(): void {
+    this.userService.getUsers().subscribe((users: any[]) => {
+      this.adminUsersFolders = users;
+      console.log('Usuarios:', this.adminUsersFolders);
+      this.isAdminParent = true;
+      this.folders = [];
+    });
   }
 
   // Cargar carpetas principales
-  private loadParentFolders(userId: number): void {
+  loadParentFolders(userId: number): void {
     this.folderService
       .getParentFoldersByUser(userId)
       .subscribe((data: Folder[]) => {
         this.folders = data;
         this.folderHistory = []; // Limpiar historial al cargar carpetas principales
+      });
+  }
+
+  adminLoadParentFolderByUser(userId: number): void {
+    this.folderService
+      .getParentFoldersByUser(userId)
+      .subscribe((data: Folder[]) => {
+        this.folders = data;
+        this.folderHistory = []; // Limpiar historial al cargar carpetas principales
+        this.isAdminParent = false;
+        this.userId = userId;
       });
   }
 
@@ -85,6 +117,7 @@ export class FileStorageComponent implements OnInit {
       });
 
     this.loadFiles(folder.id);
+    this.selectedFile = undefined;
   }
 
   // Regresar al nivel anterior
