@@ -1,56 +1,89 @@
-<p-toast></p-toast> <!-- Agregar en la plantilla principal -->
-<div class="file-storage-container">
-  <!-- Botones para crear carpeta y subir archivo -->
-   
-  <p-button icon="pi pi-arrow-left" (onClick)="goBack()"/>
-  <p-fileUpload 
-    mode="basic" 
-    chooseIcon="pi pi-upload" 
-    maxFileSize="1000000" 
-    (onSelect)="uploadOnFileSelect($event)" 
-    [auto]="true" 
-    chooseLabel="Subir Archivo" />
+<p-toast></p-toast>
 
-    <!-- Botón Crear Carpeta con Icono -->
-  <p-button *ngIf="!isCreatingFolder" label="Crear Carpeta" icon="pi pi-folder" (click)="startFolderCreation()"></p-button>
+<div class="m-5 grid">
+  <div class="col-12 grid">
+    <!-- Recuadro con borde visible -->
+    <div class="col p-0 grid">
+      <div class="flex col align-items-center">
+        <p-button
+          icon="pi pi-arrow-left"
+          (onClick)="goBack()"
+          [severity]="folderHistory.length > 0 ? 'primary' : 'secondary'"
+          class="align-items-end"
+        />
+        <div class="text-base font-medium text-700 m-2">{{ selectedFile }}</div>
+      </div>
+      <div class="flex col justify-content-end align-items-center">
+        <p-fileUpload
+          class="m-2"
+          mode="basic"
+          chooseIcon="pi pi-upload"
+          maxFileSize="1000000"
+          (onSelect)="uploadOnFileSelect($event)"
+          [auto]="true"
+          chooseLabel="Subir Archivo"
+        />
+        <!-- Botón Crear Carpeta con Icono -->
+        <p-button
+          *ngIf="!isCreatingFolder"
+          label="Crear Carpeta"
+          severity="secondary"
+          icon="pi pi-folder"
+          (click)="startFolderCreation()"
+        ></p-button>
 
-  <!-- Formulario para crear la carpeta (aparece cuando isCreatingFolder es true) -->
-  <div *ngIf="isCreatingFolder" class="folder-creation-form">
-    <input type="text" pInputText [(ngModel)]="newFolderName" placeholder="Nombre de la carpeta" />
-    <p-button label="Confirmar" icon="pi pi-check" (click)="confirmFolderCreation()"></p-button>
-    <p-button label="Cancelar" icon="pi pi-times" (click)="cancelFolderCreation()"></p-button>
+        <!-- Formulario para crear la carpeta (aparece cuando isCreatingFolder es true) -->
+        <div *ngIf="isCreatingFolder" class="flex flex-wrap align-items-center">
+          <input
+            class="m-2"
+            type="text"
+            pInputText
+            [(ngModel)]="newFolderName"
+            placeholder="Nombre de la carpeta"
+          />
+          <p-button
+            class="m-2"
+            label="Confirmar"
+            severity="success"
+            icon="pi pi-check"
+            (click)="confirmFolderCreation()"
+          ></p-button>
+          <p-button
+            class="m-2"
+            label="Cancelar"
+            severity="danger"
+            icon="pi pi-times"
+            (click)="cancelFolderCreation()"
+          ></p-button>
+        </div>
+      </div>
+    </div>
   </div>
-
-    
-  <!-- Contenedor scrollable para archivos y carpetas -->
-  <div class="folders-files-container">
-    <!-- Sección de carpetas y archivos -->
-    <div class="folders-section">
-      <!-- Título que cambia según el historial de carpetas -->
-      <div *ngIf="folderHistory.length === 0">
-      </div>
-      <div *ngIf="folderHistory.length > 0">
-        <h3>
-          Contenido en {{ folderHistory[folderHistory.length - 1].name }} (ID: {{ folderHistory[folderHistory.length - 1].id }})
-        </h3>
-      </div>
-
-      <!-- Grid de carpetas -->
-      <div class="folders-grid">
+  <div class="col-12 grid">
+    <!-- Recuadro con borde visible -->
+    <div class="storageCard p-card col p-4 h-25rem">
+      <div class="grid">
+        <!-- Grid de carpetas -->
         <div
-          class="folder-item"
+          class="folderCard flex flex-column m-2"
           *ngFor="let folder of folders"
           (click)="selectFolder(folder)"
         >
-          <i class="pi pi-folder folder-icon"></i>
+          <i class="folderIcon pi pi-folder folder-icon"></i>
           <span class="folder-name">{{ folder.name }}</span>
         </div>
-
         <!-- Grid de archivos -->
-        <div class="file-item" *ngFor="let file of files" (click)="downloadFile(file)">
-          <i class="pi pi-file file-icon"></i>
+        <div
+          class="fileCard flex flex-column m-2"
+          *ngFor="let file of files"
+          (dblclick)="downloadFile(file)"
+          (click)="selectFile(file)"
+        >
+          <i class="fileIcon pi pi-file file-icon"></i>
           <span class="file-name">{{ file.fileName }}</span>
-          <span class="file-size">({{ file.fileSize }})</span>
+          <span class="file-size" style="font-size: 0.8rem; color: gray"
+            >({{ file.fileSize }})</span
+          >
         </div>
       </div>
     </div>
