@@ -96,21 +96,26 @@
       let-removeUploadedFileCallback="removeUploadedFileCallback"
     >
       <div *ngIf="newFileList.length > 0">
-        <div class="flex flex-wrap p-0 sm:p-5 gap-5">
+        <div class="flex flex-wrap flex-column p-0 sm:p-5 gap-3">
           <div
             *ngFor="let file of newFileList; let i = index"
-            class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+            class="card m-0 px-6 flex flex-row surface-border align-items-center gap-3"
           >
             <div>
               <img
                 role="presentation"
                 [alt]="file.name"
+                [src]="file.objectURL"
                 width="100"
                 height="50"
               />
             </div>
-            <span class="font-semibold">{{ file.name }}</span>
-            <div>{{ formatSize(file.size) }}</div>
+            <span class="font-semibold w-20rem overflow-hidden">{{
+              file.name
+            }}</span>
+            <div class="w-7rem overflow-hidden">
+              {{ formatSize(file.size) }}
+            </div>
             <p-badge value="Pending" severity="warning" />
             <p-button
               #removeUploadedFileButton

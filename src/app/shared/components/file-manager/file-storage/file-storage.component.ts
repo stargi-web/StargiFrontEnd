@@ -326,7 +326,7 @@ export class FileStorageComponent implements OnInit {
             console.log('Archivo subido con éxito. URL:', downloadURL);
             this.createFile(file.name, file.size, file.type);
 
-            this.removeUploadedFileButton?.onClick.emit();
+            // this.removeUploadedFileButton?.onClick.emit();
 
             this.messageService.add({
               severity: 'success',
