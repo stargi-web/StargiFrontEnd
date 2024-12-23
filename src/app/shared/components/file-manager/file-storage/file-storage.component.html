@@ -47,7 +47,7 @@
             (onClick)="choose($event, chooseCallback)"
             icon="pi pi-upload"
             [outlined]="true"
-            label="Submit"
+            label="Subir archivo(s)"
           />
           <!-- Botón Crear Carpeta con Icono -->
           <p-button
@@ -95,6 +95,9 @@
       let-removeFileCallback="removeFileCallback"
       let-removeUploadedFileCallback="removeUploadedFileCallback"
     >
+      <div *ngIf="fileUploadProgress > 0" class="w-5 mr-2">
+        <p-progressBar [value]="fileUploadProgress" class="h-5" />
+      </div>
       <div *ngIf="newFileList.length > 0">
         <div class="flex flex-wrap flex-column p-0 sm:p-5 gap-3">
           <div
@@ -116,7 +119,8 @@
             <div class="w-7rem overflow-hidden">
               {{ formatSize(file.size) }}
             </div>
-            <p-badge value="Pending" severity="warning" />
+            <p-badge value="En cola" severity="warning" />
+
             <p-button
               #removeUploadedFileButton
               icon="pi pi-times"
@@ -175,7 +179,7 @@
         <i
           class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"
         ></i>
-        <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
+        <p class="mt-4 mb-0">Arrastre y suelte los archivos a subir aqui.</p>
       </div>
     </ng-template>
   </p-fileUpload>

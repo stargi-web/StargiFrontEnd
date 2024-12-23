@@ -33,3 +33,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+::ng-deep .p-fileupload .p-progressbar {
+  height: 1.1rem;
+}

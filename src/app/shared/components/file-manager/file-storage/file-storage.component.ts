@@ -17,6 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { UserService } from '../../../../services/userService';
 import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
+import { ProgressBarModule } from 'primeng/progressbar';
 @Component({
   selector: 'app-file-storage',
   standalone: true,
@@ -27,6 +28,7 @@ import { Button } from 'primeng/button';
     ToastModule,
     InputTextModule,
     BadgeModule,
+    ProgressBarModule,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
@@ -36,7 +38,6 @@ export class FileStorageComponent implements OnInit {
   folders: Folder[] = []; // Array para almacenar las carpetas
   files: any[] = [];
   selectedFolder: any;
-  uploadProgress: number = 0; // Para mostrar el progreso de la carga
   uploadURL: string = ''; // Para almacenar la URL del archivo cargado
   folderHistory: Folder[] = []; // Pila de historial de carpetas
   newFolderName: string = '';
@@ -52,6 +53,8 @@ export class FileStorageComponent implements OnInit {
   uploadedFiles: any[] = [];
   totalSize: number = 0;
   totalSizePercent: number = 0;
+  fileUploadProgress: number = 0;
+
   @ViewChild('removeUploadedFileButton') removeUploadedFileButton:
     | Button
     | undefined;
@@ -309,7 +312,7 @@ export class FileStorageComponent implements OnInit {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.uploadProgress = progress;
+          this.fileUploadProgress = Math.round(progress);
           console.log(`Cargando... ${progress}%`);
         },
         (error) => {
@@ -326,7 +329,8 @@ export class FileStorageComponent implements OnInit {
             console.log('Archivo subido con éxito. URL:', downloadURL);
             this.createFile(file.name, file.size, file.type);
 
-            // this.removeUploadedFileButton?.onClick.emit();
+            this.removeUploadedFileButton?.onClick.emit();
+            this.fileUploadProgress = 0;
 
             this.messageService.add({
               severity: 'success',
@@ -359,10 +363,7 @@ export class FileStorageComponent implements OnInit {
     removeFileCallback: (arg0: any, arg1: any) => void,
     index: any
   ) {
-    console.log('Archivo eliminado:', file);
     removeFileCallback(event, index);
-    this.totalSize -= parseInt(this.formatSize(file.size));
-    this.totalSizePercent = this.totalSize / 10;
   }
   choose(event: any, callback: () => void) {
     callback();
