@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FolderStorageService } from '../../../services/folderStorageService'; // Importamos el servicio
+import { FolderStorageService } from '../../../../services/folderStorageService'; // Importamos el servicio
 import {
   Storage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from '@angular/fire/storage'; // Usamos el SDK de Firebase
-import { Folder } from '../../../core/models/folderStorageModel';
+import { Folder } from '../../../../core/models/folderStorageModel';
 import { FormsModule } from '@angular/forms';
-import { FileStorageService } from '../../../services/fileStorageService';
+import { FileStorageService } from '../../../../services/fileStorageService';
 import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
-import { UserService } from '../../../services/userService';
-
+import { UserService } from '../../../../services/userService';
+import { BadgeModule } from 'primeng/badge';
+import { Button } from 'primeng/button';
 @Component({
   selector: 'app-file-storage',
   standalone: true,
@@ -25,6 +26,7 @@ import { UserService } from '../../../services/userService';
     FileUploadModule,
     ToastModule,
     InputTextModule,
+    BadgeModule,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
@@ -44,11 +46,22 @@ export class FileStorageComponent implements OnInit {
   userRole: string = '';
   adminUsersFolders: any = [];
 
+  //file
+  fileList: FileList = {} as FileList;
+  newFileList: File[] = Array.from(this.fileList || []); // Convert FileList to File[]
+  uploadedFiles: any[] = [];
+  totalSize: number = 0;
+  totalSizePercent: number = 0;
+  @ViewChild('removeUploadedFileButton') removeUploadedFileButton:
+    | Button
+    | undefined;
+
   //UI
   isCreatingFolder: boolean = false; // Estado para controlar la visibilidad del input
   isAdminParent: boolean = false;
 
   constructor(
+    private config: PrimeNGConfig,
     private folderService: FolderStorageService,
     private fileService: FileStorageService,
     private userService: UserService,
@@ -264,57 +277,94 @@ export class FileStorageComponent implements OnInit {
   }
 
   uploadOnFileSelect(event: any): void {
-    const file = event.files[0]; // Obtener el primer archivo seleccionado
+    this.fileList = event.files; // Get selected files as FileList
+    this.newFileList = this.fileList ? Array.from(this.fileList) : [];
 
-    if (!file) {
-      console.error('No se seleccionó ningún archivo.');
+    console.log('Archivos seleccionados:', this.newFileList);
+    if (!this.newFileList || this.newFileList.length === 0) {
+      console.error('No se seleccionaron archivos.');
       return;
     }
 
     if (!this.selectedFolder) {
-      alert('Debe seleccionar una carpeta para subir el archivo.');
+      alert('Debe seleccionar una carpeta para subir los archivos.');
       return;
     }
 
-    // Ruta en Firebase Storage
+    // Ruta base en Firebase Storage
     const folderPath = `users/${this.userId}/${this.selectedFolder.path}`;
-    const filePath = `${folderPath}/${file.name}`;
 
-    // Crear referencia al archivo en Firebase
-    const fileRef = ref(this.storage, filePath);
+    // Iterar sobre los archivos seleccionados
+    this.newFileList.forEach((file: File, index: number) => {
+      const filePath = `${folderPath}/${file.name}`;
 
-    // Subir archivo
-    const uploadTask = uploadBytesResumable(fileRef, file);
+      // Crear referencia al archivo en Firebase
+      const fileRef = ref(this.storage, filePath);
 
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.uploadProgress = progress;
-        console.log(`Cargando... ${progress}%`);
-      },
-      (error) => {
-        console.error('Error al subir el archivo:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al subir el archivo.',
-        });
-      },
-      () => {
-        getDownloadURL(fileRef).then((downloadURL) => {
-          this.uploadURL = downloadURL;
-          console.log('Archivo subido con éxito. URL:', downloadURL);
-          this.createFile(file.name, file.size, file.type);
+      // Subir archivo
+      const uploadTask = uploadBytesResumable(fileRef, file);
 
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.uploadProgress = progress;
+          console.log(`Cargando... ${progress}%`);
+        },
+        (error) => {
+          console.error('Error al subir el archivo:', error);
           this.messageService.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: 'Archivo subido con éxito.',
+            severity: 'error',
+            summary: 'Error',
+            detail: `Error al subir el archivo ${index + 1}.`,
           });
-        });
-      }
-    );
+        },
+        () => {
+          getDownloadURL(fileRef).then((downloadURL) => {
+            this.uploadURL = downloadURL;
+            console.log('Archivo subido con éxito. URL:', downloadURL);
+            this.createFile(file.name, file.size, file.type);
+
+            this.removeUploadedFileButton?.onClick.emit();
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: `Archivo ${index + 1} subido con éxito.`,
+            });
+          });
+        }
+      );
+    });
+  }
+
+  formatSize(bytes: number) {
+    const k = 1024;
+    const dm = 3;
+    const sizes = this.config.translation.fileSizeTypes;
+    if (bytes === 0) {
+      return `0 ${sizes?.[0] || 'B'}`;
+    }
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+
+    return `${formattedSize} ${sizes?.[i] || 'B'}`;
+  }
+
+  onRemoveTemplatingFile(
+    event: any,
+    file: { size: number },
+    removeFileCallback: (arg0: any, arg1: any) => void,
+    index: any
+  ) {
+    console.log('Archivo eliminado:', file);
+    removeFileCallback(event, index);
+    this.totalSize -= parseInt(this.formatSize(file.size));
+    this.totalSizePercent = this.totalSize / 10;
+  }
+  choose(event: any, callback: () => void) {
+    callback();
   }
 }
