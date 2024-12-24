@@ -154,33 +154,33 @@
         <!--ADMIN Grid de carpetas -->
         <ng-container *ngIf="userRole === 'admin' && isAdminParent">
           <div
-            class="folderCard flex flex-column m-2"
+            class="folderCard flex flex-column m-2 p-2"
             *ngFor="let userFolder of adminUsersFolders"
             (dblclick)="adminLoadParentFolderByUser(userFolder.id)"
           >
             <i class="folderIcon pi pi-folder folder-icon"></i>
-            <span class="folder-name">{{ userFolder.userName }}</span>
+            <span class="folder-name mt-1">{{ userFolder.userName }}</span>
           </div>
         </ng-container>
         <!-- Grid de carpetas -->
         <div
-          class="folderCard flex flex-column m-2"
+          class="folderCard flex flex-column m-2 p-2"
           *ngFor="let folder of folders"
           (dblclick)="goToFolder(folder)"
           (click)="selectFolder(folder)"
         >
           <i class="folderIcon pi pi-folder folder-icon"></i>
-          <span class="folder-name">{{ folder.name }}</span>
+          <span class="folder-name mt-1">{{ folder.name }}</span>
         </div>
         <!-- Grid de archivos -->
         <div
-          class="fileCard flex flex-column m-2"
+          class="fileCard flex flex-column m-2 p-2"
           *ngFor="let file of files"
           (dblclick)="downloadFile(file)"
           (click)="selectFile(file)"
         >
           <i class="fileIcon pi pi-file file-icon"></i>
-          <span class="file-name">{{ file.fileName }}</span>
+          <span class="file-name mt-1">{{ file.fileName }}</span>
           <span class="file-size" style="font-size: 0.8rem; color: gray">{{
             formatSize(file.fileSize)
           }}</span>
