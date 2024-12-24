@@ -53,6 +53,13 @@ export class AdminNavigationComponent implements OnInit {
         }
       },
       {
+        label:'Archivos',
+        icon:'pi pi-file',
+        command:()=>{
+          this.router.navigate(['/admin/files']);
+        }
+      },
+      {
         label:'Cerrar sesión',
         icon:'pi pi-sign-out',
         command:()=>{

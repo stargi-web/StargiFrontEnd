@@ -31,76 +31,111 @@ import { RrhhMonthlyAttendanceSummaryComponent } from './features/rrhh/rrhh-mont
 import { ExecutiveOpportunitiesViewComponent } from './features/executive/executive-opportunities-view/executive-opportunities-view.component';
 import { AdminCreateUserComponent } from './features/admin/admin-create-user/admin-create-user.component';
 import { AttendanceTableComponent } from './features/rrhh/attendance-table/attendance-table.component';
+import { FileStorageComponent } from './shared/components/file-manager/file-storage/file-storage.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'login', component: AuthComponent },
-    {
-        path: 'executive',
-        component: ExecutiveNavigationComponent,
-        canActivate: [roleGuard],
-        data: { expectedRoles: ['executive', 'executivegpon'] },
-        children: [
-            { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Redirección por defecto
-            { path: 'dashboard', component: ExecutiveDashboardComponent },
-            { path: 'create-opportunity', component: ExecutiveCreateOpportunityComponent },
-            { path: 'profile', component: ProfileViewComponent },
-            {path:'bases',component:ViewAssignedCollectionsComponent},
-            {path:'base/:baseId/clients',component:ViewAssignedClientsComponent},
-            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
-            {path:'opportunities-view',component:ExecutiveOpportunitiesViewComponent}
-        ]
-    },
-    {
-        path: 'admin',
-        component: AdminNavigationComponent,
-        canActivate: [roleGuard],
-        data: { expectedRoles: ['admin'] },
-        children: [
-            { path: '', redirectTo: 'users', pathMatch: 'full' }, // Redirección por defecto
-            { path: 'users', component: AdminUsersViewComponent },
-            { path: 'users-opp/:userId', component: AdminUserOppComponent },
-            { path: 'teams-view', component: AdminTeamsViewComponent },
-            { path: 'team-opportunities/:teamId', component: AdminViewTeamOpportunitiesComponent },
-            { path: 'profile', component: ProfileViewComponent },
-            {path:'opportunities',component:AdminViewAllOpportunitiesComponent},
-            {path:'bases',component:AdminViewBasesComponent},
-            {path:'base-detail/:id',component:AdminBaseDetailsComponent},
-            {path:'create-user',component:AdminCreateUserComponent}
-        ]
-    },
-    {
-        path: 'supervisor',
-        component: SupervisorNavigationComponent,
-        canActivate: [roleGuard],
-        data: { expectedRoles: ['supervisor'] },
-        children: [
-            { path: '', redirectTo: 'team', pathMatch: 'full' }, // Redirección por defecto
-            { path: 'team', component: SupervisorTeamMembersComponent },
-            { path: 'team-opportunities', component: SupervisorTeamOpportunitiesComponent },
-            { path: 'opportunities', component: SupervisorOpportunitiesComponent },
-            { path: 'create-user', component: SupervisorCreateMemberComponent },
-            { path: 'create-opportunity', component: SupervisorCreateOppComponent },
-            { path: 'profile', component: ProfileViewComponent },
-            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
-            {path:'users-attendances',component:RrhhUsersAttendacesComponent},
-            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent},
-            {path:'view-team-opp',component:ExecutiveOpportunitiesViewComponent}
-        ]
-    },
-    {
-        path:'HHRR',
-        component: RrhhNavigationComponent,
-        canActivate: [roleGuard],
-        data:{expectedRoles:['HHRR']},
-        children:[
-            {path:'',redirectTo:'users-attendances',pathMatch:'full'},
-            {path:'encuestas',component:RrhhSurverysComponent},
-            {path:'register-attendance',component:ExecutiveRegisterAttendanceComponent},
-            {path:'users-attendances',component:RrhhUsersAttendacesComponent},
-            {path:'user-attendaces-details/:userId',component:RrhhUserAttendancesDetailsComponent},
-            {path:'monthly-attendance-summary',component:AttendanceTableComponent},
-            {path:'create-user',component:AdminCreateUserComponent}
-        ]
-    }
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: AuthComponent },
+  {
+    path: 'executive',
+    component: ExecutiveNavigationComponent,
+    canActivate: [roleGuard],
+    data: { expectedRoles: ['executive', 'executivegpon'] },
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Redirección por defecto
+      { path: 'dashboard', component: ExecutiveDashboardComponent },
+      {
+        path: 'create-opportunity',
+        component: ExecutiveCreateOpportunityComponent,
+      },
+      { path: 'profile', component: ProfileViewComponent },
+      { path: 'bases', component: ViewAssignedCollectionsComponent },
+      { path: 'base/:baseId/clients', component: ViewAssignedClientsComponent },
+      {
+        path: 'register-attendance',
+        component: ExecutiveRegisterAttendanceComponent,
+      },
+      {
+        path: 'opportunities-view',
+        component: ExecutiveOpportunitiesViewComponent,
+      },
+      { path: 'files', component: FileStorageComponent },
+    ],
+  },
+  {
+    path: 'admin',
+    component: AdminNavigationComponent,
+    canActivate: [roleGuard],
+    data: { expectedRoles: ['admin'] },
+    children: [
+      { path: '', redirectTo: 'users', pathMatch: 'full' }, // Redirección por defecto
+      { path: 'users', component: AdminUsersViewComponent },
+      { path: 'users-opp/:userId', component: AdminUserOppComponent },
+      { path: 'teams-view', component: AdminTeamsViewComponent },
+      {
+        path: 'team-opportunities/:teamId',
+        component: AdminViewTeamOpportunitiesComponent,
+      },
+      { path: 'profile', component: ProfileViewComponent },
+      { path: 'opportunities', component: AdminViewAllOpportunitiesComponent },
+      { path: 'bases', component: AdminViewBasesComponent },
+      { path: 'base-detail/:id', component: AdminBaseDetailsComponent },
+      { path: 'files', component: FileStorageComponent },
+      { path: 'create-user', component: AdminCreateUserComponent },
+    ],
+  },
+  {
+    path: 'supervisor',
+    component: SupervisorNavigationComponent,
+    canActivate: [roleGuard],
+    data: { expectedRoles: ['supervisor'] },
+    children: [
+      { path: '', redirectTo: 'team', pathMatch: 'full' }, // Redirección por defecto
+      { path: 'team', component: SupervisorTeamMembersComponent },
+      {
+        path: 'team-opportunities',
+        component: SupervisorTeamOpportunitiesComponent,
+      },
+      { path: 'opportunities', component: SupervisorOpportunitiesComponent },
+      { path: 'create-user', component: SupervisorCreateMemberComponent },
+      { path: 'create-opportunity', component: SupervisorCreateOppComponent },
+      { path: 'profile', component: ProfileViewComponent },
+      {
+        path: 'register-attendance',
+        component: ExecutiveRegisterAttendanceComponent,
+      },
+      { path: 'users-attendances', component: RrhhUsersAttendacesComponent },
+      {
+        path: 'user-attendaces-details/:userId',
+        component: RrhhUserAttendancesDetailsComponent,
+      },
+      { path: 'view-team-opp', component: ExecutiveOpportunitiesViewComponent },
+      { path: 'files', component: FileStorageComponent },
+    ],
+  },
+  {
+    path: 'HHRR',
+    component: RrhhNavigationComponent,
+    canActivate: [roleGuard],
+    data: { expectedRoles: ['HHRR'] },
+    children: [
+      { path: '', redirectTo: 'users-attendances', pathMatch: 'full' },
+      { path: 'encuestas', component: RrhhSurverysComponent },
+      {
+        path: 'register-attendance',
+        component: ExecutiveRegisterAttendanceComponent,
+      },
+      { path: 'users-attendances', component: RrhhUsersAttendacesComponent },
+      {
+        path: 'user-attendaces-details/:userId',
+        component: RrhhUserAttendancesDetailsComponent,
+      },
+      {
+        path: 'monthly-attendance-summary',
+        component: AttendanceTableComponent,
+      },
+      { path: 'create-user', component: AdminCreateUserComponent },
+      { path: 'files', component: FileStorageComponent },
+    ],
+  },
 ];

@@ -1,0 +1,207 @@
+<p-toast></p-toast>
+<div class="m-5">
+  <p-toast />
+  <p-fileUpload
+    [disabled]="folderHistory.length > 0 ? false : true"
+    name="myfile[]"
+    [multiple]="true"
+    [auto]="true"
+    (onSelect)="uploadOnFileSelect($event)"
+    maxFileSize="0"
+  >
+    <ng-template
+      pTemplate="header"
+      let-newFileList
+      let-chooseCallback="chooseCallback"
+    >
+      <!-- Recuadro con borde visible -->
+      <div class="col p-0 grid">
+        <div class="flex col align-items-center">
+          <p-button
+            icon="pi pi-arrow-left"
+            (onClick)="
+              userRole === 'admin' && folderHistory.length === 0
+                ? adminLoadAllUserFolders()
+                : goBack()
+            "
+            [disabled]="
+              folderHistory.length > 0 || !isAdminParent ? 'false' : 'true'
+            "
+            class="align-items-end my-2"
+          />
+          <div class="font-medium text-700 m-2">
+            {{
+              folderHistory.length > 0
+                ? folderHistory[folderHistory.length - 1].path
+                : ""
+            }}
+          </div>
+        </div>
+        <div class="flex col justify-content-end align-items-center">
+          <p-button
+            *ngIf="selectedFolder"
+            (onClick)="deleteFolder(selectedFolder)"
+            icon="pi pi-trash"
+            [outlined]="true"
+            severity="danger"
+            label="Borrar Folder"
+          />
+          <p-button
+            *ngIf="isFileSelected"
+            (onClick)="deleteFile(selectedFile)"
+            icon="pi pi-trash"
+            [outlined]="true"
+            severity="danger"
+            label="Borrar archivo"
+          />
+          <p-button
+            *ngIf="folderHistory.length > 0"
+            (onClick)="choose($event, chooseCallback)"
+            icon="pi pi-upload"
+            [outlined]="true"
+            label="Subir archivo(s)"
+          />
+          <!-- Botón Crear Carpeta con Icono -->
+          <p-button
+            class="my-2 ml-2"
+            *ngIf="!isCreatingFolder && !isAdminParent"
+            label="Crear Carpeta"
+            severity="secondary"
+            icon="pi pi-folder"
+            (click)="startFolderCreation()"
+          ></p-button>
+
+          <!-- Formulario para crear la carpeta (aparece cuando isCreatingFolder es true) -->
+          <div
+            *ngIf="isCreatingFolder"
+            class="flex flex-wrap align-items-center"
+          >
+            <input
+              class="m-2"
+              type="text"
+              pInputText
+              [(ngModel)]="newFolderName"
+              placeholder="Nombre de la carpeta"
+            />
+            <p-button
+              class="m-2"
+              label="Confirmar"
+              severity="success"
+              icon="pi pi-check"
+              (click)="confirmFolderCreation()"
+            ></p-button>
+            <p-button
+              class="m-2"
+              label="Cancelar"
+              severity="danger"
+              icon="pi pi-times"
+              (click)="cancelFolderCreation()"
+            ></p-button>
+          </div>
+        </div></div
+    ></ng-template>
+    <ng-template
+      pTemplate="content"
+      let-newFileList
+      let-uploadedFiles="uploadedFiles"
+      let-removeFileCallback="removeFileCallback"
+      let-removeUploadedFileCallback="removeUploadedFileCallback"
+    >
+      <div *ngIf="fileUploadProgress > 0" class="w-5 mr-2">
+        <p-progressBar [value]="fileUploadProgress" class="h-5" />
+      </div>
+      <div *ngIf="newFileList.length > 0">
+        <div class="flex flex-wrap flex-column p-0 sm:p-5 gap-3">
+          <div
+            *ngFor="let file of newFileList; let i = index"
+            class="card m-0 px-6 flex flex-row surface-border align-items-center gap-3"
+          >
+            <div>
+              <img
+                role="presentation"
+                [alt]="file.name"
+                [src]="file.objectURL"
+                width="100"
+                height="50"
+              />
+            </div>
+            <span class="font-semibold w-20rem overflow-hidden">{{
+              file.name
+            }}</span>
+            <div class="w-7rem overflow-hidden">
+              {{ formatSize(file.size) }}
+            </div>
+            <p-badge value="En cola" severity="warning" />
+
+            <p-button
+              #removeUploadedFileButton
+              icon="pi pi-times"
+              (onClick)="
+                onRemoveTemplatingFile($event, file, removeFileCallback, i)
+              "
+              [outlined]="true"
+              [rounded]="true"
+              severity="danger"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="grid overflow-y-scroll max-h-30rem">
+        <!--ADMIN Grid de carpetas -->
+        <ng-container *ngIf="userRole === 'admin' && isAdminParent">
+          <div
+            class="folderCard flex flex-column m-2 p-2"
+            [ngClass]="{
+              'selected-folder': userFolder === selectedFolderAdmin
+            }"
+            *ngFor="let userFolder of adminUsersFolders"
+            (dblclick)="adminLoadParentFolderByUser(userFolder.id)"
+            (click)="selectAdminFolder(userFolder)"
+          >
+            <i class="folderIcon pi pi-folder folder-icon"></i>
+            <span class="folder-name mt-1">{{ userFolder.userName }}</span>
+          </div>
+        </ng-container>
+        <!-- Grid de carpetas -->
+        <div
+          class="folderCard flex flex-column m-2 p-2"
+          [ngClass]="{ 'selected-folder': folder === selectedFolder }"
+          *ngFor="let folder of folders"
+          (dblclick)="goToFolder(folder)"
+          (click)="selectFolder(folder)"
+        >
+          <i class="folderIcon pi pi-folder folder-icon"></i>
+          <span class="folder-name mt-1">{{ folder.name }}</span>
+        </div>
+        <!-- Grid de archivos -->
+        <div
+          class="fileCard flex flex-column m-2 p-2"
+          [ngClass]="{ 'selected-file': file === selectedFile }"
+          *ngFor="let file of files"
+          (dblclick)="downloadFile(file)"
+          (click)="selectFile(file)"
+        >
+          <i class="fileIcon pi pi-file file-icon"></i>
+          <span class="file-name mt-1">{{ file.fileName }}</span>
+          <span
+            class="file-size"
+            style="user-select: none; font-size: 0.8rem; color: gray"
+            >{{ formatSize(file.fileSize) }}</span
+          >
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="file"> </ng-template>
+    <ng-template pTemplate="empty">
+      <div
+        class="flex align-items-center justify-content-center flex-column mt-5"
+        *ngIf="folderHistory.length > 0"
+      >
+        <i
+          class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"
+        ></i>
+        <p class="mt-4 mb-0">Arrastre y suelte los archivos a subir aqui.</p>
+      </div>
+    </ng-template>
+  </p-fileUpload>
+</div>
