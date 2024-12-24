@@ -36,12 +36,20 @@
                 : ""
             }}{{
               folderHistory.length > 0 && selectedFile
-                ? "/ " + selectedFile
+                ? "/ " + selectedFile.fileName
                 : ""
             }}
           </div>
         </div>
         <div class="flex col justify-content-end align-items-center">
+          <p-button
+            *ngIf="isFileSelected"
+            (onClick)="deleteFile(selectedFile)"
+            icon="pi pi-trash"
+            [outlined]="true"
+            severity="danger"
+            label="Borrar archivo"
+          />
           <p-button
             *ngIf="folderHistory.length > 0"
             (onClick)="choose($event, chooseCallback)"
@@ -164,9 +172,9 @@
         >
           <i class="fileIcon pi pi-file file-icon"></i>
           <span class="file-name">{{ file.fileName }}</span>
-          <span class="file-size" style="font-size: 0.8rem; color: gray"
-            >({{ file.fileSize }})</span
-          >
+          <span class="file-size" style="font-size: 0.8rem; color: gray">{{
+            formatSize(file.fileSize)
+          }}</span>
         </div>
       </div></ng-template
     >

@@ -42,18 +42,22 @@ export class FileStorageComponent implements OnInit {
   folderHistory: Folder[] = []; // Pila de historial de carpetas
   newFolderName: string = '';
   userId = Number(sessionStorage.getItem('userId'));
-  selectedFile: any;
 
   userRole: string = '';
   adminUsersFolders: any = [];
 
   //file
+  isFileSelected: boolean = false;
+  selectedFile: any;
   fileList: FileList = {} as FileList;
   newFileList: File[] = Array.from(this.fileList || []); // Convert FileList to File[]
   uploadedFiles: any[] = [];
   totalSize: number = 0;
   totalSizePercent: number = 0;
   fileUploadProgress: number = 0;
+
+  completedUploads: number = 0;
+  totalFiles: number = 0;
 
   @ViewChild('removeUploadedFileButton') removeUploadedFileButton:
     | Button
@@ -125,6 +129,7 @@ export class FileStorageComponent implements OnInit {
 
   // Maneja el clic en una carpeta
   selectFolder(folder: Folder): void {
+    this.isFileSelected = false; // Deseleccionar archivo
     this.selectedFolder = folder; // Actualizar la carpeta seleccionada
     this.folderHistory.push(folder); // Agregar la carpeta actual al historial
     this.folderService
@@ -139,6 +144,7 @@ export class FileStorageComponent implements OnInit {
 
   // Regresar al nivel anterior
   goBack(): void {
+    this.isFileSelected = false;
     this.folderHistory.pop(); // Eliminar la carpeta actual del historial
     const previousFolder = this.folderHistory[this.folderHistory.length - 1];
 
@@ -221,6 +227,15 @@ export class FileStorageComponent implements OnInit {
     this.fileService.createFile(this.userId, folderId, fileData).subscribe({
       next: (file) => {
         console.log('File created:', file);
+
+        if (this.completedUploads === this.totalFiles) {
+          this.completedUploads = 0;
+          this.totalFiles = 0;
+          console.log(
+            'a Todos los archivos subidos con éxito. ' + this.selectedFolder.id
+          );
+          this.loadFiles(this.selectedFolder.id);
+        }
       },
       error: (error) => {
         console.error('Error creating file:', error);
@@ -254,8 +269,9 @@ export class FileStorageComponent implements OnInit {
 
   //UI
   selectFile(file: any) {
-    this.selectedFile = file.fileName;
-    console.log('Archivo seleccionado:', this.selectedFile);
+    this.selectedFile = file;
+    this.isFileSelected = true;
+    console.log('Archivo seleccionado:', this.selectedFile.fileName);
   }
 
   startFolderCreation() {
@@ -296,11 +312,11 @@ export class FileStorageComponent implements OnInit {
 
     // Ruta base en Firebase Storage
     const folderPath = `users/${this.userId}/${this.selectedFolder.path}`;
+    this.totalFiles = this.newFileList.length;
 
     // Iterar sobre los archivos seleccionados
     this.newFileList.forEach((file: File, index: number) => {
       const filePath = `${folderPath}/${file.name}`;
-
       // Crear referencia al archivo en Firebase
       const fileRef = ref(this.storage, filePath);
 
@@ -331,6 +347,7 @@ export class FileStorageComponent implements OnInit {
 
             this.removeUploadedFileButton?.onClick.emit();
             this.fileUploadProgress = 0;
+            this.completedUploads++;
 
             this.messageService.add({
               severity: 'success',
@@ -367,5 +384,25 @@ export class FileStorageComponent implements OnInit {
   }
   choose(event: any, callback: () => void) {
     callback();
+  }
+
+  deleteFile(file: any): void {
+    if (!file) {
+      return;
+    }
+
+    if (!confirm(`¿Estás seguro de eliminar el archivo ${file.fileName}?`)) {
+      return;
+    }
+
+    this.fileService.deleteFile(file.id).subscribe({
+      next: () => {
+        this.loadFiles(this.selectedFolder.id);
+        this.selectedFile = undefined;
+      },
+      error: (error) => {
+        console.error('Error deleting file:', error);
+      },
+    });
   }
 }
