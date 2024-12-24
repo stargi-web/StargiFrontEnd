@@ -29,14 +29,10 @@
             "
             class="align-items-end my-2"
           />
-          <div class="text-base font-medium text-700 m-2">
+          <div class="font-medium text-700 m-2">
             {{
               folderHistory.length > 0
                 ? folderHistory[folderHistory.length - 1].path
-                : ""
-            }}{{
-              folderHistory.length > 0 && selectedFile
-                ? "/ " + selectedFile.fileName
                 : ""
             }}
           </div>
@@ -187,9 +183,11 @@
         >
           <i class="fileIcon pi pi-file file-icon"></i>
           <span class="file-name mt-1">{{ file.fileName }}</span>
-          <span class="file-size" style="font-size: 0.8rem; color: gray">{{
-            formatSize(file.fileSize)
-          }}</span>
+          <span
+            class="file-size"
+            style="user-select: none; font-size: 0.8rem; color: gray"
+            >{{ formatSize(file.fileSize) }}</span
+          >
         </div>
       </div>
     </ng-template>

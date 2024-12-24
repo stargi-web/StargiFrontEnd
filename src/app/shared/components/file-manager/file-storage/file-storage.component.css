@@ -30,6 +30,7 @@
 
 .folder-name,
 .file-name {
+  user-select: none;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
