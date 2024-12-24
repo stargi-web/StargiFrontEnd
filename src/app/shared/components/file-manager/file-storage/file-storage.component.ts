@@ -62,6 +62,9 @@ export class FileStorageComponent implements OnInit {
   completedUploads: number = 0;
   totalFiles: number = 0;
 
+  //admin
+  selectedFolderAdmin: any;
+
   @ViewChild('removeUploadedFileButton') removeUploadedFileButton:
     | Button
     | undefined;
@@ -95,6 +98,7 @@ export class FileStorageComponent implements OnInit {
   }
 
   adminLoadAllUserFolders(): void {
+    this.selectedFolder = undefined;
     this.userService.getUsersIncludingAdmins().subscribe((users: any[]) => {
       this.adminUsersFolders = users;
       this.isAdminParent = true;
@@ -113,6 +117,7 @@ export class FileStorageComponent implements OnInit {
   }
 
   adminLoadParentFolderByUser(userId: number): void {
+    this.selectedFolderAdmin = undefined;
     this.folderService
       .getParentFoldersByUser(userId)
       .subscribe((data: Folder[]) => {
@@ -427,8 +432,10 @@ export class FileStorageComponent implements OnInit {
             this.loadChildrenFolders(
               this.folderHistory[this.folderHistory.length - 1].id
             );
+            this.selectedFolder = undefined;
           } else {
             this.loadParentFolders(this.userId);
+            this.selectedFolder = undefined;
           }
         },
         error: (error) => {
@@ -453,5 +460,9 @@ export class FileStorageComponent implements OnInit {
     for (const item of fileList.items) {
       await deleteObject(item);
     }
+  }
+
+  selectAdminFolder(folder: any): void {
+    this.selectedFolderAdmin = folder;
   }
 }
