@@ -6,6 +6,8 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  listAll,
+  deleteObject,
 } from '@angular/fire/storage'; // Usamos el SDK de Firebase
 import { Folder } from '../../../../core/models/folderStorageModel';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +20,7 @@ import { UserService } from '../../../../services/userService';
 import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
+
 @Component({
   selector: 'app-file-storage',
   standalone: true,
@@ -94,7 +97,6 @@ export class FileStorageComponent implements OnInit {
   adminLoadAllUserFolders(): void {
     this.userService.getUsers().subscribe((users: any[]) => {
       this.adminUsersFolders = users;
-      console.log('Usuarios:', this.adminUsersFolders);
       this.isAdminParent = true;
       this.folders = [];
     });
@@ -131,20 +133,28 @@ export class FileStorageComponent implements OnInit {
   selectFolder(folder: Folder): void {
     this.isFileSelected = false; // Deseleccionar archivo
     this.selectedFolder = folder; // Actualizar la carpeta seleccionada
-    this.folderHistory.push(folder); // Agregar la carpeta actual al historial
-    this.folderService
-      .getChildrenFoldersByFolderId(folder.id)
-      .subscribe((subFolders: Folder[]) => {
-        this.folders = subFolders; // Actualizar la vista con las subcarpetas
-      });
-
-    this.loadFiles(folder.id);
     this.selectedFile = undefined;
   }
 
+  goToFolder(folder: Folder): void {
+    this.folderHistory.push(folder); // Agregar la carpeta actual al historial
+    this.loadChildrenFolders(folder.id);
+    this.loadFiles(folder.id);
+    this.selectedFolder = undefined;
+  }
+
+  loadChildrenFolders(folderId: number): void {
+    this.folderService
+      .getChildrenFoldersByFolderId(folderId)
+      .subscribe((subFolders: Folder[]) => {
+        this.folders = subFolders; // Actualizar la vista con las subcarpetas
+      });
+  }
   // Regresar al nivel anterior
   goBack(): void {
     this.isFileSelected = false;
+    this.selectedFolder = undefined;
+
     this.folderHistory.pop(); // Eliminar la carpeta actual del historial
     const previousFolder = this.folderHistory[this.folderHistory.length - 1];
 
@@ -197,9 +207,7 @@ export class FileStorageComponent implements OnInit {
         next: () => {
           this.newFolderName = '';
           if (parentId) {
-            this.selectFolder(
-              this.folderHistory[this.folderHistory.length - 1]
-            );
+            this.loadChildrenFolders(parentId);
           } else {
             this.loadParentFolders(this.userId);
           }
@@ -231,7 +239,7 @@ export class FileStorageComponent implements OnInit {
         if (this.completedUploads === this.totalFiles) {
           this.completedUploads = 0;
           this.totalFiles = 0;
-          this.loadFiles(this.selectedFolder.id);
+          this.loadFiles(this.folderHistory[this.folderHistory.length - 1].id);
         }
       },
       error: (error) => {
@@ -241,7 +249,9 @@ export class FileStorageComponent implements OnInit {
   }
 
   downloadFile(file: any): void {
-    const filePath = `users/${this.userId}/${this.selectedFolder.path}/${file.fileName}`; // Ruta completa del archivo en Firebase Storage
+    const filePath = `users/${this.userId}/${
+      this.folderHistory[this.folderHistory.length - 1].path
+    }/${file.fileName}`; // Ruta completa del archivo en Firebase Storage
     const fileRef = ref(this.storage, filePath);
 
     // Obtener la URL de descarga
@@ -296,13 +306,15 @@ export class FileStorageComponent implements OnInit {
       return;
     }
 
-    if (!this.selectedFolder) {
+    if (!this.folderHistory[this.folderHistory.length - 1]) {
       alert('Debe seleccionar una carpeta para subir los archivos.');
       return;
     }
 
     // Ruta base en Firebase Storage
-    const folderPath = `users/${this.userId}/${this.selectedFolder.path}`;
+    const folderPath = `users/${this.userId}/${
+      this.folderHistory[this.folderHistory.length - 1].path
+    }`;
     this.totalFiles = this.newFileList.length;
 
     // Iterar sobre los archivos seleccionados
@@ -386,12 +398,60 @@ export class FileStorageComponent implements OnInit {
 
     this.fileService.deleteFile(file.id).subscribe({
       next: () => {
-        this.loadFiles(this.selectedFolder.id);
+        this.loadFiles(this.folderHistory[this.folderHistory.length - 1].id);
         this.selectedFile = undefined;
       },
       error: (error) => {
         console.error('Error deleting file:', error);
       },
     });
+  }
+
+  async deleteFolder(folder: Folder): Promise<void> {
+    if (
+      !folder ||
+      !confirm(`¿Estás seguro de eliminar la carpeta ${folder.name}?`)
+    ) {
+      return;
+    }
+
+    try {
+      const folderPath = `users/${this.userId}/${folder.path}`;
+      await this.deleteFirebaseFolder(folderPath);
+
+      // Delete folder from database
+      this.folderService.deleteFolder(folder.id).subscribe({
+        next: () => {
+          // Refresh folder list
+          if (this.folderHistory.length > 0) {
+            this.loadChildrenFolders(
+              this.folderHistory[this.folderHistory.length - 1].id
+            );
+          } else {
+            this.loadParentFolders(this.userId);
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting folder from database:', error);
+        },
+      });
+    } catch (error) {
+      console.error('Error deleting folder from storage:', error);
+    }
+  }
+
+  private async deleteFirebaseFolder(folderPath: string): Promise<void> {
+    const folderRef = ref(this.storage, folderPath);
+    const fileList = await listAll(folderRef);
+
+    // Recursively handle all subfolders first
+    for (const prefix of fileList.prefixes) {
+      await this.deleteFirebaseFolder(prefix.fullPath);
+    }
+
+    // Delete all files in current folder
+    for (const item of fileList.items) {
+      await deleteObject(item);
+    }
   }
 }

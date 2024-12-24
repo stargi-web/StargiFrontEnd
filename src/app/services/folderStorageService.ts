@@ -37,4 +37,8 @@ export class FolderStorageService {
   getChildrenFoldersByFolderId(folderId: number): Observable<Folder[]> {
     return this.http.get<Folder[]>(`${this.apiUrl}/children/${folderId}`);
   }
+
+  deleteFolder(folderId: number): Observable<Folder> {
+    return this.http.delete<Folder>(`${this.apiUrl}/${folderId}`);
+  }
 }
