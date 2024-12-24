@@ -95,7 +95,7 @@ export class FileStorageComponent implements OnInit {
   }
 
   adminLoadAllUserFolders(): void {
-    this.userService.getUsers().subscribe((users: any[]) => {
+    this.userService.getUsersIncludingAdmins().subscribe((users: any[]) => {
       this.adminUsersFolders = users;
       this.isAdminParent = true;
       this.folders = [];
