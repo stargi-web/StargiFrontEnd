@@ -226,14 +226,11 @@ export class FileStorageComponent implements OnInit {
 
     this.fileService.createFile(this.userId, folderId, fileData).subscribe({
       next: (file) => {
-        console.log('File created:', file);
+        console.log('File created:', file.fileName);
 
         if (this.completedUploads === this.totalFiles) {
           this.completedUploads = 0;
           this.totalFiles = 0;
-          console.log(
-            'a Todos los archivos subidos con éxito. ' + this.selectedFolder.id
-          );
           this.loadFiles(this.selectedFolder.id);
         }
       },
@@ -247,12 +244,9 @@ export class FileStorageComponent implements OnInit {
     const filePath = `users/${this.userId}/${this.selectedFolder.path}/${file.fileName}`; // Ruta completa del archivo en Firebase Storage
     const fileRef = ref(this.storage, filePath);
 
-    console.log(fileRef);
     // Obtener la URL de descarga
     getDownloadURL(fileRef)
       .then((downloadURL) => {
-        console.log('URL de descarga: ', downloadURL);
-
         // Abrir el archivo en una nueva pestaña
         const newTab = window.open(downloadURL, '_blank');
 
@@ -271,7 +265,6 @@ export class FileStorageComponent implements OnInit {
   selectFile(file: any) {
     this.selectedFile = file;
     this.isFileSelected = true;
-    console.log('Archivo seleccionado:', this.selectedFile.fileName);
   }
 
   startFolderCreation() {
@@ -281,7 +274,6 @@ export class FileStorageComponent implements OnInit {
   // Método que se llama cuando se confirma la creación de la carpeta
   confirmFolderCreation() {
     if (this.newFolderName) {
-      console.log('Carpeta creada con nombre:', this.newFolderName);
       // Aquí agregarías el código para crear la carpeta con el nombre dado
       this.isCreatingFolder = false; // Vuelve al estado de solo el botón
       this.createFolder();
@@ -299,7 +291,6 @@ export class FileStorageComponent implements OnInit {
     this.fileList = event.files; // Get selected files as FileList
     this.newFileList = this.fileList ? Array.from(this.fileList) : [];
 
-    console.log('Archivos seleccionados:', this.newFileList);
     if (!this.newFileList || this.newFileList.length === 0) {
       console.error('No se seleccionaron archivos.');
       return;
@@ -329,7 +320,6 @@ export class FileStorageComponent implements OnInit {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           this.fileUploadProgress = Math.round(progress);
-          console.log(`Cargando... ${progress}%`);
         },
         (error) => {
           console.error('Error al subir el archivo:', error);
@@ -342,7 +332,6 @@ export class FileStorageComponent implements OnInit {
         () => {
           getDownloadURL(fileRef).then((downloadURL) => {
             this.uploadURL = downloadURL;
-            console.log('Archivo subido con éxito. URL:', downloadURL);
             this.createFile(file.name, file.size, file.type);
 
             this.removeUploadedFileButton?.onClick.emit();
