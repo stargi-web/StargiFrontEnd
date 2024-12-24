@@ -58,6 +58,13 @@ export class ExecutiveNavigationComponent implements OnInit {
         },
       },
       {
+        label: 'Archivos',
+        icon: 'pi pi-file',
+        command: () => {
+          this.router.navigate(['/executive/files']);
+        },
+      },
+      {
         label: 'Cerrar sesión',
         icon: 'pi pi-sign-out',
         command: () => {
@@ -66,13 +73,6 @@ export class ExecutiveNavigationComponent implements OnInit {
           sessionStorage.removeItem('name');
           sessionStorage.removeItem('role');
           this.router.navigate(['/login']);
-        },
-      },
-      {
-        label: 'Archivos',
-        icon: 'pi pi-file',
-        command: () => {
-          this.router.navigate(['/executive/files']);
         },
       },
     ];
