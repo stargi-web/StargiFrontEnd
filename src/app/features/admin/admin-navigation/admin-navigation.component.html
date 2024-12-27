@@ -1,8 +1,13 @@
-<p-menubar [model]="items">
+<div class="card">
+  <p-menubar [model]="items">
     <ng-template pTemplate="end">
-        <div class="flex align-items-center gap-2" (click)="goToProfile()">
-            <p>{{name}}</p>
+      <div class="flex align-items-center gap-2">
+        <p>{{ name }}</p>
+        <div class="user-icon" (click)="goToProfile()">
+          <i class="pi pi-user"></i>
         </div>
+      </div>
     </ng-template>
-</p-menubar>
-<router-outlet></router-outlet>
+  </p-menubar>
+  <router-outlet></router-outlet>
+</div>

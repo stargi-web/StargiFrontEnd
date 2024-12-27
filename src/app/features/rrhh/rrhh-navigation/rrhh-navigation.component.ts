@@ -65,6 +65,6 @@ export class RrhhNavigationComponent implements OnInit {
     ];
   }
   goToProfile() {
-    this.router.navigate(['/executive/profile']);
+    this.router.navigate(['/HHRR/profile']);
   }
 }
