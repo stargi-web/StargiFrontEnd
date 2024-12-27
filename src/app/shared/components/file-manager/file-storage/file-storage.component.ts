@@ -15,6 +15,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { FirebaseCloudStorageService } from '../../../../services/firebaseCloudStorage';
 import { MessageNotificationService } from '../../../services/message-toast.service';
 import { MessageModule } from 'primeng/message';
+import { CustomConfirmDialogComponent } from '../../custom-confirm-dialog/custom-confirm-dialog.component';
 
 @Component({
   selector: 'app-file-storage',
@@ -28,6 +29,7 @@ import { MessageModule } from 'primeng/message';
     BadgeModule,
     ProgressBarModule,
     MessageModule,
+    CustomConfirmDialogComponent,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
@@ -53,7 +55,6 @@ export class FileStorageComponent implements OnInit {
   uploadedFiles: any[] = [];
   totalSize: number = 0;
   totalSizePercent: number = 0;
-  fileUploadProgress: number = 0;
 
   completedUploads: number = 0;
   totalFiles: number = 0;
@@ -64,7 +65,10 @@ export class FileStorageComponent implements OnInit {
   @ViewChild('removeUploadedFileButton') removeUploadedFileButton:
     | Button
     | undefined;
-
+  @ViewChild('deleteFolderDialog')
+  deleteFolderDialog!: CustomConfirmDialogComponent;
+  @ViewChild('deleteFileDialog')
+  deleteFileDialog!: CustomConfirmDialogComponent;
   //UI
   isCreatingFolder: boolean = false; // Estado para controlar la visibilidad del input
   isAdminParent: boolean = false;
@@ -375,44 +379,39 @@ export class FileStorageComponent implements OnInit {
       return;
     }
 
-    if (!confirm(`¿Estás seguro de eliminar el archivo ${file.fileName}?`)) {
-      return;
-    }
-
     this.fileService.deleteFile(file.id).subscribe({
       next: () => {
         this.loadFiles(this.folderHistory[this.folderHistory.length - 1].id);
         this.deleteFirebaseFile(
-          `users/${this.userId}/files/${this.selectedFile.filePath}`
+          `users/${this.userId}/files/${this.selectedFile.filePath}`,
+          file.fileName
         );
         this.selectedFile = undefined;
         this.isFileSelected = false;
       },
       error: (error) => {
-        console.error('Error deleting file:', error);
+        this.messageNotificationService.showError(error.error.message);
       },
     });
   }
 
-  deleteFirebaseFile(path: string): void {
+  deleteFirebaseFile(path: string, fileName: string): void {
     this.firebaseCloudStorageService.deleteFile(path).subscribe(
       (response) => {
         // Maneja la respuesta exitosa (puedes mostrar un mensaje al usuario, por ejemplo)
         console.log(response.message);
+        this.messageNotificationService.showSuccess(
+          `Archivo ${fileName} eliminado con éxito`
+        );
       },
       (error) => {
-        // Maneja el error si ocurre
-        console.error('Error al eliminar el archivo: ', error);
-        // Aquí puedes agregar un mensaje de error al usuario si es necesario
+        this.messageNotificationService.showError(error.error.message);
       }
     );
   }
 
   async deleteFolder(folder: Folder): Promise<void> {
-    if (
-      !folder ||
-      !confirm(`¿Estás seguro de eliminar la carpeta ${folder.name}?`)
-    ) {
+    if (!folder) {
       return;
     }
 
@@ -423,6 +422,10 @@ export class FileStorageComponent implements OnInit {
       // Delete folder from database
       this.folderService.deleteFolder(folder.id).subscribe({
         next: () => {
+          this.messageNotificationService.showSuccess(
+            `Carpeta ${folder.name} eliminada con éxito`
+          );
+
           // Refresh folder list
           if (this.folderHistory.length > 0) {
             this.loadChildrenFolders(
@@ -435,7 +438,7 @@ export class FileStorageComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error deleting folder from database:', error);
+          this.messageNotificationService.showError(error.error.message);
         },
       });
     } catch (error) {
@@ -451,7 +454,7 @@ export class FileStorageComponent implements OnInit {
       },
       (error) => {
         // Maneja cualquier error que ocurra
-        console.error('Error al eliminar la carpeta: ', error);
+        this.messageNotificationService.showError(error.error.message);
       }
     );
   }
@@ -459,4 +462,26 @@ export class FileStorageComponent implements OnInit {
   selectAdminFolder(folder: any): void {
     this.selectedFolderAdmin = folder;
   }
+
+  // Show the confirmation dialog for folder deletion
+  showDeleteFolderConfirmation(event: Event) {
+    this.deleteFolderDialog.open(event);
+  }
+
+  // Show the confirmation dialog for file deletion
+  showDeleteFileConfirmation(event: Event) {
+    this.deleteFileDialog.open(event);
+  }
+
+  // Handle the folder deletion
+  handleDeleteFolder() {
+    this.deleteFolder(this.selectedFolder);
+  }
+
+  // Handle the file deletion
+  handleDeleteFile() {
+    this.deleteFile(this.selectedFile);
+  }
+
+  handleReject(): void {}
 }

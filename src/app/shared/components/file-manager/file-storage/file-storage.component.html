@@ -1,4 +1,28 @@
 <p-toast></p-toast>
+<!-- Custom Confirm Dialog for Folder Deletion -->
+<app-custom-confirm-dialog
+  #deleteFolderDialog
+  [message]="'Seguro que quiere eliminar esta carpeta?'"
+  [header]="'Confirmación de eliminación de carpeta'"
+  [icon]="'pi pi-trash'"
+  [acceptButtonStyleClass]="'p-button-danger'"
+  [rejectButtonStyleClass]="'p-button-secondary'"
+  (onAccept)="handleDeleteFolder()"
+  (onReject)="handleReject()"
+></app-custom-confirm-dialog>
+
+<!-- Custom Confirm Dialog for File Deletion -->
+<app-custom-confirm-dialog
+  #deleteFileDialog
+  [message]="'Seguro que quiere eliminar este archivo?'"
+  [header]="'Confirmación de eliminación de archivo'"
+  [icon]="'pi pi-trash'"
+  [acceptButtonStyleClass]="'p-button-danger'"
+  [rejectButtonStyleClass]="'p-button-secondary'"
+  (onAccept)="handleDeleteFile()"
+  (onReject)="handleReject()"
+></app-custom-confirm-dialog>
+
 <div class="m-5">
   <p-toast />
   <p-fileUpload
@@ -40,15 +64,16 @@
         <div class="flex col justify-content-end align-items-center">
           <p-button
             *ngIf="selectedFolder"
-            (onClick)="deleteFolder(selectedFolder)"
+            (click)="showDeleteFolderConfirmation($event)"
             icon="pi pi-trash"
             [outlined]="true"
             severity="danger"
             label="Borrar Folder"
           />
+
           <p-button
             *ngIf="isFileSelected"
-            (onClick)="deleteFile(selectedFile)"
+            (click)="showDeleteFileConfirmation(selectedFile)"
             icon="pi pi-trash"
             [outlined]="true"
             severity="danger"
@@ -107,9 +132,6 @@
       let-removeFileCallback="removeFileCallback"
       let-removeUploadedFileCallback="removeUploadedFileCallback"
     >
-      <div *ngIf="fileUploadProgress > 0" class="w-5 mr-2">
-        <p-progressBar [value]="fileUploadProgress" class="h-5" />
-      </div>
       <div *ngIf="newFileList.length > 0">
         <div class="flex flex-wrap flex-column p-0 sm:p-5 gap-3">
           <div

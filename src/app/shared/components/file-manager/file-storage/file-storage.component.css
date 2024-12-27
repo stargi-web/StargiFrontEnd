@@ -36,10 +36,6 @@
   text-overflow: ellipsis;
 }
 
-::ng-deep .p-fileupload .p-progressbar {
-  height: 1.1rem;
-}
-
 .selected-folder {
   background-color: #d1e7ff; /* Un color suave para resaltar */
   border: 1px solid #339af0; /* Opcional: agregar un borde */
