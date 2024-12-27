@@ -198,6 +198,9 @@ export class FileStorageComponent implements OnInit {
       })
       .subscribe({
         next: () => {
+          this.messageNotificationService.showSuccess(
+            `Folder ${this.newFolderName} creado con éxito`
+          );
           this.newFolderName = '';
           if (parentId) {
             this.loadChildrenFolders(parentId);
@@ -206,7 +209,7 @@ export class FileStorageComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error creating folder:', error);
+          this.messageNotificationService.showError(error.error.message);
         },
       });
   }
