@@ -13,6 +13,8 @@ import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { FirebaseCloudStorageService } from '../../../../services/firebaseCloudStorage';
+import { MessageNotificationService } from '../../../services/message-toast.service';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-file-storage',
@@ -25,10 +27,11 @@ import { FirebaseCloudStorageService } from '../../../../services/firebaseCloudS
     InputTextModule,
     BadgeModule,
     ProgressBarModule,
+    MessageModule,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
-  providers: [MessageService],
+  providers: [MessageService, MessageNotificationService],
 })
 export class FileStorageComponent implements OnInit {
   folders: Folder[] = []; // Array para almacenar las carpetas
@@ -72,7 +75,7 @@ export class FileStorageComponent implements OnInit {
     private fileService: FileStorageService,
     private userService: UserService,
     private firebaseCloudStorageService: FirebaseCloudStorageService,
-    private messageService: MessageService
+    private messageNotificationService: MessageNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -185,21 +188,13 @@ export class FileStorageComponent implements OnInit {
         ? this.folderHistory[this.folderHistory.length - 1].id
         : undefined; // Changed from null to undefined
 
-    //validar si folder ya existe
-    const existingFolder = this.folders.find(
-      (folder) =>
-        folder.name.toLowerCase() === this.newFolderName.trim().toLowerCase()
-    );
-
-    if (existingFolder) {
-      alert('Ya existe una carpeta con ese nombre en esta ruta.');
-      return;
-    }
-
     this.folderService
       .createFolder(this.userId, {
         name: this.newFolderName,
         parentId,
+        path: parentId
+          ? this.folderHistory[this.folderHistory.length - 1].path
+          : this.newFolderName,
       })
       .subscribe({
         next: () => {
@@ -232,16 +227,19 @@ export class FileStorageComponent implements OnInit {
 
     this.fileService.createFile(this.userId, folderId, fileData).subscribe({
       next: (file) => {
-        console.log('File created:', file.fileName);
-
         if (this.completedUploads === this.totalFiles) {
           this.completedUploads = 0;
           this.totalFiles = 0;
           this.loadFiles(this.folderHistory[this.folderHistory.length - 1].id);
         }
+        this.removeUploadedFileButton?.onClick.emit();
+
+        this.messageNotificationService.showSuccess(
+          `Archivo ${fileName} subido con éxito`
+        );
       },
       error: (error) => {
-        console.error('Error creating file:', error);
+        this.messageNotificationService.showError(error.error.message);
       },
     });
   }
@@ -316,7 +314,7 @@ export class FileStorageComponent implements OnInit {
       this.folderHistory[this.folderHistory.length - 1].path
     }`;
     this.totalFiles = this.newFileList.length;
-
+    this.completedUploads = 0;
     // Llamar al servicio para subir los archivos
     this.firebaseCloudStorageService
       .uploadFiles(this.newFileList, folderPath)
@@ -333,21 +331,12 @@ export class FileStorageComponent implements OnInit {
             );
 
             this.completedUploads++;
-
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Éxito',
-              detail: `Archivo ${fileName} subido con éxito.`,
-            });
           });
         },
         (error) => {
-          console.error('Error al subir los archivos:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al subir los archivos.`,
-          });
+          this.messageNotificationService.showError(
+            'Error al subir los archivos.'
+          );
         }
       );
   }
