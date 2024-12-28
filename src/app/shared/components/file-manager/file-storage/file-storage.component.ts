@@ -484,4 +484,25 @@ export class FileStorageComponent implements OnInit {
   }
 
   handleReject(): void {}
+
+  getFileIcon(fileName: string): string {
+    const extension = fileName.split('.').pop()?.toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return 'pi-file-pdf';
+      case 'doc':
+      case 'docx':
+        return 'pi-file-word';
+      case 'xls':
+      case 'xlsx':
+        return 'pi-file-excel';
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+        return 'pi-image';
+      default:
+        return 'pi-file';
+    }
+  }
 }
