@@ -6,10 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/authService';
 import { LogInUser } from '../core/models/LogInUser';
-import { MessageNotificationService } from '../shared/services/message-toast.service';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import { MessageNotificationService } from '../shared/components/message-toast/message-toast.service';
+import { MessageToastModule } from '../shared/components/message-toast/message-toast.module';
 
 @Component({
   selector: 'app-auth',
@@ -19,10 +17,9 @@ import { ToastModule } from 'primeng/toast';
     PasswordModule,
     ButtonModule,
     FormsModule,
-    MessageModule,
-    ToastModule,
+    MessageToastModule,
   ],
-  providers: [MessageService, MessageNotificationService],
+  providers: [],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',
 })

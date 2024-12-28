@@ -1,4 +1,4 @@
-<p-toast></p-toast>
+<app-message-toast></app-message-toast>
 <!-- Custom Confirm Dialog for Folder Deletion -->
 <app-custom-confirm-dialog
   #deleteFolderDialog
@@ -24,7 +24,6 @@
 ></app-custom-confirm-dialog>
 
 <div class="m-5">
-  <p-toast />
   <p-fileUpload
     [disabled]="folderHistory.length > 0 ? false : true"
     name="myfile[]"

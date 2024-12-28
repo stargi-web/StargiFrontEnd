@@ -4,18 +4,16 @@ import { FolderStorageService } from '../../../../services/folderStorageService'
 import { Folder } from '../../../../core/models/folderStorageModel';
 import { FormsModule } from '@angular/forms';
 import { FileStorageService } from '../../../../services/fileStorageService';
-import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
-import { ToastModule } from 'primeng/toast';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { FileUploadModule } from 'primeng/fileupload';
+import { PrimeNGConfig } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { UserService } from '../../../../services/userService';
 import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
-import { ProgressBarModule } from 'primeng/progressbar';
 import { FirebaseCloudStorageService } from '../../../../services/firebaseCloudStorage';
-import { MessageNotificationService } from '../../../services/message-toast.service';
-import { MessageModule } from 'primeng/message';
+import { MessageNotificationService } from '../../message-toast/message-toast.service';
 import { CustomConfirmDialogComponent } from '../../custom-confirm-dialog/custom-confirm-dialog.component';
+import { MessageToastModule } from '../../message-toast/message-toast.module';
 
 @Component({
   selector: 'app-file-storage',
@@ -24,16 +22,14 @@ import { CustomConfirmDialogComponent } from '../../custom-confirm-dialog/custom
     CommonModule,
     FormsModule,
     FileUploadModule,
-    ToastModule,
     InputTextModule,
     BadgeModule,
-    ProgressBarModule,
-    MessageModule,
     CustomConfirmDialogComponent,
+    MessageToastModule,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
-  providers: [MessageService, MessageNotificationService],
+  providers: [],
 })
 export class FileStorageComponent implements OnInit {
   folders: Folder[] = []; // Array para almacenar las carpetas
