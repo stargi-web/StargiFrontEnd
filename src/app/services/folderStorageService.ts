@@ -15,7 +15,7 @@ export class FolderStorageService {
   // Crear una nueva carpeta
   createFolder(
     userId: number,
-    folderData: { name: string; parentId?: number }
+    folderData: { name: string; parentId?: number; path: string }
   ): Observable<Folder> {
     return this.http.post<Folder>(`${this.apiUrl}`, { userId, ...folderData });
   }

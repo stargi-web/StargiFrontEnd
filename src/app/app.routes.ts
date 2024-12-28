@@ -136,6 +136,7 @@ export const routes: Routes = [
       },
       { path: 'create-user', component: AdminCreateUserComponent },
       { path: 'files', component: FileStorageComponent },
+      { path: 'profile', component: ProfileViewComponent },
     ],
   },
 ];

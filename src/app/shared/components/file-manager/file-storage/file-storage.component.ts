@@ -1,14 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FolderStorageService } from '../../../../services/folderStorageService'; // Importamos el servicio
-import {
-  Storage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  listAll,
-  deleteObject,
-} from '@angular/fire/storage'; // Usamos el SDK de Firebase
 import { Folder } from '../../../../core/models/folderStorageModel';
 import { FormsModule } from '@angular/forms';
 import { FileStorageService } from '../../../../services/fileStorageService';
@@ -20,6 +12,10 @@ import { UserService } from '../../../../services/userService';
 import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { FirebaseCloudStorageService } from '../../../../services/firebaseCloudStorage';
+import { MessageNotificationService } from '../../../services/message-toast.service';
+import { MessageModule } from 'primeng/message';
+import { CustomConfirmDialogComponent } from '../../custom-confirm-dialog/custom-confirm-dialog.component';
 
 @Component({
   selector: 'app-file-storage',
@@ -32,10 +28,12 @@ import { ProgressBarModule } from 'primeng/progressbar';
     InputTextModule,
     BadgeModule,
     ProgressBarModule,
+    MessageModule,
+    CustomConfirmDialogComponent,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
-  providers: [MessageService],
+  providers: [MessageService, MessageNotificationService],
 })
 export class FileStorageComponent implements OnInit {
   folders: Folder[] = []; // Array para almacenar las carpetas
@@ -57,7 +55,6 @@ export class FileStorageComponent implements OnInit {
   uploadedFiles: any[] = [];
   totalSize: number = 0;
   totalSizePercent: number = 0;
-  fileUploadProgress: number = 0;
 
   completedUploads: number = 0;
   totalFiles: number = 0;
@@ -68,7 +65,10 @@ export class FileStorageComponent implements OnInit {
   @ViewChild('removeUploadedFileButton') removeUploadedFileButton:
     | Button
     | undefined;
-
+  @ViewChild('deleteFolderDialog')
+  deleteFolderDialog!: CustomConfirmDialogComponent;
+  @ViewChild('deleteFileDialog')
+  deleteFileDialog!: CustomConfirmDialogComponent;
   //UI
   isCreatingFolder: boolean = false; // Estado para controlar la visibilidad del input
   isAdminParent: boolean = false;
@@ -78,8 +78,8 @@ export class FileStorageComponent implements OnInit {
     private folderService: FolderStorageService,
     private fileService: FileStorageService,
     private userService: UserService,
-    private storage: Storage,
-    private messageService: MessageService
+    private firebaseCloudStorageService: FirebaseCloudStorageService,
+    private messageNotificationService: MessageNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -192,24 +192,19 @@ export class FileStorageComponent implements OnInit {
         ? this.folderHistory[this.folderHistory.length - 1].id
         : undefined; // Changed from null to undefined
 
-    //validar si folder ya existe
-    const existingFolder = this.folders.find(
-      (folder) =>
-        folder.name.toLowerCase() === this.newFolderName.trim().toLowerCase()
-    );
-
-    if (existingFolder) {
-      alert('Ya existe una carpeta con ese nombre en esta ruta.');
-      return;
-    }
-
     this.folderService
       .createFolder(this.userId, {
         name: this.newFolderName,
         parentId,
+        path: parentId
+          ? this.folderHistory[this.folderHistory.length - 1].path
+          : this.newFolderName,
       })
       .subscribe({
         next: () => {
+          this.messageNotificationService.showSuccess(
+            `Folder ${this.newFolderName} creado con éxito`
+          );
           this.newFolderName = '';
           if (parentId) {
             this.loadChildrenFolders(parentId);
@@ -218,7 +213,7 @@ export class FileStorageComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error creating folder:', error);
+          this.messageNotificationService.showError(error.error.message);
         },
       });
   }
@@ -239,29 +234,33 @@ export class FileStorageComponent implements OnInit {
 
     this.fileService.createFile(this.userId, folderId, fileData).subscribe({
       next: (file) => {
-        console.log('File created:', file.fileName);
-
         if (this.completedUploads === this.totalFiles) {
           this.completedUploads = 0;
           this.totalFiles = 0;
           this.loadFiles(this.folderHistory[this.folderHistory.length - 1].id);
         }
+        this.removeUploadedFileButton?.onClick.emit();
+
+        this.messageNotificationService.showSuccess(
+          `Archivo ${fileName} subido con éxito`
+        );
       },
       error: (error) => {
-        console.error('Error creating file:', error);
+        this.messageNotificationService.showError(error.error.message);
       },
     });
   }
 
   downloadFile(file: any): void {
-    const filePath = `users/${this.userId}/${
+    const filePath = `users/${this.userId}/files/${
       this.folderHistory[this.folderHistory.length - 1].path
     }/${file.fileName}`; // Ruta completa del archivo en Firebase Storage
-    const fileRef = ref(this.storage, filePath);
 
     // Obtener la URL de descarga
-    getDownloadURL(fileRef)
-      .then((downloadURL) => {
+    this.firebaseCloudStorageService.getFileUrl(filePath).subscribe(
+      (response) => {
+        const downloadURL = response.url;
+
         // Abrir el archivo en una nueva pestaña
         const newTab = window.open(downloadURL, '_blank');
 
@@ -270,10 +269,11 @@ export class FileStorageComponent implements OnInit {
         } else {
           console.error('No se pudo abrir la nueva pestaña');
         }
-      })
-      .catch((error) => {
+      },
+      (error) => {
         console.error('Error al obtener la URL de descarga: ', error);
-      });
+      }
+    );
   }
 
   //UI
@@ -317,53 +317,35 @@ export class FileStorageComponent implements OnInit {
     }
 
     // Ruta base en Firebase Storage
-    const folderPath = `users/${this.userId}/${
+    const folderPath = `users/${this.userId}/files/${
       this.folderHistory[this.folderHistory.length - 1].path
     }`;
     this.totalFiles = this.newFileList.length;
+    this.completedUploads = 0;
+    // Llamar al servicio para subir los archivos
+    this.firebaseCloudStorageService
+      .uploadFiles(this.newFileList, folderPath)
+      .subscribe(
+        (response) => {
+          // Procesar URLs de archivos subidos
+          response.urls.forEach((url, index) => {
+            // Asumimos que el nombre de archivo se extrae desde el URL o algo similar
+            const fileName = this.newFileList[index].name;
+            this.createFile(
+              fileName,
+              this.newFileList[index].size,
+              this.newFileList[index].type
+            );
 
-    // Iterar sobre los archivos seleccionados
-    this.newFileList.forEach((file: File, index: number) => {
-      const filePath = `${folderPath}/${file.name}`;
-      // Crear referencia al archivo en Firebase
-      const fileRef = ref(this.storage, filePath);
-
-      // Subir archivo
-      const uploadTask = uploadBytesResumable(fileRef, file);
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.fileUploadProgress = Math.round(progress);
+            this.completedUploads++;
+          });
         },
         (error) => {
-          console.error('Error al subir el archivo:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al subir el archivo ${index + 1}.`,
-          });
-        },
-        () => {
-          getDownloadURL(fileRef).then((downloadURL) => {
-            this.uploadURL = downloadURL;
-            this.createFile(file.name, file.size, file.type);
-
-            this.removeUploadedFileButton?.onClick.emit();
-            this.fileUploadProgress = 0;
-            this.completedUploads++;
-
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Éxito',
-              detail: `Archivo ${index + 1} subido con éxito.`,
-            });
-          });
+          this.messageNotificationService.showError(
+            'Error al subir los archivos.'
+          );
         }
       );
-    });
   }
 
   formatSize(bytes: number) {
@@ -397,36 +379,53 @@ export class FileStorageComponent implements OnInit {
       return;
     }
 
-    if (!confirm(`¿Estás seguro de eliminar el archivo ${file.fileName}?`)) {
-      return;
-    }
-
     this.fileService.deleteFile(file.id).subscribe({
       next: () => {
         this.loadFiles(this.folderHistory[this.folderHistory.length - 1].id);
+        this.deleteFirebaseFile(
+          `users/${this.userId}/files/${this.selectedFile.filePath}`,
+          file.fileName
+        );
         this.selectedFile = undefined;
+        this.isFileSelected = false;
       },
       error: (error) => {
-        console.error('Error deleting file:', error);
+        this.messageNotificationService.showError(error.error.message);
       },
     });
   }
 
+  deleteFirebaseFile(path: string, fileName: string): void {
+    this.firebaseCloudStorageService.deleteFile(path).subscribe(
+      (response) => {
+        // Maneja la respuesta exitosa (puedes mostrar un mensaje al usuario, por ejemplo)
+        console.log(response.message);
+        this.messageNotificationService.showSuccess(
+          `Archivo ${fileName} eliminado con éxito`
+        );
+      },
+      (error) => {
+        this.messageNotificationService.showError(error.error.message);
+      }
+    );
+  }
+
   async deleteFolder(folder: Folder): Promise<void> {
-    if (
-      !folder ||
-      !confirm(`¿Estás seguro de eliminar la carpeta ${folder.name}?`)
-    ) {
+    if (!folder) {
       return;
     }
 
     try {
-      const folderPath = `users/${this.userId}/${folder.path}`;
+      const folderPath = `users/${this.userId}/files/${folder.path}`;
       await this.deleteFirebaseFolder(folderPath);
 
       // Delete folder from database
       this.folderService.deleteFolder(folder.id).subscribe({
         next: () => {
+          this.messageNotificationService.showSuccess(
+            `Carpeta ${folder.name} eliminada con éxito`
+          );
+
           // Refresh folder list
           if (this.folderHistory.length > 0) {
             this.loadChildrenFolders(
@@ -439,7 +438,7 @@ export class FileStorageComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error deleting folder from database:', error);
+          this.messageNotificationService.showError(error.error.message);
         },
       });
     } catch (error) {
@@ -447,22 +446,42 @@ export class FileStorageComponent implements OnInit {
     }
   }
 
-  private async deleteFirebaseFolder(folderPath: string): Promise<void> {
-    const folderRef = ref(this.storage, folderPath);
-    const fileList = await listAll(folderRef);
-
-    // Recursively handle all subfolders first
-    for (const prefix of fileList.prefixes) {
-      await this.deleteFirebaseFolder(prefix.fullPath);
-    }
-
-    // Delete all files in current folder
-    for (const item of fileList.items) {
-      await deleteObject(item);
-    }
+  private deleteFirebaseFolder(folderPath: string): void {
+    this.firebaseCloudStorageService.deleteFolder(folderPath).subscribe(
+      (response) => {
+        // Maneja la respuesta (por ejemplo, muestra un mensaje de éxito)
+        console.log(response.message);
+      },
+      (error) => {
+        // Maneja cualquier error que ocurra
+        this.messageNotificationService.showError(error.error.message);
+      }
+    );
   }
 
   selectAdminFolder(folder: any): void {
     this.selectedFolderAdmin = folder;
   }
+
+  // Show the confirmation dialog for folder deletion
+  showDeleteFolderConfirmation(event: Event) {
+    this.deleteFolderDialog.open(event);
+  }
+
+  // Show the confirmation dialog for file deletion
+  showDeleteFileConfirmation(event: Event) {
+    this.deleteFileDialog.open(event);
+  }
+
+  // Handle the folder deletion
+  handleDeleteFolder() {
+    this.deleteFolder(this.selectedFolder);
+  }
+
+  // Handle the file deletion
+  handleDeleteFile() {
+    this.deleteFile(this.selectedFile);
+  }
+
+  handleReject(): void {}
 }
