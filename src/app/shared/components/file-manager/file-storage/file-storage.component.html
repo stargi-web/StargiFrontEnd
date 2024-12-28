@@ -203,7 +203,7 @@
           (dblclick)="downloadFile(file)"
           (click)="selectFile(file)"
         >
-          <i class="fileIcon pi pi-file file-icon"></i>
+          <i class="fileIcon pi" [ngClass]="getFileIcon(file.fileName)"></i>
           <span class="file-name mt-1">{{ file.fileName }}</span>
           <span
             class="file-size"
