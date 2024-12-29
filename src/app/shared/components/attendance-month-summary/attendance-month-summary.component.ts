@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AttendanceService } from '../../../services/attendanceService';
+import { AttendanceService } from '../../../services/nestjs-services/attendanceService';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip';
 
 interface Attendance {
-  date: string; 
-  state: string; 
+  date: string;
+  state: string;
 }
 
 @Component({
@@ -13,7 +13,7 @@ interface Attendance {
   standalone: true,
   imports: [CommonModule, TooltipModule],
   templateUrl: './attendance-month-summary.component.html',
-  styleUrls: ['./attendance-month-summary.component.css']
+  styleUrls: ['./attendance-month-summary.component.css'],
 })
 export class AttendanceMonthSummaryComponent implements OnInit {
   weekDaysInMonth: { date: Date }[] = [];
@@ -23,7 +23,7 @@ export class AttendanceMonthSummaryComponent implements OnInit {
   constructor(private attendanceService: AttendanceService) {}
 
   ngOnInit(): void {
-    this.userId = Number(sessionStorage.getItem("userId"));
+    this.userId = Number(sessionStorage.getItem('userId'));
     this.initializeWeekdaysInMonth();
     this.fetchAttendances();
   }
@@ -49,26 +49,29 @@ export class AttendanceMonthSummaryComponent implements OnInit {
     const startDate = new Date(year, month, 1).toISOString();
     const endDate = new Date(year, month + 1, 0).toISOString();
 
-    this.attendanceService.getAttendancesByUserAndDates(this.userId, startDate, endDate)
+    this.attendanceService
+      .getAttendancesByUserAndDates(this.userId, startDate, endDate)
       .subscribe((response) => {
-        console.log(response)
-        this.attendances = response.attendances.map((attendance: Attendance) => ({
-          ...attendance,
-          date: this.convertToLocalDate(new Date(attendance.date))
-        }));
+        console.log(response);
+        this.attendances = response.attendances.map(
+          (attendance: Attendance) => ({
+            ...attendance,
+            date: this.convertToLocalDate(new Date(attendance.date)),
+          })
+        );
       });
   }
 
   convertToLocalDate(date: Date): string {
-    const peruOffset = -5 * 60; 
+    const peruOffset = -5 * 60;
     const localDate = new Date(date.getTime() + peruOffset * 60000);
-    return localDate.toISOString(); 
+    return localDate.toISOString();
   }
 
   getAttendanceClass(date: Date): string {
     const today = new Date();
     if (date > today) {
-      return ''; 
+      return '';
     }
     const attendance = this.attendances.find(
       (att) => new Date(att.date).toDateString() === date.toDateString()
@@ -88,14 +91,14 @@ export class AttendanceMonthSummaryComponent implements OnInit {
           return '';
       }
     } else {
-      return 'red'; 
+      return 'red';
     }
   }
 
   getAttendanceLetter(date: Date): string {
     const today = new Date();
     if (date > today) {
-      return ''; 
+      return '';
     }
     const attendance = this.attendances.find(
       (att) => new Date(att.date).toDateString() === date.toDateString()
@@ -115,13 +118,14 @@ export class AttendanceMonthSummaryComponent implements OnInit {
           return '';
       }
     } else {
-      return 'F'; 
+      return 'F';
     }
   }
 
   generateTooltip(attendanceDate: Date): string {
     const attendance = this.attendances.find(
-      (att) => new Date(att.date).toDateString() === attendanceDate.toDateString()
+      (att) =>
+        new Date(att.date).toDateString() === attendanceDate.toDateString()
     );
 
     if (attendance) {

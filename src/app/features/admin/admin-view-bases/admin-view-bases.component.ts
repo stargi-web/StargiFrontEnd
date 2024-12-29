@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientCollection } from '../../../core/models/collectionModel';
-import { ClientCollectionService } from '../../../services/clientCollectionService';
+import { ClientCollectionService } from '../../../services/nestjs-services/clientCollectionService';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,20 +8,23 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './admin-view-bases.component.html',
-  styleUrl: './admin-view-bases.component.css'
+  styleUrl: './admin-view-bases.component.css',
 })
 export class AdminViewBasesComponent implements OnInit {
   collections: ClientCollection[] = [];
-  constructor(private clientCollectionService:ClientCollectionService,private router: Router){}
+  constructor(
+    private clientCollectionService: ClientCollectionService,
+    private router: Router
+  ) {}
   ngOnInit(): void {
     this.clientCollectionService.getAllCollections().subscribe({
-      next:response=>{
-        this.collections=response;
+      next: (response) => {
+        this.collections = response;
       },
-      error:error=>console.error(error)
-    })
+      error: (error) => console.error(error),
+    });
   }
-  viewDetails(id:string){
+  viewDetails(id: string) {
     this.router.navigate(['/admin/base-detail', id]);
   }
 }

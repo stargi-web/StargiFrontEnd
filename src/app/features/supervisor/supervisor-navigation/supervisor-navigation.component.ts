@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
-import { UserService } from '../../../services/userService';
+import { UserService } from '../../../services/nestjs-services/userService';
 @Component({
   selector: 'app-supervisor-navigation',
   standalone: true,

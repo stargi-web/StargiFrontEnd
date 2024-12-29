@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { OpportunityService } from '../../../services/opportunityService';
+import { OpportunityService } from '../../../services/nestjs-services/opportunityService';
 import { OpportunityModel } from '../../../core/models/opportunityModel';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -12,18 +12,25 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-supervisor-opportunities',
   standalone: true,
-  providers:[DialogService],
-  imports: [TableModule,CommonModule,ButtonModule,InputNumberModule,DropdownModule,FormsModule],
+  providers: [DialogService],
+  imports: [
+    TableModule,
+    CommonModule,
+    ButtonModule,
+    InputNumberModule,
+    DropdownModule,
+    FormsModule,
+  ],
   templateUrl: './supervisor-opportunities.component.html',
-  styleUrl: './supervisor-opportunities.component.css'
+  styleUrl: './supervisor-opportunities.component.css',
 })
-export class SupervisorOpportunitiesComponent implements OnInit{
-  opportunities!:OpportunityModel[];
-  loading=true;
+export class SupervisorOpportunitiesComponent implements OnInit {
+  opportunities!: OpportunityModel[];
+  loading = true;
   opportunityTypes = [
     { label: 'Básico', value: 'Básico' },
     { label: 'Estandar', value: 'Estandar' },
-    { label: 'No estandar', value: 'No estandar' }
+    { label: 'No estandar', value: 'No estandar' },
   ];
   products = [
     { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
@@ -33,7 +40,7 @@ export class SupervisorOpportunitiesComponent implements OnInit{
     { label: 'Antivirus', value: 'Antivirus' },
     { label: 'Cloud Backup', value: 'Cloud Backup' },
     { label: 'Central telefónica', value: 'Central telefónica' },
-    { label: 'Otros', value: 'Otros' }
+    { label: 'Otros', value: 'Otros' },
   ];
   states = [
     { label: 'Potenciales', value: 'Potenciales' },
@@ -41,49 +48,50 @@ export class SupervisorOpportunitiesComponent implements OnInit{
     { label: 'Prospecto calificado', value: 'Prospecto calificado' },
     { label: 'Prospecto desarrollado', value: 'Prospecto desarrollado' },
     { label: 'Cierre', value: 'Cierre' },
-    { label: 'No cierre', value: 'No cierre' }]
+    { label: 'No cierre', value: 'No cierre' },
+  ];
   editingRowIndex: number | null = null;
-  ref:DynamicDialogRef|undefined;
-  opportunityStateSummary: { sigla: string, count: number }[] = [];
+  ref: DynamicDialogRef | undefined;
+  opportunityStateSummary: { sigla: string; count: number }[] = [];
   totalOpportunities = 0;
-  constructor(public dialogService:DialogService,private opportunityService:OpportunityService){}
+  constructor(
+    public dialogService: DialogService,
+    private opportunityService: OpportunityService
+  ) {}
   ngOnInit(): void {
-    
     this.loadOpportunities();
   }
-  loadOpportunities(){
-    const userId=Number(sessionStorage.getItem("userId"));
-    this.opportunityService.getOpportunitiesByUserId(userId).subscribe(
-      {
-        next:response=>{
-          this.opportunities=response;
-          this.loading=false;
-          this.opportunities.forEach(opp=>{
-            opp.oppSfaDateCreation=new Date(opp.oppSfaDateCreation);
-            opp.createdAt=new Date(opp.createdAt);
-            opp.updatedAt=new Date(opp.updatedAt);
-            opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
-            if(opp.nextInteraction){
-              opp.nextInteraction=new Date(opp.nextInteraction);
-            }
-          })
-          this.calculateOpportunityStateSummary();
-        }
-      }
-    )
+  loadOpportunities() {
+    const userId = Number(sessionStorage.getItem('userId'));
+    this.opportunityService.getOpportunitiesByUserId(userId).subscribe({
+      next: (response) => {
+        this.opportunities = response;
+        this.loading = false;
+        this.opportunities.forEach((opp) => {
+          opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
+          opp.createdAt = new Date(opp.createdAt);
+          opp.updatedAt = new Date(opp.updatedAt);
+          opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
+          if (opp.nextInteraction) {
+            opp.nextInteraction = new Date(opp.nextInteraction);
+          }
+        });
+        this.calculateOpportunityStateSummary();
+      },
+    });
   }
   calculateOpportunityStateSummary() {
-    const stateCounts ={
-      "No contactado":0,
-      "Potenciales":0,
-      "Prospecto":0,
-      "Prospecto calificado":0,
-      "Prospecto desarrollado":0,
-      "Cierre":0,
-      "No cierre":0
+    const stateCounts = {
+      'No contactado': 0,
+      Potenciales: 0,
+      Prospecto: 0,
+      'Prospecto calificado': 0,
+      'Prospecto desarrollado': 0,
+      Cierre: 0,
+      'No cierre': 0,
     };
 
-    this.opportunities.forEach(opportunity => {
+    this.opportunities.forEach((opportunity) => {
       stateCounts[opportunity.state as keyof typeof stateCounts]++;
     });
 
@@ -94,7 +102,7 @@ export class SupervisorOpportunitiesComponent implements OnInit{
       { sigla: 'PC', count: stateCounts['Prospecto calificado'] },
       { sigla: 'PD', count: stateCounts['Prospecto desarrollado'] },
       { sigla: 'C', count: stateCounts.Cierre },
-      { sigla: 'NoC', count: stateCounts['No cierre'] }
+      { sigla: 'NoC', count: stateCounts['No cierre'] },
     ];
 
     this.totalOpportunities = this.opportunities.length;
@@ -106,43 +114,68 @@ export class SupervisorOpportunitiesComponent implements OnInit{
     const diffInDays = diffInTime / (1000 * 3600 * 24);
 
     if (diffInDays > 28) {
-        return 'overdue-red';
+      return 'overdue-red';
     } else if (diffInDays > 25) {
-        return 'overdue-yellow';
+      return 'overdue-yellow';
     } else {
-        return '';
+      return '';
     }
-}
+  }
   startEditing(rowIndex: number) {
     this.editingRowIndex = rowIndex;
   }
 
-  saveChanges(oppId:number,newState:string,newCommentary:string,contactName:string,contactNumber:string,amount:number,product:string,type:string,email:string) {
-    const userId=Number(sessionStorage.getItem('userId'))
-    this.opportunityService.editOpportunity({oppId,newState,newCommentary,contactName,contactNumber,amount,product,type,userId,email}).subscribe(
-      {
-        next:response=>{
+  saveChanges(
+    oppId: number,
+    newState: string,
+    newCommentary: string,
+    contactName: string,
+    contactNumber: string,
+    amount: number,
+    product: string,
+    type: string,
+    email: string
+  ) {
+    const userId = Number(sessionStorage.getItem('userId'));
+    this.opportunityService
+      .editOpportunity({
+        oppId,
+        newState,
+        newCommentary,
+        contactName,
+        contactNumber,
+        amount,
+        product,
+        type,
+        userId,
+        email,
+      })
+      .subscribe({
+        next: (response) => {
           alert(`${response.message}`);
-          this.editingRowIndex=null;
+          this.editingRowIndex = null;
         },
-        error:error=>{console.error(error);this.editingRowIndex = null;}
-        
-      }
-    );
-    
+        error: (error) => {
+          console.error(error);
+          this.editingRowIndex = null;
+        },
+      });
   }
 
   cancelEditing() {
     this.editingRowIndex = null;
   }
-  openRecordsDialog(oppId:number){
-    const config={
-      data:{
-        oppId
+  openRecordsDialog(oppId: number) {
+    const config = {
+      data: {
+        oppId,
       },
-      Headers:'Historial de cambios',
-      with:'60vw',
-    }
-    this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
+      Headers: 'Historial de cambios',
+      with: '60vw',
+    };
+    this.ref = this.dialogService.open(
+      ExecutiveRecordsOppDialogComponent,
+      config
+    );
   }
 }
