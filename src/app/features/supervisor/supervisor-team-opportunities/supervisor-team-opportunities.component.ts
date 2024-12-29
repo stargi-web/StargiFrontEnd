@@ -1,4 +1,4 @@
-import { OpportunityService } from '../../../services/opportunityService';
+import { OpportunityService } from '../../../services/nestjs-services/opportunityService';
 import { OpportunityModel } from './../../../core/models/opportunityModel';
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
@@ -10,51 +10,69 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmDeleteOpportunityDialogComponent } from '../../../shared/components/confirm-delete-opportunity-dialog/confirm-delete-opportunity-dialog.component';
 import { ExecutiveRecordsOppDialogComponent } from '../../executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
-import { opportunityTypes, products, productTypes, states } from '../../../shared/const/constantes';
+import {
+  opportunityTypes,
+  products,
+  productTypes,
+  states,
+} from '../../../shared/const/constantes';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 @Component({
   selector: 'app-supervisor-team-opportunities',
   standalone: true,
-  providers:[DialogService],
-  imports: [CalendarModule,InputTextModule,TableModule,CommonModule,ButtonModule,InputNumberModule,DropdownModule,CommonModule,ReactiveFormsModule,FormsModule],
+  providers: [DialogService],
+  imports: [
+    CalendarModule,
+    InputTextModule,
+    TableModule,
+    CommonModule,
+    ButtonModule,
+    InputNumberModule,
+    DropdownModule,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   templateUrl: './supervisor-team-opportunities.component.html',
-  styleUrl: './supervisor-team-opportunities.component.css'
+  styleUrl: './supervisor-team-opportunities.component.css',
 })
-export class SupervisorTeamOpportunitiesComponent implements OnInit{
+export class SupervisorTeamOpportunitiesComponent implements OnInit {
   private readonly NEAR_CLOSING_DAYS = 7;
 
-  opportunities!:OpportunityModel[];
-  teamId!:number
+  opportunities!: OpportunityModel[];
+  teamId!: number;
   editingRowIndex: number | null = null;
-  loading=true;
+  loading = true;
   states = states;
-  productTypes=productTypes;
+  productTypes = productTypes;
   opportunityTypes = opportunityTypes;
   products = products;
-  constructor(public dialogService:DialogService,private opportunityService:OpportunityService){}
-  ref:DynamicDialogRef|undefined;
+  constructor(
+    public dialogService: DialogService,
+    private opportunityService: OpportunityService
+  ) {}
+  ref: DynamicDialogRef | undefined;
   urgentOpportunitiesCount: number = 0;
-  opportunityStateSummary: { sigla: string, count: number }[] = [];
+  opportunityStateSummary: { sigla: string; count: number }[] = [];
   totalOpportunities = 0;
   ngOnInit(): void {
-    this.productTypes=productTypes;
-    this.teamId=Number(sessionStorage.getItem("teamId"));
+    this.productTypes = productTypes;
+    this.teamId = Number(sessionStorage.getItem('teamId'));
     this.loadOpportunities();
-    
   }
   calculateOpportunityStateSummary() {
-    const stateCounts ={
-      "No contactado":0,
-      "Potenciales":0,
-      "Prospecto":0,
-      "Prospecto calificado":0,
-      "Prospecto desarrollado":0,
-      "Cierre":0,
-      "No cierre":0
+    const stateCounts = {
+      'No contactado': 0,
+      Potenciales: 0,
+      Prospecto: 0,
+      'Prospecto calificado': 0,
+      'Prospecto desarrollado': 0,
+      Cierre: 0,
+      'No cierre': 0,
     };
 
-    this.opportunities.forEach(opportunity => {
+    this.opportunities.forEach((opportunity) => {
       stateCounts[opportunity.state as keyof typeof stateCounts]++;
     });
 
@@ -65,53 +83,50 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
       { sigla: 'PC', count: stateCounts['Prospecto calificado'] },
       { sigla: 'PD', count: stateCounts['Prospecto desarrollado'] },
       { sigla: 'C', count: stateCounts.Cierre },
-      { sigla: 'NoC', count: stateCounts['No cierre'] }
+      { sigla: 'NoC', count: stateCounts['No cierre'] },
     ];
 
     this.totalOpportunities = this.opportunities.length;
   }
-  loadOpportunities(){
-    if(this.teamId){
-      this.opportunityService.getOpportunitiesByTeamId(this.teamId).subscribe(
-        {
-          next:response=>{
-            console.log(response);
-            
-            this.opportunities=response;
-            this.opportunities.forEach(opp=>{
-              opp.oppSfaDateCreation=new Date(opp.oppSfaDateCreation);
-              opp.createdAt=new Date(opp.createdAt);
-              opp.updatedAt=new Date(opp.updatedAt);
-              opp.estimatedClosingDate=new Date(opp.estimatedClosingDate);
-              if(opp.nextInteraction){
-                opp.nextInteraction=new Date(opp.nextInteraction);
-              }
-            })
-            this.calculateOpportunityStateSummary();
-            this.loading=false;
-            
-            this.calculateUrgentOpportunities();
-          },
-          error:error=>{
-            console.error(error);
-          }
-        }
-      )
+  loadOpportunities() {
+    if (this.teamId) {
+      this.opportunityService.getOpportunitiesByTeamId(this.teamId).subscribe({
+        next: (response) => {
+          console.log(response);
+
+          this.opportunities = response;
+          this.opportunities.forEach((opp) => {
+            opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
+            opp.createdAt = new Date(opp.createdAt);
+            opp.updatedAt = new Date(opp.updatedAt);
+            opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
+            if (opp.nextInteraction) {
+              opp.nextInteraction = new Date(opp.nextInteraction);
+            }
+          });
+          this.calculateOpportunityStateSummary();
+          this.loading = false;
+
+          this.calculateUrgentOpportunities();
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
     }
   }
   isNearClosingDate(opportunity: OpportunityModel): boolean {
     const today = new Date(); // Fecha actual
-    const closingDate = new Date(opportunity.estimatedClosingDate); 
+    const closingDate = new Date(opportunity.estimatedClosingDate);
 
-    
     const diffInTime = closingDate.getTime() - today.getTime();
-    const diffInDays = Math.ceil(diffInTime / (1000 * 3600 * 24)); 
+    const diffInDays = Math.ceil(diffInTime / (1000 * 3600 * 24));
 
     return diffInDays <= this.NEAR_CLOSING_DAYS;
   }
   calculateUrgentOpportunities() {
     const today = new Date();
-    this.urgentOpportunitiesCount = this.opportunities.filter(opportunity => {
+    this.urgentOpportunitiesCount = this.opportunities.filter((opportunity) => {
       const estimatedClosingDate = new Date(opportunity.estimatedClosingDate);
       const timeDiff = estimatedClosingDate.getTime() - today.getTime();
       const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -121,7 +136,9 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
   getRowClass(opportunity: any): string {
     const today = new Date();
     const oppSfaDateCreation = new Date(opportunity.oppSfaDateCreation);
-    const dayDiff = Math.ceil((today.getTime() - oppSfaDateCreation.getTime()) / (1000 * 3600 * 24));
+    const dayDiff = Math.ceil(
+      (today.getTime() - oppSfaDateCreation.getTime()) / (1000 * 3600 * 24)
+    );
 
     if (dayDiff > 28) {
       return 'red-row';
@@ -153,69 +170,69 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit{
       product: opportunity.product,
       amount: opportunity.amount!,
       newClosingDate: opportunity.estimatedClosingDate,
-      newUnits: opportunity.units,  
+      newUnits: opportunity.units,
       newState: opportunity.state,
       newCommentary: opportunity.commentary,
       contactName: opportunity.contactName || '',
       contactNumber: opportunity.contactNumber || '',
-      email:opportunity.email,
-      nextInteraction:opportunity.nextInteraction,
-      userId:Number(sessionStorage.getItem('userId'))
+      email: opportunity.email,
+      nextInteraction: opportunity.nextInteraction,
+      userId: Number(sessionStorage.getItem('userId')),
     };
-  
-    this.opportunityService.editOpportunity(editCommand).subscribe(
-      {
-        next: response => {
-          alert(`${response.message}`);
-          this.editingRowIndex = null;
-          this.loadOpportunities();  // Recargar la lista de oportunidades
-        },
-        error: error => {
-          console.error(error);
-          this.editingRowIndex = null;
-        }
-      }
-    );
+
+    this.opportunityService.editOpportunity(editCommand).subscribe({
+      next: (response) => {
+        alert(`${response.message}`);
+        this.editingRowIndex = null;
+        this.loadOpportunities(); // Recargar la lista de oportunidades
+      },
+      error: (error) => {
+        console.error(error);
+        this.editingRowIndex = null;
+      },
+    });
   }
 
   cancelEditing() {
     this.editingRowIndex = null;
   }
-  deleteOpportunity(name: string,id:number) {
-    const config={
-      data:{
-        bussinesName:name
+  deleteOpportunity(name: string, id: number) {
+    const config = {
+      data: {
+        bussinesName: name,
       },
-      Headers:'Confimar eliminacion'
-    }
-    this.ref=this.dialogService.open(ConfirmDeleteOpportunityDialogComponent,config);
-    this.ref.onClose.subscribe((response:boolean)=>{
-      if(response){
-        this.opportunityService.deleteOpportunity(id).subscribe(
-          {
-            next:response=>{
-              this.opportunities=this.opportunities.filter(o=>o.id!==id);
-            },error:error=>{
-              console.error(error);
-            }
-          }
-        )
+      Headers: 'Confimar eliminacion',
+    };
+    this.ref = this.dialogService.open(
+      ConfirmDeleteOpportunityDialogComponent,
+      config
+    );
+    this.ref.onClose.subscribe((response: boolean) => {
+      if (response) {
+        this.opportunityService.deleteOpportunity(id).subscribe({
+          next: (response) => {
+            this.opportunities = this.opportunities.filter((o) => o.id !== id);
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
       }
-    })
+    });
   }
-  openRecordsDialog(oppId:number){
-    if(this.editingRowIndex==null){
-      const config={
-        data:{
-          oppId
+  openRecordsDialog(oppId: number) {
+    if (this.editingRowIndex == null) {
+      const config = {
+        data: {
+          oppId,
         },
-        Headers:'Historial de cambios',
-        with:'60vw',
-      }
-      this.ref=this.dialogService.open(ExecutiveRecordsOppDialogComponent,config);
+        Headers: 'Historial de cambios',
+        with: '60vw',
+      };
+      this.ref = this.dialogService.open(
+        ExecutiveRecordsOppDialogComponent,
+        config
+      );
     }
-    
   }
 }
-
-

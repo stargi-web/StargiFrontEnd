@@ -1,52 +1,56 @@
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { UserModel } from '../../../core/models/userModel';
-import { UserService } from '../../../services/userService';
+import { UserService } from '../../../services/nestjs-services/userService';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AdminConfirmationDeleteUserComponent } from '../admin-confirmation-delete-user/admin-confirmation-delete-user.component';
 import { style } from '@angular/animations';
 import { SelectItemGroup } from 'primeng/api';
-import { OpportunityService } from '../../../services/opportunityService';
+import { OpportunityService } from '../../../services/nestjs-services/opportunityService';
 import { DeleteUserDialogComponent } from '../../../shared/components/delete-user-dialog/delete-user-dialog.component';
 @Component({
   selector: 'app-admin-users-view',
   standalone: true,
-  providers:[DialogService],
-  imports: [TableModule,ButtonModule],
+  providers: [DialogService],
+  imports: [TableModule, ButtonModule],
   templateUrl: './admin-users-view.component.html',
-  styleUrl: './admin-users-view.component.css'
+  styleUrl: './admin-users-view.component.css',
 })
 export class AdminUsersViewComponent implements OnInit {
-  groupedUsers!:SelectItemGroup[];
+  groupedUsers!: SelectItemGroup[];
 
-  users!:UserModel[];
-  loading=true;
-  constructor(public dialogService:DialogService,private userService:UserService,private router:Router,private oppService:OpportunityService){}
-  ref:DynamicDialogRef|undefined;
+  users!: UserModel[];
+  loading = true;
+  constructor(
+    public dialogService: DialogService,
+    private userService: UserService,
+    private router: Router,
+    private oppService: OpportunityService
+  ) {}
+  ref: DynamicDialogRef | undefined;
 
   ngOnInit() {
     this.groupedUsers = [
       {
         label: 'Ejecutivos',
         value: 'executives',
-        items: []
+        items: [],
       },
       {
         label: 'Supervisores',
         value: 'supervisors',
-        items: []
+        items: [],
       },
     ];
     this.loadUsers();
   }
-  loadUsers(){
-    this.userService.getUsers().subscribe(
-      {
-        next:(response)=>{
-        this.users=response;
-        this.loading=false;
+  loadUsers() {
+    this.userService.getUsers().subscribe({
+      next: (response) => {
+        this.users = response;
+        this.loading = false;
         response.map((user: any) => {
           if (user.role === 'executive') {
             this.groupedUsers[0].items.push({
@@ -61,24 +65,22 @@ export class AdminUsersViewComponent implements OnInit {
           }
         });
       },
-      error:error=>console.error(error)
-      }
-    )
+      error: (error) => console.error(error),
+    });
   }
-  viewOpportunities(userId:number) {
-    this.router.navigate([`/admin/users-opp/${userId}`])
+  viewOpportunities(userId: number) {
+    this.router.navigate([`/admin/users-opp/${userId}`]);
   }
 
-  deleteUser(userId:number,groupedUsers:any){
-    const config={
-      data:{
+  deleteUser(userId: number, groupedUsers: any) {
+    const config = {
+      data: {
         userId,
       },
-      style:{
-        height:'800px'
-      }
-    }
-    this.ref=this.dialogService.open(DeleteUserDialogComponent,config);
+      style: {
+        height: '800px',
+      },
+    };
+    this.ref = this.dialogService.open(DeleteUserDialogComponent, config);
   }
-
 }

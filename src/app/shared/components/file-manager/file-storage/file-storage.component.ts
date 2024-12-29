@@ -1,22 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FolderStorageService } from '../../../../services/folderStorageService'; // Importamos el servicio
+import { FolderStorageService } from '../../../../services/nestjs-services/folderStorageService'; // Importamos el servicio
 import { Folder } from '../../../../core/models/folderStorageModel';
 import { FormsModule } from '@angular/forms';
-import { FileStorageService } from '../../../../services/fileStorageService';
-import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
-import { ToastModule } from 'primeng/toast';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { FileStorageService } from '../../../../services/nestjs-services/fileStorageService';
+import { FileUploadModule } from 'primeng/fileupload';
+import { PrimeNGConfig } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
-import { UserService } from '../../../../services/userService';
+import { UserService } from '../../../../services/nestjs-services/userService';
 import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { FirebaseCloudStorageService } from '../../../../services/firebaseCloudStorage';
-import { MessageNotificationService } from '../../../services/message-toast.service';
-import { MessageModule } from 'primeng/message';
+import { FirebaseCloudStorageService } from '../../../../services/external-services/firebaseCloudStorageService';
+import { MessageNotificationService } from '../../message-toast/message-toast.service';
 import { CustomConfirmDialogComponent } from '../../custom-confirm-dialog/custom-confirm-dialog.component';
-
+import { MessageToastModule } from '../../message-toast/message-toast.module';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-file-storage',
   standalone: true,
@@ -24,16 +22,15 @@ import { CustomConfirmDialogComponent } from '../../custom-confirm-dialog/custom
     CommonModule,
     FormsModule,
     FileUploadModule,
-    ToastModule,
     InputTextModule,
     BadgeModule,
-    ProgressBarModule,
-    MessageModule,
     CustomConfirmDialogComponent,
+    MessageToastModule,
+    NgxSpinnerModule,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
-  providers: [MessageService, MessageNotificationService],
+  providers: [],
 })
 export class FileStorageComponent implements OnInit {
   folders: Folder[] = []; // Array para almacenar las carpetas
@@ -79,7 +76,8 @@ export class FileStorageComponent implements OnInit {
     private fileService: FileStorageService,
     private userService: UserService,
     private firebaseCloudStorageService: FirebaseCloudStorageService,
-    private messageNotificationService: MessageNotificationService
+    private messageNotificationService: MessageNotificationService,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -197,7 +195,9 @@ export class FileStorageComponent implements OnInit {
         name: this.newFolderName,
         parentId,
         path: parentId
-          ? this.folderHistory[this.folderHistory.length - 1].path
+          ? `${this.folderHistory[this.folderHistory.length - 1].path}/${
+              this.newFolderName
+            }`
           : this.newFolderName,
       })
       .subscribe({
@@ -417,15 +417,11 @@ export class FileStorageComponent implements OnInit {
 
     try {
       const folderPath = `users/${this.userId}/files/${folder.path}`;
-      await this.deleteFirebaseFolder(folderPath);
+      await this.deleteFirebaseFolder(folderPath, folder.name);
 
       // Delete folder from database
       this.folderService.deleteFolder(folder.id).subscribe({
         next: () => {
-          this.messageNotificationService.showSuccess(
-            `Carpeta ${folder.name} eliminada con éxito`
-          );
-
           // Refresh folder list
           if (this.folderHistory.length > 0) {
             this.loadChildrenFolders(
@@ -446,9 +442,12 @@ export class FileStorageComponent implements OnInit {
     }
   }
 
-  private deleteFirebaseFolder(folderPath: string): void {
+  private deleteFirebaseFolder(folderPath: string, folderName: string): void {
     this.firebaseCloudStorageService.deleteFolder(folderPath).subscribe(
       (response) => {
+        this.messageNotificationService.showSuccess(
+          `Carpeta ${folderName} eliminada con éxito`
+        );
         // Maneja la respuesta (por ejemplo, muestra un mensaje de éxito)
         console.log(response.message);
       },

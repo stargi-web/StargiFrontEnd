@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AttendanceService } from '../../../services/attendanceService';
+import { AttendanceService } from '../../../services/nestjs-services/attendanceService';
 import { CommonModule, formatDate } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
@@ -9,16 +9,19 @@ import { JustificationDialogComponent } from '../justification-dialog/justificat
 @Component({
   selector: 'app-attendance-table',
   standalone: true,
-  imports: [CommonModule,TooltipModule,ConfirmDialogModule],
-  providers:[DialogService],
+  imports: [CommonModule, TooltipModule, ConfirmDialogModule],
+  providers: [DialogService],
   templateUrl: './attendance-table.component.html',
-  styleUrl: './attendance-table.component.css'
+  styleUrl: './attendance-table.component.css',
 })
-export class AttendanceTableComponent implements OnInit{
+export class AttendanceTableComponent implements OnInit {
   attendanceData: any[] = [];
   weekdays: Date[] = [];
 
-  constructor(public dialogService: DialogService,private attendanceService: AttendanceService) {}
+  constructor(
+    public dialogService: DialogService,
+    private attendanceService: AttendanceService
+  ) {}
   ref: DynamicDialogRef | undefined;
   ngOnInit(): void {
     this.initializeWeekdays();
@@ -44,25 +47,29 @@ export class AttendanceTableComponent implements OnInit{
     const month = today.getMonth() + 1;
     const year = today.getFullYear();
 
-    this.attendanceService.getAttendanceSummaryByRole(month, year).subscribe((response) => {
-      if (response.success) {
-        this.attendanceData = response.data.map((user: any) => ({
-          ...user,
-          attendances: user.attendances.map((attendance: any) => ({
-            ...attendance,
-            
-            registerDate: this.adjustToLimaTimezone(new Date(attendance.registerDate)),
-          })),
-        }));
-      }
-    });
+    this.attendanceService
+      .getAttendanceSummaryByRole(month, year)
+      .subscribe((response) => {
+        if (response.success) {
+          this.attendanceData = response.data.map((user: any) => ({
+            ...user,
+            attendances: user.attendances.map((attendance: any) => ({
+              ...attendance,
+
+              registerDate: this.adjustToLimaTimezone(
+                new Date(attendance.registerDate)
+              ),
+            })),
+          }));
+        }
+      });
   }
   private adjustToLimaTimezone(date: Date): Date {
-    const utcOffset = -5 * 60; 
-    const localOffset = date.getTimezoneOffset(); 
+    const utcOffset = -5 * 60;
+    const localOffset = date.getTimezoneOffset();
     const totalOffset = utcOffset + localOffset;
-  
-    return new Date(date.getTime() + totalOffset * 60000); 
+
+    return new Date(date.getTime() + totalOffset * 60000);
   }
   getAttendanceLabel(user: any, day: Date): string {
     const today = new Date();
@@ -70,9 +77,10 @@ export class AttendanceTableComponent implements OnInit{
     if (day > today) {
       return '';
     }
-    const attendance = user.attendances.find((att:any) =>
-      formatDate(att.registerDate, 'yyyy-MM-dd', 'en-US') ===
-      formatDate(day, 'yyyy-MM-dd', 'en-US')
+    const attendance = user.attendances.find(
+      (att: any) =>
+        formatDate(att.registerDate, 'yyyy-MM-dd', 'en-US') ===
+        formatDate(day, 'yyyy-MM-dd', 'en-US')
     );
 
     if (!attendance) {
@@ -100,7 +108,7 @@ export class AttendanceTableComponent implements OnInit{
     const minutes = registerDate.getMinutes();
 
     if (hours < 9 || (hours === 9 && minutes === 0)) {
-     return 'A';
+      return 'A';
     } else {
       return 'T';
     }
@@ -112,9 +120,10 @@ export class AttendanceTableComponent implements OnInit{
     if (day > today) {
       return '';
     }
-    const attendance = user.attendances.find((att:any) =>
-      formatDate(att.registerDate, 'yyyy-MM-dd', 'en-US') ===
-      formatDate(day, 'yyyy-MM-dd', 'en-US')
+    const attendance = user.attendances.find(
+      (att: any) =>
+        formatDate(att.registerDate, 'yyyy-MM-dd', 'en-US') ===
+        formatDate(day, 'yyyy-MM-dd', 'en-US')
     );
 
     if (!attendance || attendance.status === 'Falta') {
@@ -140,7 +149,7 @@ export class AttendanceTableComponent implements OnInit{
     if (hours < 9 || (hours === 9 && minutes === 0)) {
       return 'asistencia';
     } else {
-     return 'tardanza';
+      return 'tardanza';
     }
   }
   getTooltipText(user: any, day: Date): string {
@@ -152,7 +161,7 @@ export class AttendanceTableComponent implements OnInit{
           formatDate(day, 'yyyy-MM-dd', 'en-US')
       );
     });
-  
+
     if (attendance) {
       const registerDate = new Date(attendance.registerDate);
       return `Marcado el ${registerDate.toLocaleDateString('es-PE', {
@@ -166,13 +175,14 @@ export class AttendanceTableComponent implements OnInit{
         hour12: true,
       })}`;
     }
-  
+
     return 'No hay registro para este día';
   }
 
   openJustificationDialog(user: any, day: Date): void {
-    const attendance = user.attendances.find((att: any) =>
-      new Date(att.registerDate).toDateString() === day.toDateString()
+    const attendance = user.attendances.find(
+      (att: any) =>
+        new Date(att.registerDate).toDateString() === day.toDateString()
     );
 
     if (!attendance) {
@@ -183,24 +193,25 @@ export class AttendanceTableComponent implements OnInit{
       header: 'Confirmar Justificación',
       width: '400px',
       data: {
-        user, 
-        date: day, 
-        attendanceId: attendance.attendanceId, 
+        user,
+        date: day,
+        attendanceId: attendance.attendanceId,
       },
     });
 
     this.ref.onClose.subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.attendanceService.justifyAttendance(attendance.attendanceId).subscribe({
-          next: () => {
-            attendance.status = 'Justificado';
-          },
-          error: (err) => {
-            console.error('Error al justificar el attendance:', err);
-          },
-        });
+        this.attendanceService
+          .justifyAttendance(attendance.attendanceId)
+          .subscribe({
+            next: () => {
+              attendance.status = 'Justificado';
+            },
+            error: (err) => {
+              console.error('Error al justificar el attendance:', err);
+            },
+          });
       }
     });
   }
-  
 }
