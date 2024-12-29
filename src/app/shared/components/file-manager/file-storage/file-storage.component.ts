@@ -195,7 +195,9 @@ export class FileStorageComponent implements OnInit {
         name: this.newFolderName,
         parentId,
         path: parentId
-          ? this.folderHistory[this.folderHistory.length - 1].path
+          ? `${this.folderHistory[this.folderHistory.length - 1].path}/${
+              this.newFolderName
+            }`
           : this.newFolderName,
       })
       .subscribe({
