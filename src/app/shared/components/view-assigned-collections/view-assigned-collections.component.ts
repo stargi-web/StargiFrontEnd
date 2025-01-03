@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientCollectionService } from '../../../services/nestjs-services/clientCollectionService';
+import { ClientCollectionService } from '../../../core/services/nestjs-services/clientCollectionService';
 import { Router } from '@angular/router';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { OpportunityService } from '../../../services/nestjs-services/opportunityService';
+import { OpportunityService } from '../../../core/services/nestjs-services/opportunityService';
 
 @Component({
   selector: 'app-delete-user-dialog',

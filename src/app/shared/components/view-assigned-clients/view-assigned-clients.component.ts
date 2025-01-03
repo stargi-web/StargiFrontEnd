@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientService } from '../../../services/nestjs-services/clientService';
+import { ClientService } from '../../../core/services/nestjs-services/clientService';
 import { TableModule } from 'primeng/table';
 
 @Component({

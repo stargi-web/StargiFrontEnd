@@ -20,6 +20,7 @@ export class MessageNotificationService {
       severity: 'error',
       summary: 'Error',
       detail: message,
+      life: 7000,
     });
   }
 
