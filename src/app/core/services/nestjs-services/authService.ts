@@ -19,6 +19,7 @@ export class AuthService {
         sessionStorage.setItem('userId', response.userId);
         sessionStorage.setItem('token', response.token);
         sessionStorage.setItem('name', response.name);
+        sessionStorage.setItem('username', response.userName);
       }),
       catchError(this.handleError)
     );

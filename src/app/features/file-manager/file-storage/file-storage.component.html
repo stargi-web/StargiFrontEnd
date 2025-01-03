@@ -25,7 +25,7 @@
 
 <div class="m-5">
   <p-fileUpload
-    [disabled]="folderHistory.length > 0 ? false : true"
+    [disabled]="folderHistory.length > 0 && userRole === 'admin' ? false : true"
     name="myfile[]"
     [multiple]="true"
     [auto]="true"
@@ -71,7 +71,7 @@
             >p</p-button
           >
           <p-button
-            *ngIf="selectedFolder"
+            *ngIf="selectedFolder && userRole === 'admin'"
             (click)="showDeleteFolderConfirmation($event)"
             icon="pi pi-trash"
             [outlined]="true"
@@ -80,7 +80,7 @@
           />
 
           <p-button
-            *ngIf="isFileSelected"
+            *ngIf="selectedFile && userRole === 'admin'"
             (click)="showDeleteFileConfirmation(selectedFile)"
             icon="pi pi-trash"
             [outlined]="true"
@@ -88,7 +88,7 @@
             label="Borrar archivo"
           />
           <p-button
-            *ngIf="folderHistory.length > 0"
+            *ngIf="folderHistory.length > 0 && userRole === 'admin'"
             (onClick)="choose($event, chooseCallback)"
             icon="pi pi-upload"
             [outlined]="true"
@@ -97,7 +97,7 @@
           <!-- Botón Crear Carpeta con Icono -->
           <p-button
             class="my-2 ml-2"
-            *ngIf="!isCreatingFolder && !isAdminParent"
+            *ngIf="!isCreatingFolder && !isAdminParent && userRole === 'admin'"
             label="Crear Carpeta"
             severity="secondary"
             icon="pi pi-folder"
@@ -158,7 +158,9 @@
                 'selected-folder': userFolder === selectedFolderAdmin
               }"
               *ngFor="let userFolder of adminUsersFolders"
-              (dblclick)="adminLoadParentFolderByUser(userFolder.id)"
+              (dblclick)="
+                adminLoadParentFolderByUser(userFolder.id, userFolder.userName)
+              "
               (click)="selectAdminFolder(userFolder)"
             >
               <i class="folderIcon pi pi-folder folder-icon"></i>
@@ -195,7 +197,7 @@
         </div>
         <div
           class="flex align-items-center justify-content-center flex-column pt-4 pb-1"
-          *ngIf="folderHistory.length > 0"
+          *ngIf="folderHistory.length > 0 && userRole === 'admin'"
         >
           <i
             class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"

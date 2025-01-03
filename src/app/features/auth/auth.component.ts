@@ -37,7 +37,6 @@ export class AuthComponent {
       userName: this.userName,
       password: this.password,
     };
-    console.log('logInUser', logInUser);
     this.authService.logIn(logInUser).subscribe({
       next: (response) => {
         this.authService.redirectToRoleBasedComponent();

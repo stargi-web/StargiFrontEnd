@@ -41,11 +41,11 @@ export class FileStorageComponent implements OnInit {
   newFolderName: string = '';
   userId = Number(sessionStorage.getItem('userId'));
 
+  userName: string = '';
   userRole: string = '';
   adminUsersFolders: any = [];
 
   //file
-  isFileSelected: boolean = false;
   selectedFile: any;
   fileList: FileList = {} as FileList;
   newFileList: File[] = Array.from(this.fileList || []); // Convert FileList to File[]
@@ -76,8 +76,7 @@ export class FileStorageComponent implements OnInit {
     private fileService: FileStorageService,
     private userService: UserService,
     private firebaseCloudStorageService: FirebaseCloudStorageService,
-    private messageNotificationService: MessageNotificationService,
-    private spinner: NgxSpinnerService
+    private messageNotificationService: MessageNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -87,16 +86,17 @@ export class FileStorageComponent implements OnInit {
       this.adminLoadAllUserFolders();
       this.isAdminParent = true;
     } else {
-      this.folderService
-        .getParentFoldersByUser(this.userId)
-        .subscribe((data: Folder[]) => {
-          this.folders = data; // Asignamos las carpetas principales
-        });
+      this.userName = sessionStorage.getItem('username') || '';
+      this.loadParentFolders(this.userId);
     }
   }
 
+  getBaseFirebasePath(): string {
+    return `users/${this.userName}/files`;
+  }
+
   adminLoadAllUserFolders(): void {
-    this.selectedFolder = undefined;
+    this.deselectFolder();
     this.userService.getUsersIncludingAdmins().subscribe((users: any[]) => {
       this.adminUsersFolders = users;
       this.isAdminParent = true;
@@ -114,7 +114,8 @@ export class FileStorageComponent implements OnInit {
       });
   }
 
-  adminLoadParentFolderByUser(userId: number): void {
+  adminLoadParentFolderByUser(userId: number, username: string): void {
+    this.userName = username;
     this.selectedFolderAdmin = undefined;
     this.folderService
       .getParentFoldersByUser(userId)
@@ -134,9 +135,12 @@ export class FileStorageComponent implements OnInit {
 
   // Maneja el clic en una carpeta
   selectFolder(folder: Folder): void {
-    this.isFileSelected = false; // Deseleccionar archivo
     this.selectedFolder = folder; // Actualizar la carpeta seleccionada
     this.selectedFile = undefined;
+  }
+
+  deselectFolder(): void {
+    this.selectedFolder = undefined;
   }
 
   goToFolder(folder: Folder): void {
@@ -155,9 +159,6 @@ export class FileStorageComponent implements OnInit {
   }
   // Regresar al nivel anterior
   goBack(): void {
-    this.isFileSelected = false;
-    this.selectedFolder = undefined;
-
     this.folderHistory.pop(); // Eliminar la carpeta actual del historial
     const previousFolder = this.folderHistory[this.folderHistory.length - 1];
 
@@ -175,7 +176,8 @@ export class FileStorageComponent implements OnInit {
       this.loadParentFolders(this.userId);
       this.files = [];
     }
-    this.selectedFile = undefined;
+    this.deselectFile();
+    this.deselectFolder();
   }
 
   createFolder(): void {
@@ -252,7 +254,7 @@ export class FileStorageComponent implements OnInit {
   }
 
   downloadFile(file: any): void {
-    const filePath = `users/${this.userId}/files/${
+    const filePath = `${this.getBaseFirebasePath()}/${
       this.folderHistory[this.folderHistory.length - 1].path
     }/${file.fileName}`; // Ruta completa del archivo en Firebase Storage
 
@@ -279,7 +281,11 @@ export class FileStorageComponent implements OnInit {
   //UI
   selectFile(file: any) {
     this.selectedFile = file;
-    this.isFileSelected = true;
+    this.selectedFolder = undefined;
+  }
+
+  deselectFile() {
+    this.selectedFile = undefined;
   }
 
   startFolderCreation() {
@@ -317,7 +323,7 @@ export class FileStorageComponent implements OnInit {
     }
 
     // Ruta base en Firebase Storage
-    const folderPath = `users/${this.userId}/files/${
+    const folderPath = `${this.getBaseFirebasePath()}/${
       this.folderHistory[this.folderHistory.length - 1].path
     }`;
     this.totalFiles = this.newFileList.length;
@@ -383,11 +389,10 @@ export class FileStorageComponent implements OnInit {
       next: () => {
         this.loadFiles(this.folderHistory[this.folderHistory.length - 1].id);
         this.deleteFirebaseFile(
-          `users/${this.userId}/files/${this.selectedFile.filePath}`,
+          `${this.getBaseFirebasePath()}/${this.selectedFile.filePath}`,
           file.fileName
         );
-        this.selectedFile = undefined;
-        this.isFileSelected = false;
+        this.deselectFile();
       },
       error: (error) => {
         this.messageNotificationService.showError(error.error.message);
@@ -416,7 +421,7 @@ export class FileStorageComponent implements OnInit {
     }
 
     try {
-      const folderPath = `users/${this.userId}/files/${folder.path}`;
+      const folderPath = `${this.getBaseFirebasePath()}/${folder.path}`;
       await this.deleteFirebaseFolder(folderPath, folder.name);
 
       // Delete folder from database
@@ -427,10 +432,10 @@ export class FileStorageComponent implements OnInit {
             this.loadChildrenFolders(
               this.folderHistory[this.folderHistory.length - 1].id
             );
-            this.selectedFolder = undefined;
+            this.deselectFolder();
           } else {
             this.loadParentFolders(this.userId);
-            this.selectedFolder = undefined;
+            this.deselectFolder();
           }
         },
         error: (error) => {
