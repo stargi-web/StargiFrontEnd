@@ -19,6 +19,9 @@ export class OpportunityService {
   getAllOpportunities() {
     return this.httpClient.get<any>(`${this.apiUrl}`);
   }
+  getAllOpportunitiesDeleted() {
+    return this.httpClient.get<any>(`${this.apiUrl}/deleted`);
+  }
   getAllOpportunitiesPaginated(page: number, limit: number, filter: any) {
     return this.httpClient.post<any>(
       `${this.apiUrl}/filter/${page}/page/${limit}/limit`,

@@ -148,7 +148,7 @@
               <p-multiSelect
                 [ngModel]="value"
                 [options]="states"
-                placeholder=""
+                placeholder="Seleccione"
                 (onChange)="filter($event.value)"
                 optionLabel="label"
               >
@@ -215,6 +215,7 @@
           *ngIf="editingRowIndex !== rowIndex"
         ></p-button>
         <p-button
+          *ngIf="!isViewDeleted"
           icon="pi pi-trash"
           [rounded]="true"
           (onClick)="showDeleteOpportunityDialog($event, opportunity)"

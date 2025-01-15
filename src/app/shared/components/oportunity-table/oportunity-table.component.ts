@@ -260,9 +260,7 @@ export class OportunityTableComponent {
 
   showDeleteOpportunityDialog(event: Event, opportunity: OpportunityModel) {
     this.selectedOpportunity = opportunity;
-    setTimeout(() => {
-      this.deleteOportunityDialog.open(event);
-    }, 2);
+    this.deleteOportunityDialog.open(event);
   }
   handleDeleteOportunity() {
     this.deleteOpportunity(
