@@ -1,3 +1,17 @@
+<app-custom-confirm-dialog
+  #deleteOportunityDialog
+  [message]="
+    selectedOpportunity
+      ? 'Seguro que quiere eliminar ' + selectedOpportunity.businessName + '?'
+      : ''
+  "
+  [header]="'Confirmación de eliminación de oportunidad'"
+  [icon]="'pi pi-trash'"
+  [acceptButtonStyleClass]="'p-button-danger'"
+  [rejectButtonStyleClass]="'p-button-secondary'"
+  (onAccept)="handleDeleteOportunity()"
+></app-custom-confirm-dialog>
+
 <p-table
   [value]="opportunities"
   [rows]="10"
@@ -10,7 +24,7 @@
   scrollHeight="80vh"
 >
   <ng-template pTemplate="caption">
-    <div class="status-summary">
+    <div class="status-summary mb-3">
       <div class="status-item" *ngFor="let status of opportunityStateSummary">
         <div class="status-sigla">{{ status.sigla }}</div>
         <div class="status-count">{{ status.count }}</div>
@@ -20,7 +34,15 @@
         <div class="status-count">{{ totalOpportunities }}</div>
       </div>
     </div>
+    <p-button
+      icon="pi pi-trash"
+      [outlined]="true"
+      severity="info"
+      (click)="toggleViewDeleted()"
+      [label]="isViewDeleted ? 'Ver Activos' : 'Ver Borrados'"
+    />
   </ng-template>
+
   <ng-template pTemplate="header">
     <tr>
       <th>
@@ -195,9 +217,7 @@
         <p-button
           icon="pi pi-trash"
           [rounded]="true"
-          (onClick)="
-            deleteOpportunity(opportunity.businessName, opportunity.id)
-          "
+          (onClick)="showDeleteOpportunityDialog($event, opportunity)"
         />
         }
       </td>

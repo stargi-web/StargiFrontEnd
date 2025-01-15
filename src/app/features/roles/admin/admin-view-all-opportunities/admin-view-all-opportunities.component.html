@@ -1,5 +1,6 @@
 <app-oportunity-table
   [opportunities]="opportunities"
   [groupedUsers]="groupedUsers"
+  (viewDeletedToggled)="toggleViewDeletedInParent($event)"
 >
 </app-oportunity-table>

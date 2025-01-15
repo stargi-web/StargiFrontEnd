@@ -13,8 +13,7 @@ import { Button } from 'primeng/button';
 import { FirebaseCloudStorageService } from '../../../core/services/external-services/firebaseCloudStorageService';
 import { MessageNotificationService } from '../../../shared/components/message-toast/message-toast.service';
 import { CustomConfirmDialogComponent } from '../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
-import { MessageToastModule } from '../../../shared/components/message-toast/message-toast.module';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+
 @Component({
   selector: 'app-file-storage',
   standalone: true,
@@ -25,8 +24,6 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
     InputTextModule,
     BadgeModule,
     CustomConfirmDialogComponent,
-    MessageToastModule,
-    NgxSpinnerModule,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],

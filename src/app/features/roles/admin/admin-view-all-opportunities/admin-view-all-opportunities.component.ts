@@ -70,6 +70,16 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
     this.loadUsers();
     this.loadOpportunities();
   }
+
+  toggleViewDeletedInParent(isViewDeleted: boolean) {
+    if (isViewDeleted) {
+      console.log('No se implementó la funcionalidad');
+      this.loadDeletedOpportunities();
+    } else {
+      this.loadOpportunities();
+    }
+  }
+
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: (response) => {
@@ -107,4 +117,6 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
       error: (error) => console.error(error),
     });
   }
+
+  loadDeletedOpportunities() {}
 }

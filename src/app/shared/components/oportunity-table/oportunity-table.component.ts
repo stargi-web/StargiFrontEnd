@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
@@ -10,7 +16,6 @@ import { TableModule } from 'primeng/table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OpportunityService } from '../../../core/services/nestjs-services/opportunityService';
 import { OpportunityModel } from '../../../core/models/opportunityModel';
-import { ConfirmDeleteOpportunityDialogComponent } from '../confirm-delete-opportunity-dialog/confirm-delete-opportunity-dialog.component';
 import { ExecutiveRecordsOppDialogComponent } from '../../../features/roles/executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
 import { SimpleChanges } from '@angular/core';
 import {
@@ -19,6 +24,8 @@ import {
   productTypes,
   states,
 } from '../../const/constantes';
+import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-confirm-dialog.component';
+
 @Component({
   selector: 'app-oportunity-table',
   standalone: true,
@@ -32,6 +39,7 @@ import {
     InputNumberModule,
     TableModule,
     CommonModule,
+    CustomConfirmDialogComponent,
   ],
   templateUrl: './oportunity-table.component.html',
   styleUrl: './oportunity-table.component.css',
@@ -39,6 +47,8 @@ import {
 export class OportunityTableComponent {
   @Input() opportunities: any[] = [];
   @Input() groupedUsers: any[] = [];
+  @Output() viewDeletedToggled = new EventEmitter<boolean>();
+  userRole: string = '';
   opportunityStateSummary: { sigla: string; count: number }[] = [];
   totalOpportunities: number = 0;
   states = states;
@@ -49,10 +59,15 @@ export class OportunityTableComponent {
   assignUserMode: boolean = false;
   indexAssignUserMode: number = -1;
   urgentOpportunitiesCount: number = 0;
-
   selectedUser: any = null;
   // Métodos necesarios para manejar la lógica del componente
   private readonly NEAR_CLOSING_DAYS = 7;
+  selectedOpportunity!: OpportunityModel;
+
+  isViewDeleted: boolean = false;
+
+  @ViewChild('deleteOportunityDialog')
+  deleteOportunityDialog!: CustomConfirmDialogComponent;
 
   constructor(
     public dialogService: DialogService,
@@ -60,11 +75,21 @@ export class OportunityTableComponent {
   ) {}
   ref: DynamicDialogRef | undefined;
 
+  ngOnInit(): void {
+    this.userRole = sessionStorage.getItem('role') || '';
+    console.log(this.userRole);
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['opportunities']) {
       this.calculateOpportunityStateSummary();
       //this.calculateUrgentOpportunities();
     }
+  }
+
+  toggleViewDeleted() {
+    this.isViewDeleted = !this.isViewDeleted;
+    this.viewDeletedToggled.emit(this.isViewDeleted);
   }
 
   enableEditUserMode(index: number) {
@@ -208,27 +233,13 @@ export class OportunityTableComponent {
     this.editingRowIndex = null;
   }
   deleteOpportunity(name: string, id: number) {
-    const config = {
-      data: {
-        bussinesName: name,
+    this.opportunityService.deleteOpportunity(id).subscribe({
+      next: (response) => {
+        this.opportunities = this.opportunities.filter((o) => o.id !== id);
       },
-      Headers: 'Confimar eliminacion',
-    };
-    this.ref = this.dialogService.open(
-      ConfirmDeleteOpportunityDialogComponent,
-      config
-    );
-    this.ref.onClose.subscribe((response: boolean) => {
-      if (response) {
-        this.opportunityService.deleteOpportunity(id).subscribe({
-          next: (response) => {
-            this.opportunities = this.opportunities.filter((o) => o.id !== id);
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-      }
+      error: (error) => {
+        console.error(error);
+      },
     });
   }
   openRecordsDialog(oppId: number) {
@@ -245,5 +256,18 @@ export class OportunityTableComponent {
         config
       );
     }
+  }
+
+  showDeleteOpportunityDialog(event: Event, opportunity: OpportunityModel) {
+    this.selectedOpportunity = opportunity;
+    setTimeout(() => {
+      this.deleteOportunityDialog.open(event);
+    }, 2);
+  }
+  handleDeleteOportunity() {
+    this.deleteOpportunity(
+      this.selectedOpportunity.businessName,
+      this.selectedOpportunity.id!
+    );
   }
 }
