@@ -53,6 +53,9 @@ export class OpportunityService {
   getOpportunitiesByTeamId(teamId: number): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
   }
+  getOpportunitiesDeletedByTeamId(teamId: number): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/${teamId}/team/deleted`);
+  }
 
   createOpportunity(body: any) {
     console.log('Entrando al servicio de creación');
