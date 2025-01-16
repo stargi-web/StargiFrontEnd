@@ -7,18 +7,11 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/nestjs-services/authService';
 import { LogInUser } from '../../core/models/LogInUser';
 import { MessageNotificationService } from '../../shared/components/message-toast/message-toast.service';
-import { MessageToastModule } from '../../shared/components/message-toast/message-toast.module';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    FormsModule,
-    MessageToastModule,
-  ],
+  imports: [InputTextModule, PasswordModule, ButtonModule, FormsModule],
   providers: [],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',

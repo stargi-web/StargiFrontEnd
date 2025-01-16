@@ -21,19 +21,21 @@ export class CustomConfirmDialogComponent {
   constructor(private confirmationService: ConfirmationService) {}
 
   open(event: Event) {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: this.message,
-      header: this.header,
-      icon: this.icon,
-      acceptButtonStyleClass: this.acceptButtonStyleClass,
-      rejectButtonStyleClass: this.rejectButtonStyleClass,
-      accept: () => {
-        this.onAccept.emit();
-      },
-      reject: () => {
-        this.onReject.emit();
-      },
-    });
+    setTimeout(() => {
+      this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: this.message,
+        header: this.header,
+        icon: this.icon,
+        acceptButtonStyleClass: this.acceptButtonStyleClass,
+        rejectButtonStyleClass: this.rejectButtonStyleClass,
+        accept: () => {
+          this.onAccept.emit();
+        },
+        reject: () => {
+          this.onReject.emit();
+        },
+      });
+    }, 10);
   }
 }
