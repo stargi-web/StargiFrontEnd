@@ -18,6 +18,23 @@ export class AttendanceTableComponent implements OnInit {
   attendanceData: any[] = [];
   weekdays: Date[] = [];
 
+  monthNames = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ];
+  textMonth = '';
+  textYear = '';
+
   constructor(
     public dialogService: DialogService,
     private attendanceService: AttendanceService
@@ -26,6 +43,8 @@ export class AttendanceTableComponent implements OnInit {
   ngOnInit(): void {
     this.initializeWeekdays();
     this.loadAttendanceData();
+    this.textMonth = this.monthNames[new Date().getMonth()];
+    this.textYear = new Date().getFullYear().toString();
   }
 
   initializeWeekdays(): void {

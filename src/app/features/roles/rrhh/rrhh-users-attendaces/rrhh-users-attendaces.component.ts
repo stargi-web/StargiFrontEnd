@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { saveAs } from 'file-saver';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DeleteUserDialogComponent } from '../../../../shared/components/delete-user-dialog/delete-user-dialog.component';
+import { AttendanceTableComponent } from '../attendance-table/attendance-table.component';
 
 @Component({
   selector: 'app-rrhh-users-attendaces',
@@ -19,12 +20,14 @@ import { DeleteUserDialogComponent } from '../../../../shared/components/delete-
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
+    AttendanceTableComponent,
   ],
   providers: [DialogService],
   templateUrl: './rrhh-users-attendaces.component.html',
   styleUrl: './rrhh-users-attendaces.component.css',
 })
 export class RrhhUsersAttendacesComponent implements OnInit {
+  showAttendanceTable = false;
   users: any;
   loading = true;
   constructor(
@@ -70,7 +73,7 @@ export class RrhhUsersAttendacesComponent implements OnInit {
   }
 
   goToMonthlyAttendanceSummary() {
-    this.router.navigate(['/HHRR/monthly-attendance-summary']);
+    this.showAttendanceTable = !this.showAttendanceTable;
   }
   downloadExcel() {
     const month = 11;
