@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { saveAs } from 'file-saver';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DeleteUserDialogComponent } from '../../../../shared/components/delete-user-dialog/delete-user-dialog.component';
-import { AttendanceTableComponent } from '../attendance-table/attendance-table.component';
+import { AttendanceTableComponent } from './attendance-table/attendance-table.component';
 
 @Component({
   selector: 'app-rrhh-users-attendaces',

@@ -30,7 +30,7 @@ import { RrhhUserAttendancesDetailsComponent } from './features/roles/rrhh/rrhh-
 import { RrhhMonthlyAttendanceSummaryComponent } from './features/roles/rrhh/rrhh-monthly-attendance-summary/rrhh-monthly-attendance-summary.component';
 import { ExecutiveOpportunitiesViewComponent } from './features/roles/executive/executive-opportunities-view/executive-opportunities-view.component';
 import { AdminCreateUserComponent } from './features/roles/admin/admin-create-user/admin-create-user.component';
-import { AttendanceTableComponent } from './features/roles/rrhh/attendance-table/attendance-table.component';
+import { AttendanceTableComponent } from './features/roles/rrhh/rrhh-users-attendaces/attendance-table/attendance-table.component';
 import { FileStorageComponent } from './features/file-manager/file-storage/file-storage.component';
 
 export const routes: Routes = [
