@@ -1,16 +1,21 @@
-<table>
+<div class="mt-5 ml-5 mb-7">
+  <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem">
+    <span>{{ textMonth }} {{ textYear }}</span>
+  </div>
+
+  <table>
     <thead>
       <tr>
         <th>Usuario</th>
         <ng-container *ngFor="let day of weekdays">
-          <th>{{ day | date: 'dd/MM' }}</th>
+          <th>{{ day | date : "dd  " }}</th>
         </ng-container>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let user of attendanceData">
         <td>{{ user.firstName }} {{ user.lastName }}</td>
-        
+
         <ng-container *ngFor="let day of weekdays">
           <td
             [pTooltip]="getTooltipText(user, day)"
@@ -24,4 +29,4 @@
       </tr>
     </tbody>
   </table>
-  
+</div>

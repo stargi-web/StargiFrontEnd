@@ -1,0 +1,33 @@
+.falta {
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+
+.asistencia {
+  background-color: green;
+  color: white;
+  text-align: center;
+}
+
+.tardanza {
+  background-color: orange;
+  color: white;
+  text-align: center;
+}
+
+.justificado {
+  background-color: lightblue;
+  color: black;
+  text-align: center;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 3px;
+}
+
+th,
+td {
+  padding: 5px;
+}

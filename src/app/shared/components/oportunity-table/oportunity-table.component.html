@@ -13,6 +13,7 @@
 ></app-custom-confirm-dialog>
 
 <p-table
+  #dataTable
   [value]="opportunities"
   [rows]="10"
   [rowsPerPageOptions]="[10, 15, 20]"
@@ -37,10 +38,19 @@
     <p-button
       icon="pi pi-trash"
       [outlined]="true"
-      severity="info"
+      [severity]="isViewDeleted ? 'info' : 'danger'"
       (click)="toggleViewDeleted()"
       [label]="isViewDeleted ? 'Ver Activos' : 'Ver Borrados'"
     />
+    <p-button
+      class="ml-2"
+      [icon]="isFilterActive ? 'pi pi-check' : 'pi pi-eye'"
+      [outlined]="true"
+      [severity]="isFilterActive ? 'success' : 'info'"
+      (click)="applyFilterByStatus()"
+      [label]="isFilterActive ? 'Ver Todos' : 'Ver Cerrados/No Cerrados'"
+    >
+    </p-button>
   </ng-template>
 
   <ng-template pTemplate="header">
