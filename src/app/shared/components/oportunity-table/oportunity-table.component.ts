@@ -65,10 +65,10 @@ export class OportunityTableComponent {
   selectedOpportunity!: OpportunityModel;
 
   isViewDeleted: boolean = false;
-
+  isFilterActive: boolean = false;
   @ViewChild('deleteOportunityDialog')
   deleteOportunityDialog!: CustomConfirmDialogComponent;
-
+  @ViewChild('dataTable') dataTable: any;
   constructor(
     public dialogService: DialogService,
     private opportunityService: OpportunityService
@@ -84,6 +84,17 @@ export class OportunityTableComponent {
     if (changes['opportunities']) {
       this.calculateOpportunityStateSummary();
       //this.calculateUrgentOpportunities();
+      this.dataTable.filter(
+        [
+          'Potenciales',
+          'Prospecto',
+          'Prospecto calificado',
+          'Prospecto desarrollado',
+        ],
+        'state',
+        'in'
+      );
+      this.isFilterActive = false;
     }
   }
 
@@ -267,5 +278,25 @@ export class OportunityTableComponent {
       this.selectedOpportunity.businessName,
       this.selectedOpportunity.id!
     );
+  }
+
+  applyFilterByStatus() {
+    this.isFilterActive = !this.isFilterActive;
+
+    // Aplica el filtro según el estado
+    if (this.isFilterActive) {
+      this.dataTable.filter(['Cierre', 'No cierre'], 'state', 'in');
+    } else {
+      this.dataTable.filter(
+        [
+          'Potenciales',
+          'Prospecto',
+          'Prospecto calificado',
+          'Prospecto desarrollado',
+        ],
+        'state',
+        'in'
+      );
+    }
   }
 }

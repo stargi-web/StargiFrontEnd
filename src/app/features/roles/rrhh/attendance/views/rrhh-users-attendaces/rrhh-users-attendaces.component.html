@@ -3,8 +3,10 @@
     <button
       pButton
       type="button"
-      label="Ver Resumen Mensual"
+      [label]="'Ver Resumen Mensual'"
+      [icon]="showAttendanceTable ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
       (click)="goToMonthlyAttendanceSummary()"
+      iconPos="right"
       class="p-button-primary"
     ></button>
     <button
