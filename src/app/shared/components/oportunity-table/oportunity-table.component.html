@@ -19,10 +19,13 @@
   [rowsPerPageOptions]="[10, 15, 20]"
   [loading]="false"
   [paginator]="true"
-  sortField="createdAt"
-  [sortOrder]="-1"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder"
   [scrollable]="true"
   scrollHeight="80vh"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
+  (onLazyLoad)="loadOpportunities($event)"
 >
   <ng-template pTemplate="caption">
     <div class="status-summary mb-3">
@@ -32,7 +35,7 @@
       </div>
       <div class="status-item">
         <div class="status-sigla">Total</div>
-        <div class="status-count">{{ totalOpportunities }}</div>
+        <div class="status-count">{{ totalRecords }}</div>
       </div>
     </div>
     <p-button

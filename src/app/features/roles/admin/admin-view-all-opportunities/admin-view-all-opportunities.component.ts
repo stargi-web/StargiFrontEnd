@@ -22,6 +22,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { OportunityTableComponent } from '../../../../shared/components/oportunity-table/oportunity-table.component';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-admin-view-all-opportunities',
@@ -46,12 +47,20 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
   selectedUser!: any;
   opportunities!: OpportunityModel[];
   userId?: number;
+  filters: any = {
+    isCurrent: { value: true },
+    state: {
+      value: [
+        'Potenciales',
+        'Prospecto',
+        'Prospecto calificado',
+        'Prospecto desarrollado',
+      ],
+    },
+  };
   constructor(
     private userService: UserService,
-    public dialogService: DialogService,
-    private route: ActivatedRoute,
-    private opportunityService: OpportunityService,
-    private oppRecordService: OpportunityRecordService
+    public dialogService: DialogService
   ) {}
   ref: DynamicDialogRef | undefined;
   ngOnInit(): void {
@@ -68,16 +77,27 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
       },
     ];
     this.loadUsers();
-    this.loadOpportunities();
   }
 
   toggleViewDeletedInParent(isViewDeleted: boolean) {
     if (isViewDeleted) {
       this.loadUsers();
-      this.loadDeletedOpportunities();
+      this.filters = {
+        isCurrent: { value: false },
+      };
     } else {
       this.loadUsers();
-      this.loadOpportunities();
+      this.filters = {
+        isCurrent: { value: true },
+        state: {
+          value: [
+            'Potenciales',
+            'Prospecto',
+            'Prospecto calificado',
+            'Prospecto desarrollado',
+          ],
+        },
+      };
     }
   }
 
@@ -97,32 +117,6 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
             });
           }
         });
-      },
-      error: (error) => console.error(error),
-    });
-  }
-  loadOpportunities() {
-    this.opportunityService.getAllOpportunities().subscribe({
-      next: (response) => {
-        this.opportunities = response;
-        this.opportunities.forEach((opp) => {
-          opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
-          opp.createdAt = new Date(opp.createdAt);
-          opp.updatedAt = new Date(opp.updatedAt);
-          opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
-          if (opp.nextInteraction) {
-            opp.nextInteraction = new Date(opp.nextInteraction);
-          }
-        });
-      },
-      error: (error) => console.error(error),
-    });
-  }
-
-  loadDeletedOpportunities() {
-    this.opportunityService.getAllOpportunitiesDeleted().subscribe({
-      next: (response) => {
-        this.opportunities = response;
       },
       error: (error) => console.error(error),
     });

@@ -1,4 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../env/environment';
 import { catchError, Observable, tap, throwError } from 'rxjs';
@@ -93,5 +97,27 @@ export class OpportunityService {
     return throwError(
       () => new Error('Algo falló. Por favor intente nuevamente.')
     );
+  }
+
+  getOpportunities(
+    page: number,
+    size: number,
+    filters: any,
+    sortField?: string,
+    sortOrder?: string
+  ): Observable<any> {
+    let params = new HttpParams().set('page', page).set('size', size);
+
+    if (filters) {
+      params = params.set('filters', JSON.stringify(filters));
+    }
+
+    if (sortField) {
+      params = params
+        .set('sortField', sortField)
+        .set('sortOrder', sortOrder || 'ASC');
+    }
+
+    return this.httpClient.get<any>(`${this.apiUrl}/test/xd`, { params });
   }
 }

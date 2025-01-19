@@ -47,10 +47,10 @@ import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-co
 export class OportunityTableComponent {
   @Input() opportunities: any[] = [];
   @Input() groupedUsers: any[] = [];
+  @Input() filters: Record<string, { value: any | any[] }> = {};
   @Output() viewDeletedToggled = new EventEmitter<boolean>();
   userRole: string = '';
   opportunityStateSummary: { sigla: string; count: number }[] = [];
-  totalOpportunities: number = 0;
   states = states;
   opportunityTypes = opportunityTypes;
   products = products;
@@ -66,6 +66,11 @@ export class OportunityTableComponent {
 
   isViewDeleted: boolean = false;
   isFilterActive: boolean = false;
+  totalRecords: number = 0;
+  allOpportunities: any[] = [];
+  sortField: string = 'createdAt'; // El campo por el cual estás ordenando
+  sortOrder: number = -1; // Orden ASC (1) o DESC (-1)
+
   @ViewChild('deleteOportunityDialog')
   deleteOportunityDialog!: CustomConfirmDialogComponent;
   @ViewChild('dataTable') dataTable: any;
@@ -76,31 +81,22 @@ export class OportunityTableComponent {
   ref: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
+    console.log('sorting by:', this.sortField);
     this.userRole = sessionStorage.getItem('role') || '';
     console.log(this.userRole);
+    this.loadOpportunities({ first: 0, rows: 10 });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['opportunities']) {
-      this.calculateOpportunityStateSummary();
-      //this.calculateUrgentOpportunities();
-      this.dataTable.filter(
-        [
-          'Potenciales',
-          'Prospecto',
-          'Prospecto calificado',
-          'Prospecto desarrollado',
-        ],
-        'state',
-        'in'
-      );
-      this.isFilterActive = false;
+    if (changes['filters']) {
+      this.refreshOpportunityTable();
     }
   }
 
   toggleViewDeleted() {
     this.isViewDeleted = !this.isViewDeleted;
     this.viewDeletedToggled.emit(this.isViewDeleted);
+    this.isFilterActive = false;
   }
 
   enableEditUserMode(index: number) {
@@ -146,10 +142,7 @@ export class OportunityTableComponent {
       this.opportunities.forEach((opportunity) => {
         stateCounts[opportunity.state as keyof typeof stateCounts]++;
       });
-
-      this.totalOpportunities = this.opportunities.length;
     } else {
-      this.totalOpportunities = 0; // Fallback in case opportunities is not an array or is undefined
     }
 
     this.opportunityStateSummary = [
@@ -283,20 +276,61 @@ export class OportunityTableComponent {
   applyFilterByStatus() {
     this.isFilterActive = !this.isFilterActive;
 
-    // Aplica el filtro según el estado
     if (this.isFilterActive) {
-      this.dataTable.filter(['Cierre', 'No cierre'], 'state', 'in');
+      this.filters = {
+        isCurrent: { value: true },
+        state: {
+          value: ['Cierre', 'No cierre'],
+        },
+      };
     } else {
-      this.dataTable.filter(
-        [
-          'Potenciales',
-          'Prospecto',
-          'Prospecto calificado',
-          'Prospecto desarrollado',
-        ],
-        'state',
-        'in'
-      );
+      this.filters = {
+        isCurrent: { value: true },
+        state: {
+          value: [
+            'Potenciales',
+            'Prospecto',
+            'Prospecto calificado',
+            'Prospecto desarrollado',
+          ],
+        },
+      };
     }
+    this.refreshOpportunityTable();
+  }
+
+  loadOpportunities(event: any) {
+    const page = event.first / event.rows; // PrimeNG usa índices basados en 'first'
+    const size = event.rows;
+
+    //const sortField = event.sortField;
+    const sortOrder = this.sortOrder === 1 ? 'ASC' : 'DESC';
+
+    console.log('Sort field:', this.sortField);
+    console.log('Sort order:', this.sortOrder);
+
+    this.opportunityService
+      .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
+      .subscribe((data) => {
+        this.opportunities = data.items;
+        // Acumula las nuevas oportunidades
+        this.allOpportunities = [...this.allOpportunities, ...data.items];
+        this.totalRecords = data.total;
+        this.opportunities.forEach((opp) => {
+          opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
+          opp.createdAt = new Date(opp.createdAt);
+          opp.updatedAt = new Date(opp.updatedAt);
+          opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
+          if (opp.nextInteraction) {
+            opp.nextInteraction = new Date(opp.nextInteraction);
+          }
+        });
+        this.calculateOpportunityStateSummary();
+      });
+  }
+
+  refreshOpportunityTable() {
+    this.dataTable.first = 0;
+    this.loadOpportunities({ first: 0, rows: 10 }); //recargar datos
   }
 }
