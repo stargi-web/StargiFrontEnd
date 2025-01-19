@@ -45,12 +45,12 @@ import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-co
   styleUrl: './oportunity-table.component.css',
 })
 export class OportunityTableComponent {
-  @Input() opportunities: any[] = [];
+  opportunities: any[] = [];
   @Input() groupedUsers: any[] = [];
   @Input() filters: Record<string, { value: any | any[] }> = {};
   @Output() viewDeletedToggled = new EventEmitter<boolean>();
   userRole: string = '';
-  opportunityStateSummary: { sigla: string; count: number }[] = [];
+
   states = states;
   opportunityTypes = opportunityTypes;
   products = products;
@@ -71,6 +71,26 @@ export class OportunityTableComponent {
   sortField: string = 'createdAt'; // El campo por el cual estás ordenando
   sortOrder: number = -1; // Orden ASC (1) o DESC (-1)
 
+  stateCounts = {
+    'No contactado': 0,
+    Potenciales: 0,
+    Prospecto: 0,
+    'Prospecto calificado': 0,
+    'Prospecto desarrollado': 0,
+    Cierre: 0,
+    'No cierre': 0,
+  };
+
+  opportunityStateSummary = [
+    { sigla: 'NC', count: this.stateCounts['No contactado'] },
+    { sigla: 'PO', count: this.stateCounts.Potenciales },
+    { sigla: 'PR', count: this.stateCounts.Prospecto },
+    { sigla: 'PC', count: this.stateCounts['Prospecto calificado'] },
+    { sigla: 'PD', count: this.stateCounts['Prospecto desarrollado'] },
+    { sigla: 'C', count: this.stateCounts.Cierre },
+    { sigla: 'NoC', count: this.stateCounts['No cierre'] },
+  ];
+
   @ViewChild('deleteOportunityDialog')
   deleteOportunityDialog!: CustomConfirmDialogComponent;
   @ViewChild('dataTable') dataTable: any;
@@ -81,7 +101,6 @@ export class OportunityTableComponent {
   ref: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
-    console.log('sorting by:', this.sortField);
     this.userRole = sessionStorage.getItem('role') || '';
     console.log(this.userRole);
     this.loadOpportunities({ first: 0, rows: 10 });
@@ -126,35 +145,7 @@ export class OportunityTableComponent {
 
     return diffInDays <= this.NEAR_CLOSING_DAYS;
   }
-  calculateOpportunityStateSummary() {
-    const stateCounts = {
-      'No contactado': 0,
-      Potenciales: 0,
-      Prospecto: 0,
-      'Prospecto calificado': 0,
-      'Prospecto desarrollado': 0,
-      Cierre: 0,
-      'No cierre': 0,
-    };
 
-    // Ensure that opportunities is not undefined or null
-    if (this.opportunities && Array.isArray(this.opportunities)) {
-      this.opportunities.forEach((opportunity) => {
-        stateCounts[opportunity.state as keyof typeof stateCounts]++;
-      });
-    } else {
-    }
-
-    this.opportunityStateSummary = [
-      { sigla: 'NC', count: stateCounts['No contactado'] },
-      { sigla: 'PO', count: stateCounts.Potenciales },
-      { sigla: 'PR', count: stateCounts.Prospecto },
-      { sigla: 'PC', count: stateCounts['Prospecto calificado'] },
-      { sigla: 'PD', count: stateCounts['Prospecto desarrollado'] },
-      { sigla: 'C', count: stateCounts.Cierre },
-      { sigla: 'NoC', count: stateCounts['No cierre'] },
-    ];
-  }
   getRowClass(opportunity: any): string {
     const creationDate = new Date(opportunity.oppSfaDateCreation);
     const today = new Date();
@@ -278,14 +269,14 @@ export class OportunityTableComponent {
 
     if (this.isFilterActive) {
       this.filters = {
-        isCurrent: { value: true },
+        ...this.filters,
         state: {
           value: ['Cierre', 'No cierre'],
         },
       };
     } else {
       this.filters = {
-        isCurrent: { value: true },
+        ...this.filters,
         state: {
           value: [
             'Potenciales',
@@ -296,6 +287,7 @@ export class OportunityTableComponent {
         },
       };
     }
+    console.log(this.filters);
     this.refreshOpportunityTable();
   }
 
@@ -306,15 +298,12 @@ export class OportunityTableComponent {
     //const sortField = event.sortField;
     const sortOrder = this.sortOrder === 1 ? 'ASC' : 'DESC';
 
-    console.log('Sort field:', this.sortField);
-    console.log('Sort order:', this.sortOrder);
-
     this.opportunityService
       .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
       .subscribe((data) => {
         this.opportunities = data.items;
         // Acumula las nuevas oportunidades
-        this.allOpportunities = [...this.allOpportunities, ...data.items];
+        this.loadStateSummary(data.stateSummary);
         this.totalRecords = data.total;
         this.opportunities.forEach((opp) => {
           opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
@@ -325,12 +314,27 @@ export class OportunityTableComponent {
             opp.nextInteraction = new Date(opp.nextInteraction);
           }
         });
-        this.calculateOpportunityStateSummary();
       });
   }
 
   refreshOpportunityTable() {
-    this.dataTable.first = 0;
+    if (this.dataTable) this.dataTable.first = 0;
     this.loadOpportunities({ first: 0, rows: 10 }); //recargar datos
+  }
+
+  loadStateSummary(stateSummary: any) {
+    // Actualizar los valores de stateCounts
+    this.stateCounts = stateSummary;
+
+    // Sincronizar los valores con opportunityStateSummary
+    this.opportunityStateSummary = [
+      { sigla: 'NC', count: this.stateCounts['No contactado'] },
+      { sigla: 'PO', count: this.stateCounts.Potenciales },
+      { sigla: 'PR', count: this.stateCounts.Prospecto },
+      { sigla: 'PC', count: this.stateCounts['Prospecto calificado'] },
+      { sigla: 'PD', count: this.stateCounts['Prospecto desarrollado'] },
+      { sigla: 'C', count: this.stateCounts.Cierre },
+      { sigla: 'NoC', count: this.stateCounts['No cierre'] },
+    ];
   }
 }

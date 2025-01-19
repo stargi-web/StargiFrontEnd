@@ -34,9 +34,19 @@ import { UserService } from '../../../../core/services/nestjs-services/userServi
   styleUrl: './supervisor-team-opportunities.component.css',
 })
 export class SupervisorTeamOpportunitiesComponent implements OnInit {
-  opportunities!: OpportunityModel[];
   groupedUsers!: SelectItemGroup[];
   teamId!: number;
+  filters: any = {
+    isCurrent: { value: true },
+    state: {
+      value: [
+        'Potenciales',
+        'Prospecto',
+        'Prospecto calificado',
+        'Prospecto desarrollado',
+      ],
+    },
+  };
 
   constructor(
     private userService: UserService,
@@ -58,17 +68,23 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
       },
     ];
     this.teamId = Number(sessionStorage.getItem('teamId'));
+    this.teamId = 5;
     this.loadUsers();
-    this.loadOpportunities();
   }
 
   toggleViewDeletedInParent(isViewDeleted: boolean) {
     if (isViewDeleted) {
+      this.filters = {
+        ...this.filters,
+        isCurrent: { value: false },
+      };
       this.loadUsers();
-      this.loadDeletedOpportunities();
     } else {
+      this.filters = {
+        ...this.filters,
+        isCurrent: { value: true },
+      };
       this.loadUsers();
-      this.loadOpportunities();
     }
   }
   loadUsers() {
@@ -87,40 +103,19 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
             });
           }
         });
+
+        // Extract user IDs
+        const userIds = response.map((user: any) => user.id);
+
+        // Crear el objeto de filtros combinados
+        this.filters = {
+          ...this.filters,
+          user: { value: userIds },
+        };
+
+        console.log(this.filters);
       },
       error: (error) => console.error(error),
     });
-  }
-  loadOpportunities() {
-    if (this.teamId) {
-      this.opportunityService.getOpportunitiesByTeamId(this.teamId).subscribe({
-        next: (response) => {
-          this.opportunities = response;
-          this.opportunities.forEach((opp) => {
-            opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
-            opp.createdAt = new Date(opp.createdAt);
-            opp.updatedAt = new Date(opp.updatedAt);
-            opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
-            if (opp.nextInteraction) {
-              opp.nextInteraction = new Date(opp.nextInteraction);
-            }
-          });
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-    }
-  }
-
-  loadDeletedOpportunities() {
-    this.opportunityService
-      .getOpportunitiesDeletedByTeamId(this.teamId)
-      .subscribe({
-        next: (response) => {
-          this.opportunities = response;
-        },
-        error: (error) => console.error(error),
-      });
   }
 }

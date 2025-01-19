@@ -118,6 +118,6 @@ export class OpportunityService {
         .set('sortOrder', sortOrder || 'ASC');
     }
 
-    return this.httpClient.get<any>(`${this.apiUrl}/test/xd`, { params });
+    return this.httpClient.get<any>(`${this.apiUrl}/filter`, { params });
   }
 }

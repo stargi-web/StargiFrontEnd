@@ -3,16 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OpportunityModel } from '../../../../core/models/opportunityModel';
-import { OpportunityRecordService } from '../../../../core/services/nestjs-services/opportunityRecordService';
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
+
 import { UserService } from '../../../../core/services/nestjs-services/userService';
 
-import {
-  opportunityTypes,
-  products,
-  productTypes,
-  states,
-} from '../../../../shared/const/constantes';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
@@ -22,7 +15,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { OportunityTableComponent } from '../../../../shared/components/oportunity-table/oportunity-table.component';
-import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-admin-view-all-opportunities',
@@ -45,7 +37,6 @@ import { filter } from 'rxjs';
 export class AdminViewAllOpportunitiesComponent implements OnInit {
   groupedUsers!: SelectItemGroup[];
   selectedUser!: any;
-  opportunities!: OpportunityModel[];
   userId?: number;
   filters: any = {
     isCurrent: { value: true },
