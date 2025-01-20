@@ -212,7 +212,7 @@ export class FileStorageComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.messageNotificationService.showError(error.error.message);
+          this.messageNotificationService.showError(error);
         },
       });
   }
@@ -245,7 +245,7 @@ export class FileStorageComponent implements OnInit {
         );
       },
       error: (error) => {
-        this.messageNotificationService.showError(error.error.message);
+        this.messageNotificationService.showError(error);
       },
     });
   }
@@ -392,7 +392,7 @@ export class FileStorageComponent implements OnInit {
         this.deselectFile();
       },
       error: (error) => {
-        this.messageNotificationService.showError(error.error.message);
+        this.messageNotificationService.showError(error);
       },
     });
   }
@@ -407,7 +407,7 @@ export class FileStorageComponent implements OnInit {
         );
       },
       (error) => {
-        this.messageNotificationService.showError(error.error.message);
+        this.messageNotificationService.showError(error);
       }
     );
   }
@@ -436,7 +436,7 @@ export class FileStorageComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.messageNotificationService.showError(error.error.message);
+          this.messageNotificationService.showError(error);
         },
       });
     } catch (error) {
@@ -455,7 +455,7 @@ export class FileStorageComponent implements OnInit {
       },
       (error) => {
         // Maneja cualquier error que ocurra
-        this.messageNotificationService.showError(error.error.message);
+        this.messageNotificationService.showError(error);
       }
     );
   }

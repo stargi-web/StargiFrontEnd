@@ -35,7 +35,7 @@ export class AuthComponent {
         this.authService.redirectToRoleBasedComponent();
       },
       error: (error) => {
-        this.messageNotificationService.showError(error.message);
+        this.messageNotificationService.showError(error);
       },
     });
   }

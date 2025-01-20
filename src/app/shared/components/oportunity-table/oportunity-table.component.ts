@@ -26,6 +26,7 @@ import {
   states,
 } from '../../const/constantes';
 import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-confirm-dialog.component';
+import { MessageNotificationService } from '../message-toast/message-toast.service';
 
 @Component({
   selector: 'app-oportunity-table',
@@ -100,7 +101,8 @@ export class OportunityTableComponent {
   @ViewChild('dataTable') dataTable: any;
   constructor(
     public dialogService: DialogService,
-    private opportunityService: OpportunityService
+    private opportunityService: OpportunityService,
+    private messageNotificationService: MessageNotificationService
   ) {}
   ref: DynamicDialogRef | undefined;
 
@@ -128,9 +130,11 @@ export class OportunityTableComponent {
       .changeUser({ userId: userId, opportunityId: oppId })
       .subscribe({
         next: (response) => {
-          alert(response.message);
+          this.messageNotificationService.showSuccess(response.message);
         },
-        error: (error) => console.error(error),
+        error: (error) => {
+          this.messageNotificationService.showError(error);
+        },
       });
     this.assignUserMode = false;
   }
