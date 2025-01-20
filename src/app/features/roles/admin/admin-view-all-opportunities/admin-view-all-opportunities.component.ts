@@ -70,26 +70,6 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
     this.loadUsers();
   }
 
-  toggleViewDeletedInParent(isViewDeleted: boolean) {
-    if (isViewDeleted) {
-      this.filters = {
-        isCurrent: { value: false },
-      };
-    } else {
-      this.filters = {
-        isCurrent: { value: true },
-        state: {
-          value: [
-            'Potenciales',
-            'Prospecto',
-            'Prospecto calificado',
-            'Prospecto desarrollado',
-          ],
-        },
-      };
-    }
-  }
-
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: (response) => {

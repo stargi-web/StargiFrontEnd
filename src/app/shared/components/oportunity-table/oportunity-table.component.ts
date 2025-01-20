@@ -48,7 +48,7 @@ export class OportunityTableComponent {
   opportunities: any[] = [];
   @Input() groupedUsers: any[] = [];
   @Input() filters: Record<string, { value: any | any[] }> = {};
-  @Output() viewDeletedToggled = new EventEmitter<boolean>();
+
   userRole: string = '';
 
   states = states;
@@ -112,11 +112,6 @@ export class OportunityTableComponent {
     if (changes['filters']) {
       this.refreshOpportunityTable();
     }
-  }
-
-  toggleViewDeleted() {
-    this.isViewDeleted = !this.isViewDeleted;
-    this.viewDeletedToggled.emit(this.isViewDeleted);
   }
 
   enableEditUserMode(index: number) {
@@ -265,7 +260,7 @@ export class OportunityTableComponent {
     );
   }
 
-  applyFilterByStatus() {
+  viewClosedsStatus() {
     this.isFilterActive = !this.isFilterActive;
 
     if (this.isFilterActive) {
@@ -288,7 +283,23 @@ export class OportunityTableComponent {
         },
       };
     }
-    console.log(this.filters);
+    this.refreshOpportunityTable();
+  }
+
+  viewDeleted() {
+    this.isViewDeleted = !this.isViewDeleted;
+
+    if (this.isViewDeleted) {
+      this.filters = {
+        ...this.filters,
+        isCurrent: { value: false },
+      };
+    } else {
+      this.filters = {
+        ...this.filters,
+        isCurrent: { value: true },
+      };
+    }
     this.refreshOpportunityTable();
   }
 
@@ -321,6 +332,7 @@ export class OportunityTableComponent {
   refreshOpportunityTable() {
     if (this.dataTable) this.dataTable.first = 0;
     this.loadOpportunities({ first: 0, rows: 10 }); //recargar datos
+    console.log(this.filters);
   }
 
   loadStateSummary(stateSummary: any) {
@@ -348,7 +360,6 @@ export class OportunityTableComponent {
   onAsignedUsersChanged(selectedItems: any[]): void {
     this.selectedUsers = selectedItems;
 
-    console.log(this.selectedUsers);
     if (selectedItems.length === 0) {
       this.filters = {
         ...this.filters,
@@ -364,7 +375,6 @@ export class OportunityTableComponent {
         },
       };
     }
-    console.log(this.filters);
     this.refreshOpportunityTable();
   }
 }

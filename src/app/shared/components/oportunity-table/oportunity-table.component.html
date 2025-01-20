@@ -42,7 +42,7 @@
       icon="pi pi-trash"
       [outlined]="true"
       [severity]="isViewDeleted ? 'info' : 'danger'"
-      (click)="toggleViewDeleted()"
+      (click)="viewDeleted()"
       [label]="isViewDeleted ? 'Ver Activos' : 'Ver Borrados'"
     />
     <p-button
@@ -50,7 +50,7 @@
       [icon]="isFilterActive ? 'pi pi-check' : 'pi pi-eye'"
       [outlined]="true"
       [severity]="isFilterActive ? 'success' : 'info'"
-      (click)="applyFilterByStatus()"
+      (click)="viewClosedsStatus()"
       [label]="isFilterActive ? 'Ver Todos' : 'Ver Cerrados/No Cerrados'"
     >
     </p-button>
@@ -79,7 +79,7 @@
           >
             <ng-template pTemplate="header">
               <div class="px-3 pt-3 pb-0">
-                <span class="font-bold"></span>
+                <span class="font-bold">Usuarios</span>
               </div>
             </ng-template>
             <ng-template

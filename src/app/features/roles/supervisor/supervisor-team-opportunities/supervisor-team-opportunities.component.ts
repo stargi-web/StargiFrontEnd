@@ -1,4 +1,3 @@
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -47,10 +46,7 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
     },
   };
 
-  constructor(
-    private userService: UserService,
-    private opportunityService: OpportunityService
-  ) {}
+  constructor(private userService: UserService) {}
   ref: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
@@ -106,12 +102,11 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
         const userIds = response.map((user: any) => user.id);
 
         // Crear el objeto de filtros combinados
+        console.log('XDDXXDXD');
         this.filters = {
           ...this.filters,
           user: { value: userIds },
         };
-
-        console.log(this.filters);
       },
       error: (error) => console.error(error),
     });
