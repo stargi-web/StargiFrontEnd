@@ -67,20 +67,6 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
     this.loadUsers();
   }
 
-  toggleViewDeletedInParent(isViewDeleted: boolean) {
-    if (isViewDeleted) {
-      this.filters = {
-        ...this.filters,
-        isCurrent: { value: false },
-      };
-    } else {
-      this.filters = {
-        ...this.filters,
-        isCurrent: { value: true },
-      };
-    }
-  }
-
   loadUsers() {
     this.userService.getUsersByTeamId(this.teamId).subscribe({
       next: (response) => {

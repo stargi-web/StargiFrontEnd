@@ -65,7 +65,7 @@ export class OportunityTableComponent {
   selectedOpportunity!: OpportunityModel;
 
   isViewDeleted: boolean = false;
-  isFilterActive: boolean = false;
+  isViewClosed: boolean = false;
   totalRecords: number = 0;
   allOpportunities: any[] = [];
   sortField: string = 'createdAt'; // El campo por el cual estás ordenando
@@ -261,9 +261,9 @@ export class OportunityTableComponent {
   }
 
   viewClosedsStatus() {
-    this.isFilterActive = !this.isFilterActive;
+    this.isViewClosed = !this.isViewClosed;
 
-    if (this.isFilterActive) {
+    if (this.isViewClosed) {
       this.filters = {
         ...this.filters,
         state: {

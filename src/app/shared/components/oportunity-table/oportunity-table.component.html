@@ -47,11 +47,11 @@
     />
     <p-button
       class="ml-2"
-      [icon]="isFilterActive ? 'pi pi-check' : 'pi pi-eye'"
+      [icon]="isViewClosed ? 'pi pi-check' : 'pi pi-eye'"
       [outlined]="true"
-      [severity]="isFilterActive ? 'success' : 'info'"
+      [severity]="isViewClosed ? 'success' : 'info'"
       (click)="viewClosedsStatus()"
-      [label]="isFilterActive ? 'Ver Todos' : 'Ver Cerrados/No Cerrados'"
+      [label]="isViewClosed ? 'Ver Todos' : 'Ver Cerrados/No Cerrados'"
     >
     </p-button>
   </ng-template>
