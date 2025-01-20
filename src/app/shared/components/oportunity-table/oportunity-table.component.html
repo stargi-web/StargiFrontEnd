@@ -26,6 +26,7 @@
   [lazy]="true"
   [totalRecords]="totalRecords"
   (onLazyLoad)="loadOpportunities($event)"
+  [filters]="primeFilters"
 >
   <ng-template pTemplate="caption">
     <div class="status-summary mb-3">
@@ -39,20 +40,31 @@
       </div>
     </div>
     <p-button
-      icon="pi pi-trash"
       [outlined]="true"
-      [severity]="isViewDeleted ? 'info' : 'danger'"
+      [severity]="'info'"
+      class="custom-button"
       (click)="viewDeleted()"
-      [label]="isViewDeleted ? 'Ver Activos' : 'Ver Borrados'"
-    />
-    <p-button
-      class="ml-2"
-      [icon]="isViewClosed ? 'pi pi-check' : 'pi pi-eye'"
-      [outlined]="true"
-      [severity]="isViewClosed ? 'success' : 'info'"
-      (click)="viewClosedsStatus()"
-      [label]="isViewClosed ? 'Ver Todos' : 'Ver Cerrados/No Cerrados'"
     >
+      <ng-template pTemplate="content">
+        <div>
+          <p-checkbox [binary]="true" [(ngModel)]="isViewDeleted"></p-checkbox>
+          <label class="ml-1">{{ "Ver Borrados" }}</label>
+        </div>
+      </ng-template>
+    </p-button>
+
+    <p-button
+      [outlined]="true"
+      [severity]="'info'"
+      class="custom-button ml-2"
+      (click)="viewClosed()"
+    >
+      <ng-template pTemplate="content">
+        <div>
+          <p-checkbox [binary]="true" [(ngModel)]="isViewClosed"></p-checkbox>
+          <label class="ml-1">{{ "Ver Cerrados/No Cerrados" }}</label>
+        </div>
+      </ng-template>
     </p-button>
   </ng-template>
 
@@ -68,7 +80,6 @@
           Asignado
 
           <p-columnFilter
-            field="selectedUsers"
             matchMode="in"
             display="menu"
             [showMatchModes]="false"
@@ -110,7 +121,14 @@
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Ruc
-          <p-columnFilter type="text" field="ruc" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="ruc"
+            display="menu"
+          />
         </div>
       </th>
 
@@ -178,7 +196,6 @@
         <div class="flex align-items-center" style="min-width: 10rem">
           Estado
           <p-columnFilter
-            field="state"
             matchMode="in"
             display="menu"
             [showMatchModes]="false"
@@ -197,7 +214,6 @@
               let-filter="filterCallback"
             >
               <p-multiSelect
-                [ngModel]="value"
                 [options]="states"
                 placeholder="Seleccione"
                 (onChange)="filter($event.value)"

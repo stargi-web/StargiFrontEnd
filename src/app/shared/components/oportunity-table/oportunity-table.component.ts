@@ -13,6 +13,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OpportunityService } from '../../../core/services/nestjs-services/opportunityService';
 import { OpportunityModel } from '../../../core/models/opportunityModel';
@@ -39,6 +40,7 @@ import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-co
     InputNumberModule,
     TableModule,
     CommonModule,
+    CheckboxModule,
     CustomConfirmDialogComponent,
   ],
   templateUrl: './oportunity-table.component.html',
@@ -48,7 +50,7 @@ export class OportunityTableComponent {
   opportunities: any[] = [];
   @Input() groupedUsers: any[] = [];
   @Input() filters: Record<string, { value: any | any[] }> = {};
-
+  primeFilters: Record<string, { value: any | any[] }> = {};
   userRole: string = '';
 
   states = states;
@@ -260,7 +262,7 @@ export class OportunityTableComponent {
     );
   }
 
-  viewClosedsStatus() {
+  viewClosed() {
     this.isViewClosed = !this.isViewClosed;
 
     if (this.isViewClosed) {
@@ -283,6 +285,7 @@ export class OportunityTableComponent {
         },
       };
     }
+    console.log('CLOSED', this.filters);
     this.refreshOpportunityTable();
   }
 
@@ -302,6 +305,41 @@ export class OportunityTableComponent {
     }
     this.refreshOpportunityTable();
   }
+  parseData(input: any) {
+    const parsedResult: any = {};
+
+    // Iteramos sobre las claves del objeto
+    for (const key in input) {
+      if (input.hasOwnProperty(key)) {
+        const value = input[key];
+
+        // Si es un array y tiene elementos
+        if (
+          Array.isArray(value) &&
+          value.length > 0 &&
+          value[0].hasOwnProperty('value')
+        ) {
+          const values = value
+            .map((item) => item.value)
+            .filter((val) => val !== undefined); // Solo filtramos undefined
+
+          // Si hay valores válidos, los asignamos
+          if (values.length === 1) {
+            parsedResult[key] = { value: values[0] };
+          } else if (values.length > 1) {
+            parsedResult[key] = { value: values };
+          } else {
+            parsedResult[key] = { value: null }; // Si no hay valores válidos, asignamos null
+          }
+        } else {
+          // Asignamos el valor, incluso si es null
+          parsedResult[key] = value !== undefined ? value : null; // Asignamos null si el valor es undefined
+        }
+      }
+    }
+
+    return parsedResult;
+  }
 
   loadOpportunities(event: any) {
     const page = event.first / event.rows; // PrimeNG usa índices basados en 'first'
@@ -310,6 +348,16 @@ export class OportunityTableComponent {
     //const sortField = event.sortField;
     const sortOrder = this.sortOrder === 1 ? 'ASC' : 'DESC';
 
+    //console.log('filters', this.filters); // Muestra el resultado en consola
+    //console.log('prime', this.primeFilters); // Muestra el resultado en consola
+    //console.log('parsed', this.parseData(this.primeFilters)); // Muestra el resultado en consola
+
+    this.filters = {
+      ...this.filters,
+      ...this.parseData(this.primeFilters),
+    };
+
+    console.log('MERGED', this.filters); // Muestra el resultado en consola
     this.opportunityService
       .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
       .subscribe((data) => {
@@ -332,7 +380,6 @@ export class OportunityTableComponent {
   refreshOpportunityTable() {
     if (this.dataTable) this.dataTable.first = 0;
     this.loadOpportunities({ first: 0, rows: 10 }); //recargar datos
-    console.log(this.filters);
   }
 
   loadStateSummary(stateSummary: any) {
@@ -350,7 +397,6 @@ export class OportunityTableComponent {
       { sigla: 'NoC', count: this.stateCounts['No cierre'] },
     ];
   }
-
   getGroupedUserIds(): any[] {
     return this.groupedUsers
       .flatMap((group) => group.items) // Aplana todos los items de cada grupo
@@ -358,8 +404,6 @@ export class OportunityTableComponent {
   }
 
   onAsignedUsersChanged(selectedItems: any[]): void {
-    this.selectedUsers = selectedItems;
-
     if (selectedItems.length === 0) {
       this.filters = {
         ...this.filters,
@@ -368,6 +412,7 @@ export class OportunityTableComponent {
         },
       };
     } else {
+      this.selectedUsers = selectedItems;
       this.filters = {
         ...this.filters,
         user: {
@@ -375,6 +420,5 @@ export class OportunityTableComponent {
         },
       };
     }
-    this.refreshOpportunityTable();
   }
 }

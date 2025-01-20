@@ -88,7 +88,7 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
         const userIds = response.map((user: any) => user.id);
 
         // Crear el objeto de filtros combinados
-        console.log('XDDXXDXD');
+
         this.filters = {
           ...this.filters,
           user: { value: userIds },
