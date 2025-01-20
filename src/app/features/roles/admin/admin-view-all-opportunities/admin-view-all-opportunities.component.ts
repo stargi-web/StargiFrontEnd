@@ -72,12 +72,10 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
 
   toggleViewDeletedInParent(isViewDeleted: boolean) {
     if (isViewDeleted) {
-      this.loadUsers();
       this.filters = {
         isCurrent: { value: false },
       };
     } else {
-      this.loadUsers();
       this.filters = {
         isCurrent: { value: true },
         state: {

@@ -66,7 +66,45 @@
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Asignado
-          <p-columnFilter type="text" field="userAssigned" display="menu" />
+
+          <p-columnFilter
+            field="selectedUsers"
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            [showApplyButton]="false"
+            [showClearButton]="false"
+          >
+            <ng-template pTemplate="header">
+              <div class="px-3 pt-3 pb-0">
+                <span class="font-bold"></span>
+              </div>
+            </ng-template>
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [(ngModel)]="selectedUsers"
+                [options]="groupedUsers"
+                [group]="true"
+                placeholder="Seleccione"
+                (onChange)="
+                  onAsignedUsersChanged($event.value); filter($event.value)
+                "
+                optionLabel="label"
+              >
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.label }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
         </div>
       </th>
       <th>
@@ -261,10 +299,13 @@
           (click)="disableEditUserMode()"
         ></i>
         } @else {
-        {{ opportunity.userAssigned
+        {{
+          opportunity.user
+            ? opportunity.user.firstName + " " + opportunity.user.lastName
+            : "No asignado"
         }}<i
-          class="pi pi-cog"
-          style="cursor: pointer; margin-left: 0.5rem"
+          class="pi pi-cog ml-1"
+          style="cursor: pointer"
           (click)="enableEditUserMode(rowIndex)"
         ></i>
         }

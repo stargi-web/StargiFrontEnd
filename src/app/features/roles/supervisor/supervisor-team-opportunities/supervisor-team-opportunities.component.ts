@@ -1,5 +1,4 @@
 import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
-import { OpportunityModel } from '../../../../core/models/opportunityModel';
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -78,15 +77,14 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
         ...this.filters,
         isCurrent: { value: false },
       };
-      this.loadUsers();
     } else {
       this.filters = {
         ...this.filters,
         isCurrent: { value: true },
       };
-      this.loadUsers();
     }
   }
+
   loadUsers() {
     this.userService.getUsersByTeamId(this.teamId).subscribe({
       next: (response) => {

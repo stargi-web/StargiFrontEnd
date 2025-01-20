@@ -70,6 +70,8 @@ export class OportunityTableComponent {
   allOpportunities: any[] = [];
   sortField: string = 'createdAt'; // El campo por el cual estás ordenando
   sortOrder: number = -1; // Orden ASC (1) o DESC (-1)
+  userIds: any[] = [];
+  selectedUsers: any[] = [];
 
   stateCounts = {
     'No contactado': 0,
@@ -115,7 +117,6 @@ export class OportunityTableComponent {
   toggleViewDeleted() {
     this.isViewDeleted = !this.isViewDeleted;
     this.viewDeletedToggled.emit(this.isViewDeleted);
-    this.isFilterActive = false;
   }
 
   enableEditUserMode(index: number) {
@@ -336,5 +337,34 @@ export class OportunityTableComponent {
       { sigla: 'C', count: this.stateCounts.Cierre },
       { sigla: 'NoC', count: this.stateCounts['No cierre'] },
     ];
+  }
+
+  getGroupedUserIds(): any[] {
+    return this.groupedUsers
+      .flatMap((group) => group.items) // Aplana todos los items de cada grupo
+      .map((item) => item.value); // Extrae el valor de cada item
+  }
+
+  onAsignedUsersChanged(selectedItems: any[]): void {
+    this.selectedUsers = selectedItems;
+
+    console.log(this.selectedUsers);
+    if (selectedItems.length === 0) {
+      this.filters = {
+        ...this.filters,
+        user: {
+          value: this.getGroupedUserIds(),
+        },
+      };
+    } else {
+      this.filters = {
+        ...this.filters,
+        user: {
+          value: selectedItems,
+        },
+      };
+    }
+    console.log(this.filters);
+    this.refreshOpportunityTable();
   }
 }
