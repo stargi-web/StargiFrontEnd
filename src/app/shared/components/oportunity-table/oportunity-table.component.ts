@@ -69,6 +69,7 @@ export class OportunityTableComponent {
 
   isViewDeleted: boolean = false;
   isViewClosed: boolean = false;
+  isViewNotAsigned: boolean = false;
   totalRecords: number = 0;
   allOpportunities: any[] = [];
   sortField: string = 'createdAt'; // El campo por el cual estás ordenando
@@ -287,6 +288,27 @@ export class OportunityTableComponent {
             'Prospecto calificado',
             'Prospecto desarrollado',
           ],
+        },
+      };
+    }
+    this.refreshOpportunityTable();
+  }
+
+  viewNotAsigned() {
+    this.isViewNotAsigned = !this.isViewNotAsigned;
+
+    if (this.isViewNotAsigned) {
+      this.filters = {
+        ...this.filters,
+        user: {
+          value: null,
+        },
+      };
+    } else {
+      this.filters = {
+        ...this.filters,
+        user: {
+          value: this.getGroupedUserIds(),
         },
       };
     }
