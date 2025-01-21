@@ -216,11 +216,11 @@ export class OportunityTableComponent {
 
     this.opportunityService.editOpportunity(editCommand).subscribe({
       next: (response) => {
-        alert(`${response.message}`);
+        this.messageNotificationService.showSuccess(response.message);
         this.editingRowIndex = null;
       },
       error: (error) => {
-        console.error(error);
+        this.messageNotificationService.showError(error);
         this.editingRowIndex = null;
       },
     });
@@ -233,9 +233,10 @@ export class OportunityTableComponent {
     this.opportunityService.deleteOpportunity(id).subscribe({
       next: (response) => {
         this.opportunities = this.opportunities.filter((o) => o.id !== id);
+        this.messageNotificationService.showSuccess(response.message);
       },
       error: (error) => {
-        console.error(error);
+        this.messageNotificationService.showError(error);
       },
     });
   }
@@ -289,7 +290,6 @@ export class OportunityTableComponent {
         },
       };
     }
-    console.log('CLOSED', this.filters);
     this.refreshOpportunityTable();
   }
 
@@ -361,7 +361,7 @@ export class OportunityTableComponent {
       ...this.parseData(this.primeFilters),
     };
 
-    console.log('MERGED', this.filters); // Muestra el resultado en consola
+    //console.log('MERGED', this.filters); // Muestra el resultado en consola
     this.opportunityService
       .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
       .subscribe((data) => {

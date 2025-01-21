@@ -47,7 +47,11 @@
     >
       <ng-template pTemplate="content">
         <div>
-          <p-checkbox [binary]="true" [(ngModel)]="isViewDeleted"></p-checkbox>
+          <p-checkbox
+            [binary]="true"
+            [(ngModel)]="isViewDeleted"
+            (click)="viewDeleted()"
+          ></p-checkbox>
           <label class="ml-1">{{ "Ver Borrados" }}</label>
         </div>
       </ng-template>
@@ -61,7 +65,11 @@
     >
       <ng-template pTemplate="content">
         <div>
-          <p-checkbox [binary]="true" [(ngModel)]="isViewClosed"></p-checkbox>
+          <p-checkbox
+            [binary]="true"
+            [(ngModel)]="isViewClosed"
+            (click)="viewClosed()"
+          ></p-checkbox>
           <label class="ml-1">{{ "Ver Cerrados/No Cerrados" }}</label>
         </div>
       </ng-template>

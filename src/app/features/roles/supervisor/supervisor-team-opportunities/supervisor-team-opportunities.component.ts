@@ -44,6 +44,7 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
         'Prospecto desarrollado',
       ],
     },
+    user: { value: 0 },
   };
 
   constructor(private userService: UserService) {}
@@ -63,7 +64,6 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
       },
     ];
     this.teamId = Number(sessionStorage.getItem('teamId'));
-    this.teamId = 5;
     this.loadUsers();
   }
 
