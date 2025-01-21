@@ -13,6 +13,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OpportunityService } from '../../../core/services/nestjs-services/opportunityService';
 import { OpportunityModel } from '../../../core/models/opportunityModel';
@@ -25,6 +26,7 @@ import {
   states,
 } from '../../const/constantes';
 import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-confirm-dialog.component';
+import { MessageNotificationService } from '../message-toast/message-toast.service';
 
 @Component({
   selector: 'app-oportunity-table',
@@ -39,18 +41,19 @@ import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-co
     InputNumberModule,
     TableModule,
     CommonModule,
+    CheckboxModule,
     CustomConfirmDialogComponent,
   ],
   templateUrl: './oportunity-table.component.html',
   styleUrl: './oportunity-table.component.css',
 })
 export class OportunityTableComponent {
-  @Input() opportunities: any[] = [];
+  opportunities: any[] = [];
   @Input() groupedUsers: any[] = [];
-  @Output() viewDeletedToggled = new EventEmitter<boolean>();
+  @Input() filters: Record<string, { value: any | any[] }> = {};
+  primeFilters: Record<string, { value: any | any[] }> = {};
   userRole: string = '';
-  opportunityStateSummary: { sigla: string; count: number }[] = [];
-  totalOpportunities: number = 0;
+
   states = states;
   opportunityTypes = opportunityTypes;
   products = products;
@@ -65,42 +68,54 @@ export class OportunityTableComponent {
   selectedOpportunity!: OpportunityModel;
 
   isViewDeleted: boolean = false;
-  isFilterActive: boolean = false;
+  isViewClosed: boolean = false;
+  totalRecords: number = 0;
+  allOpportunities: any[] = [];
+  sortField: string = 'createdAt'; // El campo por el cual estás ordenando
+  sortOrder: number = -1; // Orden ASC (1) o DESC (-1)
+  userIds: any[] = [];
+  selectedUsers: any[] = [];
+
+  stateCounts = {
+    'No contactado': 0,
+    Potenciales: 0,
+    Prospecto: 0,
+    'Prospecto calificado': 0,
+    'Prospecto desarrollado': 0,
+    Cierre: 0,
+    'No cierre': 0,
+  };
+
+  opportunityStateSummary = [
+    { sigla: 'NC', count: this.stateCounts['No contactado'] },
+    { sigla: 'PO', count: this.stateCounts.Potenciales },
+    { sigla: 'PR', count: this.stateCounts.Prospecto },
+    { sigla: 'PC', count: this.stateCounts['Prospecto calificado'] },
+    { sigla: 'PD', count: this.stateCounts['Prospecto desarrollado'] },
+    { sigla: 'C', count: this.stateCounts.Cierre },
+    { sigla: 'NoC', count: this.stateCounts['No cierre'] },
+  ];
+
   @ViewChild('deleteOportunityDialog')
   deleteOportunityDialog!: CustomConfirmDialogComponent;
   @ViewChild('dataTable') dataTable: any;
   constructor(
     public dialogService: DialogService,
-    private opportunityService: OpportunityService
+    private opportunityService: OpportunityService,
+    private messageNotificationService: MessageNotificationService
   ) {}
   ref: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
     this.userRole = sessionStorage.getItem('role') || '';
     console.log(this.userRole);
+    this.loadOpportunities({ first: 0, rows: 10 });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['opportunities']) {
-      this.calculateOpportunityStateSummary();
-      //this.calculateUrgentOpportunities();
-      this.dataTable.filter(
-        [
-          'Potenciales',
-          'Prospecto',
-          'Prospecto calificado',
-          'Prospecto desarrollado',
-        ],
-        'state',
-        'in'
-      );
-      this.isFilterActive = false;
+    if (changes['filters']) {
+      this.refreshOpportunityTable();
     }
-  }
-
-  toggleViewDeleted() {
-    this.isViewDeleted = !this.isViewDeleted;
-    this.viewDeletedToggled.emit(this.isViewDeleted);
   }
 
   enableEditUserMode(index: number) {
@@ -115,9 +130,11 @@ export class OportunityTableComponent {
       .changeUser({ userId: userId, opportunityId: oppId })
       .subscribe({
         next: (response) => {
-          alert(response.message);
+          this.messageNotificationService.showSuccess(response.message);
         },
-        error: (error) => console.error(error),
+        error: (error) => {
+          this.messageNotificationService.showError(error);
+        },
       });
     this.assignUserMode = false;
   }
@@ -130,38 +147,7 @@ export class OportunityTableComponent {
 
     return diffInDays <= this.NEAR_CLOSING_DAYS;
   }
-  calculateOpportunityStateSummary() {
-    const stateCounts = {
-      'No contactado': 0,
-      Potenciales: 0,
-      Prospecto: 0,
-      'Prospecto calificado': 0,
-      'Prospecto desarrollado': 0,
-      Cierre: 0,
-      'No cierre': 0,
-    };
 
-    // Ensure that opportunities is not undefined or null
-    if (this.opportunities && Array.isArray(this.opportunities)) {
-      this.opportunities.forEach((opportunity) => {
-        stateCounts[opportunity.state as keyof typeof stateCounts]++;
-      });
-
-      this.totalOpportunities = this.opportunities.length;
-    } else {
-      this.totalOpportunities = 0; // Fallback in case opportunities is not an array or is undefined
-    }
-
-    this.opportunityStateSummary = [
-      { sigla: 'NC', count: stateCounts['No contactado'] },
-      { sigla: 'PO', count: stateCounts.Potenciales },
-      { sigla: 'PR', count: stateCounts.Prospecto },
-      { sigla: 'PC', count: stateCounts['Prospecto calificado'] },
-      { sigla: 'PD', count: stateCounts['Prospecto desarrollado'] },
-      { sigla: 'C', count: stateCounts.Cierre },
-      { sigla: 'NoC', count: stateCounts['No cierre'] },
-    ];
-  }
   getRowClass(opportunity: any): string {
     const creationDate = new Date(opportunity.oppSfaDateCreation);
     const today = new Date();
@@ -230,11 +216,11 @@ export class OportunityTableComponent {
 
     this.opportunityService.editOpportunity(editCommand).subscribe({
       next: (response) => {
-        alert(`${response.message}`);
+        this.messageNotificationService.showSuccess(response.message);
         this.editingRowIndex = null;
       },
       error: (error) => {
-        console.error(error);
+        this.messageNotificationService.showError(error);
         this.editingRowIndex = null;
       },
     });
@@ -247,9 +233,10 @@ export class OportunityTableComponent {
     this.opportunityService.deleteOpportunity(id).subscribe({
       next: (response) => {
         this.opportunities = this.opportunities.filter((o) => o.id !== id);
+        this.messageNotificationService.showSuccess(response.message);
       },
       error: (error) => {
-        console.error(error);
+        this.messageNotificationService.showError(error);
       },
     });
   }
@@ -280,23 +267,163 @@ export class OportunityTableComponent {
     );
   }
 
-  applyFilterByStatus() {
-    this.isFilterActive = !this.isFilterActive;
+  viewClosed() {
+    this.isViewClosed = !this.isViewClosed;
 
-    // Aplica el filtro según el estado
-    if (this.isFilterActive) {
-      this.dataTable.filter(['Cierre', 'No cierre'], 'state', 'in');
+    if (this.isViewClosed) {
+      this.filters = {
+        ...this.filters,
+        state: {
+          value: ['Cierre', 'No cierre'],
+        },
+      };
     } else {
-      this.dataTable.filter(
-        [
-          'Potenciales',
-          'Prospecto',
-          'Prospecto calificado',
-          'Prospecto desarrollado',
-        ],
-        'state',
-        'in'
-      );
+      this.filters = {
+        ...this.filters,
+        state: {
+          value: [
+            'Potenciales',
+            'Prospecto',
+            'Prospecto calificado',
+            'Prospecto desarrollado',
+          ],
+        },
+      };
+    }
+    this.refreshOpportunityTable();
+  }
+
+  viewDeleted() {
+    this.isViewDeleted = !this.isViewDeleted;
+
+    if (this.isViewDeleted) {
+      this.filters = {
+        ...this.filters,
+        isCurrent: { value: false },
+      };
+    } else {
+      this.filters = {
+        ...this.filters,
+        isCurrent: { value: true },
+      };
+    }
+    this.refreshOpportunityTable();
+  }
+  parseData(input: any) {
+    const parsedResult: any = {};
+
+    // Iteramos sobre las claves del objeto
+    for (const key in input) {
+      if (input.hasOwnProperty(key)) {
+        const value = input[key];
+
+        // Si es un array y tiene elementos
+        if (
+          Array.isArray(value) &&
+          value.length > 0 &&
+          value[0].hasOwnProperty('value')
+        ) {
+          const values = value
+            .map((item) => item.value)
+            .filter((val) => val !== undefined); // Solo filtramos undefined
+
+          // Si hay valores válidos, los asignamos
+          if (values.length === 1) {
+            parsedResult[key] = { value: values[0] };
+          } else if (values.length > 1) {
+            parsedResult[key] = { value: values };
+          } else {
+            parsedResult[key] = { value: null }; // Si no hay valores válidos, asignamos null
+          }
+        } else {
+          // Asignamos el valor, incluso si es null
+          parsedResult[key] = value !== undefined ? value : null; // Asignamos null si el valor es undefined
+        }
+      }
+    }
+
+    return parsedResult;
+  }
+
+  loadOpportunities(event: any) {
+    const page = event.first / event.rows; // PrimeNG usa índices basados en 'first'
+    const size = event.rows;
+
+    //const sortField = event.sortField;
+    const sortOrder = this.sortOrder === 1 ? 'ASC' : 'DESC';
+
+    //console.log('filters', this.filters); // Muestra el resultado en consola
+    //console.log('prime', this.primeFilters); // Muestra el resultado en consola
+    //console.log('parsed', this.parseData(this.primeFilters)); // Muestra el resultado en consola
+
+    this.filters = {
+      ...this.filters,
+      ...this.parseData(this.primeFilters),
+    };
+
+    //console.log('MERGED', this.filters); // Muestra el resultado en consola
+    this.opportunityService
+      .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
+      .subscribe((data) => {
+        this.opportunities = data.items;
+        // Acumula las nuevas oportunidades
+        this.loadStateSummary(data.stateSummary);
+        this.totalRecords = data.total;
+        this.opportunities.forEach((opp) => {
+          opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
+          opp.createdAt = new Date(opp.createdAt);
+          opp.updatedAt = new Date(opp.updatedAt);
+          opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
+          if (opp.nextInteraction) {
+            opp.nextInteraction = new Date(opp.nextInteraction);
+          }
+        });
+        this.calculateUrgentOpportunities();
+      });
+  }
+
+  refreshOpportunityTable() {
+    if (this.dataTable) this.dataTable.first = 0;
+    this.loadOpportunities({ first: 0, rows: 10 }); //recargar datos
+  }
+
+  loadStateSummary(stateSummary: any) {
+    // Actualizar los valores de stateCounts
+    this.stateCounts = stateSummary;
+
+    // Sincronizar los valores con opportunityStateSummary
+    this.opportunityStateSummary = [
+      { sigla: 'NC', count: this.stateCounts['No contactado'] },
+      { sigla: 'PO', count: this.stateCounts.Potenciales },
+      { sigla: 'PR', count: this.stateCounts.Prospecto },
+      { sigla: 'PC', count: this.stateCounts['Prospecto calificado'] },
+      { sigla: 'PD', count: this.stateCounts['Prospecto desarrollado'] },
+      { sigla: 'C', count: this.stateCounts.Cierre },
+      { sigla: 'NoC', count: this.stateCounts['No cierre'] },
+    ];
+  }
+  getGroupedUserIds(): any[] {
+    return this.groupedUsers
+      .flatMap((group) => group.items) // Aplana todos los items de cada grupo
+      .map((item) => item.value); // Extrae el valor de cada item
+  }
+
+  onAsignedUsersChanged(selectedItems: any[]): void {
+    if (selectedItems.length === 0) {
+      this.filters = {
+        ...this.filters,
+        user: {
+          value: this.getGroupedUserIds(),
+        },
+      };
+    } else {
+      this.selectedUsers = selectedItems;
+      this.filters = {
+        ...this.filters,
+        user: {
+          value: selectedItems,
+        },
+      };
     }
   }
 }

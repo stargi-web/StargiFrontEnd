@@ -1,5 +1,3 @@
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
-import { OpportunityModel } from '../../../../core/models/opportunityModel';
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -34,14 +32,22 @@ import { UserService } from '../../../../core/services/nestjs-services/userServi
   styleUrl: './supervisor-team-opportunities.component.css',
 })
 export class SupervisorTeamOpportunitiesComponent implements OnInit {
-  opportunities!: OpportunityModel[];
   groupedUsers!: SelectItemGroup[];
   teamId!: number;
+  filters: any = {
+    isCurrent: { value: true },
+    state: {
+      value: [
+        'Potenciales',
+        'Prospecto',
+        'Prospecto calificado',
+        'Prospecto desarrollado',
+      ],
+    },
+    user: { value: 0 },
+  };
 
-  constructor(
-    private userService: UserService,
-    private opportunityService: OpportunityService
-  ) {}
+  constructor(private userService: UserService) {}
   ref: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
@@ -59,18 +65,8 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
     ];
     this.teamId = Number(sessionStorage.getItem('teamId'));
     this.loadUsers();
-    this.loadOpportunities();
   }
 
-  toggleViewDeletedInParent(isViewDeleted: boolean) {
-    if (isViewDeleted) {
-      this.loadUsers();
-      this.loadDeletedOpportunities();
-    } else {
-      this.loadUsers();
-      this.loadOpportunities();
-    }
-  }
   loadUsers() {
     this.userService.getUsersByTeamId(this.teamId).subscribe({
       next: (response) => {
@@ -87,40 +83,18 @@ export class SupervisorTeamOpportunitiesComponent implements OnInit {
             });
           }
         });
+
+        // Extract user IDs
+        const userIds = response.map((user: any) => user.id);
+
+        // Crear el objeto de filtros combinados
+
+        this.filters = {
+          ...this.filters,
+          user: { value: userIds },
+        };
       },
       error: (error) => console.error(error),
     });
-  }
-  loadOpportunities() {
-    if (this.teamId) {
-      this.opportunityService.getOpportunitiesByTeamId(this.teamId).subscribe({
-        next: (response) => {
-          this.opportunities = response;
-          this.opportunities.forEach((opp) => {
-            opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
-            opp.createdAt = new Date(opp.createdAt);
-            opp.updatedAt = new Date(opp.updatedAt);
-            opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
-            if (opp.nextInteraction) {
-              opp.nextInteraction = new Date(opp.nextInteraction);
-            }
-          });
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-    }
-  }
-
-  loadDeletedOpportunities() {
-    this.opportunityService
-      .getOpportunitiesDeletedByTeamId(this.teamId)
-      .subscribe({
-        next: (response) => {
-          this.opportunities = response;
-        },
-        error: (error) => console.error(error),
-      });
   }
 }

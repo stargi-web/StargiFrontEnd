@@ -14,13 +14,13 @@ export class MessageNotificationService {
       detail: message,
     });
   }
-
-  showError(message: string): void {
+  showError(message: any): void {
+    const errorMessage = (message && message.message) || 'Error desconocido';
     this.messageService.add({
       severity: 'error',
       summary: 'Error',
-      detail: message,
-      life: 7000,
+      detail: errorMessage,
+      life: 9000,
     });
   }
 

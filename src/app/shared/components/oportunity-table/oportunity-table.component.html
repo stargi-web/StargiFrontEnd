@@ -19,10 +19,14 @@
   [rowsPerPageOptions]="[10, 15, 20]"
   [loading]="false"
   [paginator]="true"
-  sortField="createdAt"
-  [sortOrder]="-1"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder"
   [scrollable]="true"
   scrollHeight="80vh"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
+  (onLazyLoad)="loadOpportunities($event)"
+  [filters]="primeFilters"
 >
   <ng-template pTemplate="caption">
     <div class="status-summary mb-3">
@@ -32,25 +36,55 @@
       </div>
       <div class="status-item">
         <div class="status-sigla">Total</div>
-        <div class="status-count">{{ totalOpportunities }}</div>
+        <div class="status-count">{{ totalRecords }}</div>
       </div>
     </div>
-    <p-button
-      icon="pi pi-trash"
-      [outlined]="true"
-      [severity]="isViewDeleted ? 'info' : 'danger'"
-      (click)="toggleViewDeleted()"
-      [label]="isViewDeleted ? 'Ver Activos' : 'Ver Borrados'"
-    />
-    <p-button
-      class="ml-2"
-      [icon]="isFilterActive ? 'pi pi-check' : 'pi pi-eye'"
-      [outlined]="true"
-      [severity]="isFilterActive ? 'success' : 'info'"
-      (click)="applyFilterByStatus()"
-      [label]="isFilterActive ? 'Ver Todos' : 'Ver Cerrados/No Cerrados'"
-    >
-    </p-button>
+    <div class="flex align-items-center">
+      <p-button
+        [outlined]="true"
+        [severity]="'info'"
+        class="custom-button"
+        (click)="viewDeleted()"
+      >
+        <ng-template pTemplate="content">
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="isViewDeleted"
+              (click)="viewDeleted()"
+            ></p-checkbox>
+            <label class="ml-1">{{ "Ver Borrados" }}</label>
+          </div>
+        </ng-template>
+      </p-button>
+
+      <p-button
+        [outlined]="true"
+        [severity]="'info'"
+        class="custom-button ml-2"
+        (click)="viewClosed()"
+      >
+        <ng-template pTemplate="content">
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="isViewClosed"
+              (click)="viewClosed()"
+            ></p-checkbox>
+            <label class="ml-1">{{ "Ver Cerrados/No Cerrados" }}</label>
+          </div>
+        </ng-template>
+      </p-button>
+
+      <div class="ml-auto">
+        <p-button
+          *ngIf="urgentOpportunitiesCount > 0"
+          icon="pi pi-exclamation-circle"
+          label="Urgentes: {{ urgentOpportunitiesCount }}"
+          class="p-button-danger"
+        ></p-button>
+      </div>
+    </div>
   </ng-template>
 
   <ng-template pTemplate="header">
@@ -63,13 +97,57 @@
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Asignado
-          <p-columnFilter type="text" field="userAssigned" display="menu" />
+
+          <p-columnFilter
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            [showApplyButton]="false"
+            [showClearButton]="false"
+          >
+            <ng-template pTemplate="header">
+              <div class="px-3 pt-3 pb-0">
+                <span class="font-bold">Usuarios</span>
+              </div>
+            </ng-template>
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [(ngModel)]="selectedUsers"
+                [options]="groupedUsers"
+                [group]="true"
+                placeholder="Seleccione"
+                (onChange)="
+                  onAsignedUsersChanged($event.value); filter($event.value)
+                "
+                optionLabel="label"
+              >
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.label }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Ruc
-          <p-columnFilter type="text" field="ruc" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="ruc"
+            display="menu"
+          />
         </div>
       </th>
 
@@ -137,7 +215,6 @@
         <div class="flex align-items-center" style="min-width: 10rem">
           Estado
           <p-columnFilter
-            field="state"
             matchMode="in"
             display="menu"
             [showMatchModes]="false"
@@ -156,7 +233,6 @@
               let-filter="filterCallback"
             >
               <p-multiSelect
-                [ngModel]="value"
                 [options]="states"
                 placeholder="Seleccione"
                 (onChange)="filter($event.value)"
@@ -258,10 +334,13 @@
           (click)="disableEditUserMode()"
         ></i>
         } @else {
-        {{ opportunity.userAssigned
+        {{
+          opportunity.user
+            ? opportunity.user.firstName + " " + opportunity.user.lastName
+            : "No asignado"
         }}<i
-          class="pi pi-cog"
-          style="cursor: pointer; margin-left: 0.5rem"
+          class="pi pi-cog ml-1"
+          style="cursor: pointer"
           (click)="enableEditUserMode(rowIndex)"
         ></i>
         }
@@ -408,11 +487,3 @@
     </tr>
   </ng-template>
 </p-table>
-
-<div class="floating-button" *ngIf="urgentOpportunitiesCount > 0">
-  <p-button
-    icon="pi pi-exclamation-circle"
-    label="{{ urgentOpportunitiesCount }}"
-    class="p-button-danger"
-  ></p-button>
-</div>

@@ -3,16 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OpportunityModel } from '../../../../core/models/opportunityModel';
-import { OpportunityRecordService } from '../../../../core/services/nestjs-services/opportunityRecordService';
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
+
 import { UserService } from '../../../../core/services/nestjs-services/userService';
 
-import {
-  opportunityTypes,
-  products,
-  productTypes,
-  states,
-} from '../../../../shared/const/constantes';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
@@ -44,14 +37,21 @@ import { OportunityTableComponent } from '../../../../shared/components/oportuni
 export class AdminViewAllOpportunitiesComponent implements OnInit {
   groupedUsers!: SelectItemGroup[];
   selectedUser!: any;
-  opportunities!: OpportunityModel[];
   userId?: number;
+  filters: any = {
+    isCurrent: { value: true },
+    state: {
+      value: [
+        'Potenciales',
+        'Prospecto',
+        'Prospecto calificado',
+        'Prospecto desarrollado',
+      ],
+    },
+  };
   constructor(
     private userService: UserService,
-    public dialogService: DialogService,
-    private route: ActivatedRoute,
-    private opportunityService: OpportunityService,
-    private oppRecordService: OpportunityRecordService
+    public dialogService: DialogService
   ) {}
   ref: DynamicDialogRef | undefined;
   ngOnInit(): void {
@@ -68,17 +68,6 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
       },
     ];
     this.loadUsers();
-    this.loadOpportunities();
-  }
-
-  toggleViewDeletedInParent(isViewDeleted: boolean) {
-    if (isViewDeleted) {
-      this.loadUsers();
-      this.loadDeletedOpportunities();
-    } else {
-      this.loadUsers();
-      this.loadOpportunities();
-    }
   }
 
   loadUsers() {
@@ -97,32 +86,6 @@ export class AdminViewAllOpportunitiesComponent implements OnInit {
             });
           }
         });
-      },
-      error: (error) => console.error(error),
-    });
-  }
-  loadOpportunities() {
-    this.opportunityService.getAllOpportunities().subscribe({
-      next: (response) => {
-        this.opportunities = response;
-        this.opportunities.forEach((opp) => {
-          opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
-          opp.createdAt = new Date(opp.createdAt);
-          opp.updatedAt = new Date(opp.updatedAt);
-          opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
-          if (opp.nextInteraction) {
-            opp.nextInteraction = new Date(opp.nextInteraction);
-          }
-        });
-      },
-      error: (error) => console.error(error),
-    });
-  }
-
-  loadDeletedOpportunities() {
-    this.opportunityService.getAllOpportunitiesDeleted().subscribe({
-      next: (response) => {
-        this.opportunities = response;
       },
       error: (error) => console.error(error),
     });
