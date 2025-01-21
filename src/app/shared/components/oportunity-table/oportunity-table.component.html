@@ -76,6 +76,25 @@
         </ng-template>
       </p-button>
 
+      <p-button
+        *ngIf="userRole === 'admin' || userRole === 'supervisor'"
+        [outlined]="true"
+        [severity]="'info'"
+        class="custom-button ml-2"
+        (click)="viewNotAsigned()"
+      >
+        <ng-template pTemplate="content">
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="isViewNotAsigned"
+              (click)="viewNotAsigned()"
+            ></p-checkbox>
+            <label class="ml-1">{{ "Ver No Asignados" }}</label>
+          </div>
+        </ng-template>
+      </p-button>
+
       <div class="ml-auto">
         <p-button
           *ngIf="urgentOpportunitiesCount > 0"
