@@ -378,6 +378,7 @@ export class OportunityTableComponent {
             opp.nextInteraction = new Date(opp.nextInteraction);
           }
         });
+        this.calculateUrgentOpportunities();
       });
   }
 
