@@ -41,10 +41,19 @@
     </div>
     <div class="flex align-items-center">
       <p-button
+        label="Limpiar Filtros"
+        [outlined]="true"
+        icon="pi pi-filter-slash"
+        (onClick)="
+          cleanAsignedUsersFilter(); cleanStatesFilter(); clear(dataTable)
+        "
+      />
+      <p-button
         [outlined]="true"
         [severity]="'info'"
         class="custom-button"
         (click)="viewDeleted()"
+        class="ml-2"
       >
         <ng-template pTemplate="content">
           <div>
@@ -152,6 +161,14 @@
                   </div>
                 </ng-template>
               </p-multiSelect>
+              <div class="mt-5">
+                <p-button
+                  [outlined]="true"
+                  [severity]="'info'"
+                  label="Limpiar"
+                  (onClick)="cleanAsignedUsersFilter(); filter()"
+                ></p-button>
+              </div>
             </ng-template>
           </p-columnFilter>
         </div>
@@ -173,19 +190,36 @@
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Nombre
-          <p-columnFilter type="text" field="businessName" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="businessName"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Num Opp Sfa
-          <p-columnFilter type="numeric" field="SfaNumber" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="SfaNumber"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Creación Sfa
           <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
             type="date"
             field="oppSfaDateCreation"
             display="menu"
@@ -195,39 +229,81 @@
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Tipo
-          <p-columnFilter type="text" field="type" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="type"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Unidades
-          <p-columnFilter type="numeric" field="units" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="units"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Monto
-          <p-columnFilter type="numeric" field="amount" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="amount"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Producto
-          <p-columnFilter type="text" field="product" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="product"
+            display="menu"
+          />
         </div>
       </th>
       <th pSortableColumn="createdAt">
         <div class="flex align-items-center" style="min-width: 10rem">
           Creación
           <p-sortIcon field="createdAt" />
-          <p-columnFilter type="date" field="createdAt" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="createdAt"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Modificado
           <p-sortIcon field="updatedAt" />
-          <p-columnFilter type="date" field="updatedAt" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="updatedAt"
+            display="menu"
+          />
         </div>
       </th>
       <th>
@@ -240,6 +316,7 @@
             [showOperator]="false"
             [showAddButton]="false"
             [showApplyButton]="false"
+            [showClearButton]="false"
           >
             <ng-template pTemplate="header">
               <div class="px-3 pt-3 pb-0">
@@ -252,9 +329,10 @@
               let-filter="filterCallback"
             >
               <p-multiSelect
+                [(ngModel)]="selectedStates"
                 [options]="states"
                 placeholder="Seleccione"
-                (onChange)="filter($event.value)"
+                (onChange)="onStateChanged($event.value); filter($event.value)"
                 optionLabel="label"
               >
                 <ng-template let-option pTemplate="item">
@@ -263,6 +341,14 @@
                   </div>
                 </ng-template>
               </p-multiSelect>
+              <div class="mt-5">
+                <p-button
+                  [outlined]="true"
+                  [severity]="'info'"
+                  label="Limpiar"
+                  (onClick)="cleanStatesFilter(); filter()"
+                ></p-button>
+              </div>
             </ng-template>
           </p-columnFilter>
         </div>
@@ -270,13 +356,23 @@
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Prox. Interacción
-          <p-columnFilter type="date" field="nextInteraction" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="nextInteraction"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Cierre
           <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
             type="date"
             field="estimatedClosingDate"
             display="menu"
@@ -286,19 +382,40 @@
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Comentario
-          <p-columnFilter type="text" field="commentary" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="commentary"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Persona Contactada
-          <p-columnFilter type="text" field="contactName" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="contactName"
+            display="menu"
+          />
         </div>
       </th>
       <th>
         <div class="flex align-items-center" style="min-width: 10rem">
           Teléfono
-          <p-columnFilter type="text" field="contactNumber" display="menu" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="contactNumber"
+            display="menu"
+          />
         </div>
       </th>
     </tr>

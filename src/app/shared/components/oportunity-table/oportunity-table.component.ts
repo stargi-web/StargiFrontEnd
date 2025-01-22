@@ -1,18 +1,12 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OpportunityService } from '../../../core/services/nestjs-services/opportunityService';
@@ -76,6 +70,7 @@ export class OportunityTableComponent {
   sortOrder: number = -1; // Orden ASC (1) o DESC (-1)
   userIds: any[] = [];
   selectedUsers: any[] = [];
+  selectedStates: any[] = [];
 
   stateCounts = {
     'No contactado': 0,
@@ -431,6 +426,15 @@ export class OportunityTableComponent {
   }
 
   onAsignedUsersChanged(selectedItems: any[]): void {
+    if (this.isViewNotAsigned) {
+      this.filters = {
+        ...this.filters,
+        user: {
+          value: null,
+        },
+      };
+      return;
+    }
     if (selectedItems.length === 0) {
       this.filters = {
         ...this.filters,
@@ -447,5 +451,50 @@ export class OportunityTableComponent {
         },
       };
     }
+  }
+
+  onStateChanged(selectedItems: any[]): void {
+    if (selectedItems.length === 0) {
+      if (this.isViewClosed) {
+        this.filters = {
+          ...this.filters,
+          state: {
+            value: ['Cierre', 'No cierre'],
+          },
+        };
+      } else {
+        this.filters = {
+          ...this.filters,
+          state: {
+            value: [
+              'Potenciales',
+              'Prospecto',
+              'Prospecto calificado',
+              'Prospecto desarrollado',
+            ],
+          },
+        };
+      }
+    } else {
+      this.selectedStates = selectedItems;
+      this.filters = {
+        ...this.filters,
+        state: {
+          value: selectedItems,
+        },
+      };
+    }
+  }
+  cleanAsignedUsersFilter() {
+    this.selectedUsers = [];
+    this.onAsignedUsersChanged(this.selectedUsers);
+  }
+  cleanStatesFilter() {
+    this.selectedStates = [];
+    this.onStateChanged(this.selectedStates);
+  }
+
+  clear(table: Table) {
+    table.clear();
   }
 }
