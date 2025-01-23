@@ -495,6 +495,8 @@ export class OportunityTableComponent {
   }
 
   clear(table: Table) {
+    this.cleanAsignedUsersFilter();
+    this.cleanStatesFilter();
     table.clear();
   }
 }
