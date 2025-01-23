@@ -22,12 +22,13 @@
   [sortField]="sortField"
   [sortOrder]="sortOrder"
   [scrollable]="true"
-  scrollHeight="80vh"
   [lazy]="true"
   [totalRecords]="totalRecords"
   (onLazyLoad)="loadOpportunities($event)"
   [filters]="primeFilters"
+  [scrollHeight]="'68vh'"
 >
+  >
   <ng-template pTemplate="caption">
     <div class="status-summary mb-3">
       <div class="status-item" *ngFor="let status of opportunityStateSummary">
@@ -115,12 +116,12 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th>
+      <th pFrozenColumn>
         <div class="flex align-items-center" style="min-width: 10rem">
           Acción
         </div>
       </th>
-      <th>
+      <th pFrozenColumn>
         <div class="flex align-items-center" style="min-width: 10rem">
           Asignado
 
@@ -420,7 +421,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
     <tr [ngClass]="getRowClass(opportunity)">
-      <td>
+      <td pFrozenColumn>
         @if(editingRowIndex===rowIndex){
         <p-button
           label="Guardar"
@@ -442,7 +443,7 @@
         />
         }
       </td>
-      <td>
+      <td pFrozenColumn>
         @if(assignUserMode&&indexAssignUserMode===rowIndex){
         <p-dropdown
           [options]="groupedUsers"

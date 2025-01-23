@@ -21,16 +21,17 @@
   font-size: 1.2rem;
 }
 .urgent-row {
-  background-color: rgba(255, 255, 0, 0.245);
+  background-color: #fff4cc; /* Amarillo claro, cálido pero visible */
 }
 
 .no-close-row {
-  background-color: rgba(255, 0, 0, 0.2);
+  background-color: #ffd6d6; /* Rojo claro con un toque coral */
 }
+
 .overdue-yellow {
-  background-color: rgba(255, 255, 0, 0.245);
+  background-color: #ffeeaa; /* Amarillo pastel más destacado */
 }
 
 .overdue-red {
-  background-color: rgba(255, 0, 0, 0.195);
+  background-color: #ffc4c4; /* Rosa suave con un tono más cálido */
 }
