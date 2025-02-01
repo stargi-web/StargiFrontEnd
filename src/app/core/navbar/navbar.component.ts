@@ -57,9 +57,6 @@ export class NavbarComponent {
       roles: [ROLES.SUPERVISOR],
       icon: 'pi pi-users',
     },
-    // Rutas de RRHH
-
-    // Rutas de supervisores
 
     {
       path: '/team/create-user',

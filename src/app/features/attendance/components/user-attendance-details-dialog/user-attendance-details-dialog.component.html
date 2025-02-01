@@ -1,0 +1,31 @@
+<div class="p-fluid p-grid">
+  <div class="p-col-12 p-md-4">
+    <p-calendar
+      [(ngModel)]="startDate"
+      placeholder="Selecciona Fecha Inicio"
+    ></p-calendar>
+  </div>
+  <div class="p-col-12 p-md-4">
+    <p-calendar
+      [(ngModel)]="endDate"
+      placeholder="Selecciona Fecha Fin"
+    ></p-calendar>
+  </div>
+  <div class="p-col-12 p-md-4">
+    <button
+      pButton
+      type="button"
+      label="Consultar"
+      (click)="loadAttendancesByDate()"
+    ></button>
+  </div>
+</div>
+
+<div *ngIf="attendanceDates.length">
+  <app-custom-calendar
+    [startDate]="startDate"
+    [endDate]="endDate"
+    [attendances]="attendanceDates"
+  >
+  </app-custom-calendar>
+</div>

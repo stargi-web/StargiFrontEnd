@@ -1,14 +1,15 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { AttendanceService } from '../../../../core/services/nestjs-services/attendanceService';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { CustomCalendarComponent } from '../../../../shared/components/custom-calendar/custom-calendar.component';
+import { CustomCalendarComponent } from '../custom-calendar/custom-calendar.component';
 
+//TODO: AUN NO IMPLEMENTADO
 @Component({
-  selector: 'app-rrhh-user-attendances-details',
+  selector: 'app-user-attendance-details-dialog',
   standalone: true,
   imports: [
     CalendarModule,
@@ -17,10 +18,10 @@ import { CustomCalendarComponent } from '../../../../shared/components/custom-ca
     FormsModule,
     CustomCalendarComponent,
   ],
-  templateUrl: './rrhh-user-attendances-details.component.html',
-  styleUrl: './rrhh-user-attendances-details.component.css',
+  templateUrl: './user-attendance-details-dialog.component.html',
+  styleUrl: './user-attendance-details-dialog.component.css',
 })
-export class RrhhUserAttendancesDetailsComponent implements OnInit {
+export class UserAttendanceDetailsDialogComponent {
   userId?: number;
   startDate!: Date;
   endDate!: Date;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AttendanceService } from '../../../../../../core/services/nestjs-services/attendanceService';
+import { AttendanceService } from '../../../../core/services/nestjs-services/attendanceService';
 import { CommonModule, formatDate } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';

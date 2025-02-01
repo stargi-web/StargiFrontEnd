@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EnabledEvaluationService } from '../../../../core/services/nestjs-services/enabledEvaluationService';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { MONTHS } from '../../../../shared/const/months';
+import { MONTHS } from '../../../attendance/models/months';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 @Component({

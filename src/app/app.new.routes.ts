@@ -3,7 +3,6 @@ import { AuthComponent } from './features/auth/auth.component';
 import { roleGuard } from './core/guards/authGuard';
 import { ProfileViewComponent } from './shared/components/profile-view/profile-view.component';
 import { FileStorageComponent } from './features/file-manager/file-storage/file-storage.component';
-import { ExecutiveRegisterAttendanceComponent } from './features/roles/executive/executive-register-attendance/executive-register-attendance.component';
 import { AdminUsersViewComponent } from './features/roles/admin/admin-users-view/admin-users-view.component';
 import { AdminUserOppComponent } from './features/roles/admin/admin-user-opp/admin-user-opp.component';
 import { AdminTeamsViewComponent } from './features/roles/admin/admin-teams-view/admin-teams-view.component';
@@ -14,16 +13,15 @@ import { AdminCreateUserComponent } from './features/roles/admin/admin-create-us
 import { SupervisorTeamMembersComponent } from './features/roles/supervisor/supervisor-team-members/supervisor-team-members.component';
 import { SupervisorCreateMemberComponent } from './features/roles/supervisor/supervisor-create-member/supervisor-create-member.component';
 import { RrhhSurverysComponent } from './features/roles/rrhh/rrhh-surverys/rrhh-surverys.component';
-import { RrhhUsersAttendacesComponent } from './features/roles/rrhh/attendance/views/rrhh-users-attendaces/rrhh-users-attendaces.component';
-import { RrhhUserAttendancesDetailsComponent } from './features/roles/rrhh/rrhh-user-attendances-details/rrhh-user-attendances-details.component';
-import { AttendanceTableComponent } from './features/roles/rrhh/attendance/components/attendance-table/attendance-table.component';
 import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
 import { OpportunitiesRolePageComponent } from './features/opportunities/pages/opportunities-role-page/opportunities-role-page.component';
 import { CreateOpportunityPageComponent } from './features/opportunities/pages/create-opportunity-page/create-opportunity-page.component';
 import { SupervisorOpportunitiesComponent } from './features/roles/supervisor/supervisor-opportunities/supervisor-opportunities.component';
+import { RegisterAttendancePageComponent } from './features/attendance/pages/register-attendance-page/register-attendance-page.component';
+import { UsersAttendancePageComponent } from './features/attendance/pages/users-attendance-page/users-attendance-page.component';
 
-export const routesnew: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: AuthComponent },
 
@@ -92,10 +90,8 @@ export const routesnew: Routes = [
     },
     children: [
       { path: '', redirectTo: 'register', pathMatch: 'full' },
-      { path: 'register', component: ExecutiveRegisterAttendanceComponent },
-      { path: 'users', component: RrhhUsersAttendacesComponent },
-      { path: 'user/:userId', component: RrhhUserAttendancesDetailsComponent },
-      { path: 'summary', component: AttendanceTableComponent },
+      { path: 'register', component: RegisterAttendancePageComponent },
+      { path: 'users', component: UsersAttendancePageComponent },
     ],
   },
 

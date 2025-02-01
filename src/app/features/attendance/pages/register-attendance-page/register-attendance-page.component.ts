@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
-import { ClockComponent } from '../../../../shared/components/clock/clock.component';
+import { ClockComponent } from '../../components/clock/clock.component';
 import { AttendanceService } from '../../../../core/services/nestjs-services/attendanceService';
 import { ButtonModule } from 'primeng/button';
-import { AttendanceMonthSummaryComponent } from '../../../../shared/components/attendance-month-summary/attendance-month-summary.component';
+import { AttendanceMonthSummaryComponent } from '../../components/attendance-month-summary/attendance-month-summary.component';
 
 @Component({
-  selector: 'app-executive-register-attendance',
+  selector: 'app-register-attendance-page',
   standalone: true,
-  imports: [ClockComponent, ButtonModule, AttendanceMonthSummaryComponent],
-  templateUrl: './executive-register-attendance.component.html',
-  styleUrl: './executive-register-attendance.component.css',
+  imports: [ButtonModule, ClockComponent, AttendanceMonthSummaryComponent],
+  templateUrl: './register-attendance-page.component.html',
+  styleUrl: './register-attendance-page.component.css',
 })
-export class ExecutiveRegisterAttendanceComponent {
+export class RegisterAttendancePageComponent {
   constructor(private attendanceService: AttendanceService) {}
-
   registerAttendance() {
     const userId = Number(sessionStorage.getItem('userId'));
     if (userId) {

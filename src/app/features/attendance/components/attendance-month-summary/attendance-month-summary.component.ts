@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AttendanceService } from '../../../core/services/nestjs-services/attendanceService';
+import { AttendanceService } from '../../../../core/services/nestjs-services/attendanceService';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip';
 

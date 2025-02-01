@@ -6,14 +6,14 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './custom-calendar.component.html',
-  styleUrl: './custom-calendar.component.css'
+  styleUrl: './custom-calendar.component.css',
 })
 export class CustomCalendarComponent {
   @Input() startDate!: Date;
   @Input() endDate!: Date;
   @Input() attendances: Date[] = [];
 
-  currentMonthDays:  (Date | null)[] = [];
+  currentMonthDays: (Date | null)[] = [];
   weekdays: string[] = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
 
   ngOnInit() {
@@ -24,21 +24,25 @@ export class CustomCalendarComponent {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth();
-    
+
     const firstDayOfMonth = new Date(year, month, 1);
-    
+
     const lastDayOfMonth = new Date(year, month + 1, 0);
-  
+
     const startDayOfWeek = firstDayOfMonth.getDay();
-  
+
     this.currentMonthDays = [];
-  
-    const blanks = (startDayOfWeek === 0) ? 6 : startDayOfWeek - 1; 
+
+    const blanks = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1;
     for (let i = 0; i < blanks; i++) {
-      this.currentMonthDays.push(null); 
+      this.currentMonthDays.push(null);
     }
-  
-    for (let day = firstDayOfMonth.getDate(); day <= lastDayOfMonth.getDate(); day++) {
+
+    for (
+      let day = firstDayOfMonth.getDate();
+      day <= lastDayOfMonth.getDate();
+      day++
+    ) {
       this.currentMonthDays.push(new Date(year, month, day));
     }
   }
@@ -49,19 +53,20 @@ export class CustomCalendarComponent {
 
   isWeekday(date: Date): boolean {
     const day = date.getDay();
-    return day >= 1 && day <= 5; 
+    return day >= 1 && day <= 5;
   }
 
   isWeekend(date: Date): boolean {
     const day = date.getDay();
-    return day === 0 || day === 6; 
+    return day === 0 || day === 6;
   }
 
   isAttendanceDay(date: Date): boolean {
-    return this.attendances.some(d => 
-      d.getFullYear() === date.getFullYear() && 
-      d.getMonth() === date.getMonth() && 
-      d.getDate() === date.getDate()
+    return this.attendances.some(
+      (d) =>
+        d.getFullYear() === date.getFullYear() &&
+        d.getMonth() === date.getMonth() &&
+        d.getDate() === date.getDate()
     );
   }
   getDayClass(date: Date): string {
@@ -73,11 +78,11 @@ export class CustomCalendarComponent {
     }
     if (this.isWeekday(date)) {
       if (this.isAttendanceDay(date)) {
-        return 'attendance-day'; 
+        return 'attendance-day';
       } else {
-        return 'no-attendance-day'; 
+        return 'no-attendance-day';
       }
     }
-    return ''; 
+    return '';
   }
 }
