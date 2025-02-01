@@ -105,7 +105,6 @@ export class OportunityTableComponent {
 
   ngOnInit(): void {
     this.userRole = sessionStorage.getItem('role') || '';
-    console.log(this.userRole);
     this.loadOpportunities({ first: 0, rows: 10 });
   }
 
