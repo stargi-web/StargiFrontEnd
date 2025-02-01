@@ -1,20 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageNotificationService } from './shared/components/message-toast/message-toast.service';
+import { NavbarComponent } from './core/navbar/navbar.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgxSpinnerModule, ToastModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    RouterOutlet,
+    NgxSpinnerModule,
+    ToastModule,
+    NavbarComponent,
+  ],
   providers: [MessageService, MessageNotificationService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  constructor(private primengConfig: PrimeNGConfig) {}
+  // Propiedad para determinar si la ruta actual es la de login
+  isLoginPage: boolean = false;
+  constructor(private primengConfig: PrimeNGConfig, private router: Router) {
+    // Escucha los cambios de ruta
+    this.router.events.subscribe(() => {
+      this.isLoginPage = this.router.url === '/login'; // Ajusta la ruta de login según tu aplicación
+    });
+  }
   ngOnInit(): void {
     this.primengConfig.setTranslation({
       startsWith: 'Empieza con',

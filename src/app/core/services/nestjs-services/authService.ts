@@ -1,17 +1,40 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../env/environment';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { LogInUser } from '../../models/LogInUser';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { ROLES } from '../../models/roles';
+import { UserService } from './userService';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
+  private currentUserRole = new BehaviorSubject<string>(ROLES.EXECUTIVE);
+  private userId = 0;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userService: UserService
+  ) {
+    // Recupera el rol desde sessionStorage al inicializar el servicio
+    const storedRole = sessionStorage.getItem('role');
+    if (storedRole) {
+      this.currentUserRole.next(storedRole); // Actualiza el BehaviorSubject
+    }
+  }
 
-  constructor(private http: HttpClient, private router: Router) {}
+  // Método para obtener el rol del usuario
+  getCurrentUserRole() {
+    return this.currentUserRole.asObservable();
+  }
+
+  // Método para cambiar el rol del usuario
+  setUserRole(role: string) {
+    this.currentUserRole.next(role);
+  }
 
   logIn(body: LogInUser): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}`, body).pipe(
@@ -20,6 +43,9 @@ export class AuthService {
         sessionStorage.setItem('token', response.token);
         sessionStorage.setItem('name', response.name);
         sessionStorage.setItem('username', response.userName);
+        sessionStorage.setItem('role', response.role);
+        this.userId = response.userId;
+        this.setUserRole(response.role);
       }),
       catchError(this.handleError)
     );
@@ -38,21 +64,37 @@ export class AuthService {
       const decodedToken: any = this.decodeToken(token);
       const role = decodedToken?.role || [];
       sessionStorage.setItem('role', role);
-      if (role === 'admin') {
-        this.router.navigate(['/admin']);
-      } else if (role === 'user') {
-        this.router.navigate(['/user']);
-      } else if (role === 'supervisor') {
-        this.router.navigate(['/supervisor']);
-      } else if (role === 'executive' || role === 'executivegpon') {
-        this.router.navigate(['/executive']);
-      } else if (role === 'HHRR') {
-        this.router.navigate(['/HHRR']);
-      } else {
-        console.error('Rol no reconocido:', role);
+
+      // Redirige a la ruta por defecto según el rol
+      switch (role) {
+        case 'admin':
+          this.router.navigate(['/admin/users']); // Ruta por defecto para admin
+          break;
+        case 'supervisor':
+          this.userService.getLeadingTeamInfo(this.userId).subscribe({
+            next: (response) => {
+              if (response.teamId) {
+                sessionStorage.setItem('teamId', response.teamId);
+              }
+              this.router.navigate(['/team/members']); // Ruta por defecto para supervisor
+            },
+          });
+          break;
+        case 'executive':
+        case 'executivegpon':
+          this.router.navigate(['/dashboard']); // Ruta por defecto para executive
+          break;
+        case 'HHRR':
+          this.router.navigate(['/attendance/users']); // Ruta por defecto para HHRR
+          break;
+        default:
+          console.error('Rol no reconocido:', role);
+          this.router.navigate(['/login']); // Redirige al login si el rol no es reconocido
+          break;
       }
     } else {
       console.error('No se encontró el token en sessionStorage');
+      this.router.navigate(['/login']); // Redirige al login si no hay token
     }
   }
   private handleError(error: HttpErrorResponse) {

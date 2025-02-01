@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { routesnew } from './app.new.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import {
   BrowserAnimationsModule,
@@ -21,7 +22,7 @@ import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter([...routesnew]),
     provideClientHydration(),
     provideAnimations(),
     provideHttpClient(
