@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OpportunityService } from '../../services/opportunityService';
 import { CommonModule } from '@angular/common';
-import { offers } from '../../../../shared/const/constantes';
+import { offers } from '../../models/constantes';
 interface FieldError {
   field: string;
   message: string;

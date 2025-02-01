@@ -4,9 +4,9 @@ import { OpportunityModel } from '../../../../core/models/opportunityModel';
 import { OpportunityService } from '../../../opportunities/services/opportunityService';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { OpportunityRecordService } from '../../../../core/services/nestjs-services/opportunityRecordService';
+import { OpportunityRecordService } from '../../../opportunities/services/opportunityRecordService';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ExecutiveRecordsOppDialogComponent } from '../../executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
+import { ExecutiveRecordsOppDialogComponent } from '../../../opportunities/components/records-opportunity-dialog/executive-records-opp-dialog.component';
 import { ConfirmDeleteOpportunityDialogComponent } from '../../../../shared/components/confirm-delete-opportunity-dialog/confirm-delete-opportunity-dialog.component';
 import { CalendarModule } from 'primeng/calendar';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -16,7 +16,7 @@ import {
   products,
   productTypes,
   states,
-} from '../../../../shared/const/constantes';
+} from '../../../opportunities/models/constantes';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { UserService } from '../../../../core/services/nestjs-services/userService';

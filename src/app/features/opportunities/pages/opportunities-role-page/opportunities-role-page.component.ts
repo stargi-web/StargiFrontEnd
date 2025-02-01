@@ -22,6 +22,7 @@ export class OpportunitiesRolePageComponent {
         'Prospecto desarrollado',
       ],
     },
+    user: { value: 0 },
   };
 
   constructor(private opportunityService: OpportunityService) {}

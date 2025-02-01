@@ -5,14 +5,14 @@ import { OpportunityModel } from '../../../../core/models/opportunityModel';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ExecutiveRecordsOppDialogComponent } from '../../executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
+import { ExecutiveRecordsOppDialogComponent } from '../../../opportunities/components/records-opportunity-dialog/executive-records-opp-dialog.component';
 import { SelectItemGroup } from 'primeng/api';
 import {
   opportunityTypes,
   products,
   productTypes,
   states,
-} from '../../../../shared/const/constantes';
+} from '../../../opportunities/models/constantes';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';

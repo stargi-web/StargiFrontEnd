@@ -11,14 +11,14 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OpportunityService } from '../../services/opportunityService';
 import { OpportunityModel } from '../../../../core/models/opportunityModel';
-import { ExecutiveRecordsOppDialogComponent } from '../../../roles/executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
+import { ExecutiveRecordsOppDialogComponent } from '../records-opportunity-dialog/executive-records-opp-dialog.component';
 import { SimpleChanges } from '@angular/core';
 import {
   opportunityTypes,
   products,
   productTypes,
   states,
-} from '../../../../shared/const/constantes';
+} from '../../models/constantes';
 import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
 import { MessageNotificationService } from '../../../../shared/components/message-toast/message-toast.service';
 

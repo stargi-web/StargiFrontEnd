@@ -61,6 +61,8 @@ export class ExecutiveOpportunitiesViewComponent implements OnInit {
     this.loadOpportunities();
   }
   loadOpportunities() {
+    console.log('Role:', this.role);
+    this.role = 'supervisor';
     const userId = Number(sessionStorage.getItem('userId'));
     const teamId = Number(sessionStorage.getItem('teamId'));
     const filters = this.filters;
