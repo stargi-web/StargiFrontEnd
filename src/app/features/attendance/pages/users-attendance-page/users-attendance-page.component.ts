@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../core/services/nestjs-services/userService';
-import { AttendanceService } from '../../../../core/services/nestjs-services/attendanceService';
+import { AttendanceService } from '../../services/attendanceService';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';

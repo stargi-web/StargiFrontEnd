@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
-import { AttendanceService } from '../../../../core/services/nestjs-services/attendanceService';
+import { AttendanceService } from '../../services/attendanceService';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';

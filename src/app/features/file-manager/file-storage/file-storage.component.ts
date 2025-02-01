@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FolderStorageService } from '../folderService'; // Importamos el servicio
+import { FolderStorageService } from '../services/folderService'; // Importamos el servicio
 import { Folder } from '../../../core/models/folderStorageModel';
 import { FormsModule } from '@angular/forms';
-import { FileStorageService } from '../fileService';
+import { FileStorageService } from '../services/fileService';
 import { FileUploadModule } from 'primeng/fileupload';
 import { PrimeNGConfig } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { UserService } from '../../../core/services/nestjs-services/userService';
 import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
-import { FirebaseCloudStorageService } from '../../../core/services/external-services/firebaseCloudStorageService';
+import { FirebaseCloudStorageService } from '../services/firebaseCloudStorageService';
 import { MessageNotificationService } from '../../../shared/components/message-toast/message-toast.service';
 import { CustomConfirmDialogComponent } from '../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
 

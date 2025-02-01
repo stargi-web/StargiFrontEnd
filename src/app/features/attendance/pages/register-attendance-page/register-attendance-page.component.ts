@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ClockComponent } from '../../components/clock/clock.component';
-import { AttendanceService } from '../../../../core/services/nestjs-services/attendanceService';
+import { AttendanceService } from '../../services/attendanceService';
 import { ButtonModule } from 'primeng/button';
 import { AttendanceMonthSummaryComponent } from '../../components/attendance-month-summary/attendance-month-summary.component';
 

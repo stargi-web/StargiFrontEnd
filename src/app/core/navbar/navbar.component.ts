@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api'; // Importa MenuItem de PrimeNG
 import { MenubarModule } from 'primeng/menubar'; // Importa el módulo de Menubar
 import { ROLES } from '../models/roles';
-import { AuthService } from '../services/nestjs-services/authService';
+import { AuthService } from '../../features/auth/services/authService';
 import { Button } from 'primeng/button';
 
 @Component({

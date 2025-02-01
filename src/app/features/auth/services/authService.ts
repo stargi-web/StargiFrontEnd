@@ -2,11 +2,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../env/environment';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { LogInUser } from '../../models/LogInUser';
+import { LogInUser } from '../../../core/models/LogInUser';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { ROLES } from '../../models/roles';
-import { UserService } from './userService';
+import { ROLES } from '../../../core/models/roles';
+import { UserService } from '../../../core/services/nestjs-services/userService';
 @Injectable({
   providedIn: 'root',
 })
