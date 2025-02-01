@@ -34,7 +34,7 @@ export class NavbarComponent {
       icon: 'pi pi-user-plus',
     },
     {
-      path: '/opportunities/all',
+      path: '/opportunities',
       label: 'Oportunidades',
       roles: [ROLES.ADMIN],
       icon: 'pi pi-envelope',
@@ -76,7 +76,7 @@ export class NavbarComponent {
         {
           label: 'Oportunidades del equipo',
           icon: 'pi pi-folder',
-          path: '/opportunities/team',
+          path: '/opportunities',
         },
         {
           label: 'Oportunidades del equipo v2',
@@ -91,14 +91,14 @@ export class NavbarComponent {
         {
           label: 'Registrar Oportunidad',
           icon: 'pi pi-plus-circle',
-          path: '/team/create-opportunity',
+          path: '/opportunities/create',
         },
       ],
     },
 
     // Rutas de ejecutivos
     {
-      path: '/dashboard',
+      path: '/opportunities',
       label: 'Oportunidades',
       roles: [ROLES.EXECUTIVE],
       icon: 'pi pi-home',

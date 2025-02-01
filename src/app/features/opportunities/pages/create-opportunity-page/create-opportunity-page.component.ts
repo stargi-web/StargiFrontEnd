@@ -1,26 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
-import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { OpportunityService } from '../../services/opportunityService';
+import { CommonModule } from '@angular/common';
+import { offers } from '../../../../shared/const/constantes';
 interface FieldError {
   field: string;
   message: string;
 }
+
 @Component({
-  selector: 'app-supervisor-create-opp',
+  selector: 'app-create-opportunity-page',
   standalone: true,
   imports: [
     CommonModule,
@@ -33,10 +30,10 @@ interface FieldError {
     CalendarModule,
     InputTextareaModule,
   ],
-  templateUrl: './supervisor-create-opp.component.html',
-  styleUrl: './supervisor-create-opp.component.css',
+  templateUrl: './create-opportunity-page.component.html',
+  styleUrl: './create-opportunity-page.component.css',
 })
-export class SupervisorCreateOppComponent implements OnInit {
+export class CreateOpportunityPageComponent {
   errors!: FieldError[];
   opportunityForm: FormGroup;
   opportunityTypes = [
@@ -57,7 +54,23 @@ export class SupervisorCreateOppComponent implements OnInit {
     { label: 'Fibra Plus', value: 'Fibra Plus' },
     { label: 'Otros', value: 'Otros' },
   ];
-  products!: any[];
+  products = [
+    { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
+    { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
+    { label: 'DBI-Fija', value: 'DBI-Fija' },
+    { label: 'DBI-GPON', value: 'DBI-GPON' },
+    { label: 'Nube Pública', value: 'Nube Pública' },
+    { label: 'Antivirus', value: 'Antivirus' },
+    { label: 'Cloud Backup', value: 'Cloud Backup' },
+    { label: 'Central telefónica', value: 'Central telefónica' },
+    { label: 'Venta', value: 'Venta' },
+    { label: 'Portabilidad', value: 'Portabilidad' },
+    { label: 'GPON', value: 'GPON' },
+    { label: 'DBI', value: 'DBI' },
+    { label: 'SVA', value: 'SVA' },
+    { label: 'Móvil', value: 'Móvil' },
+    { label: 'Otros', value: 'Otros' },
+  ];
   states = [
     { label: 'Potenciales', value: 'Potenciales' },
     { label: 'Prospecto', value: 'Prospecto' },
@@ -66,6 +79,7 @@ export class SupervisorCreateOppComponent implements OnInit {
     { label: 'Cierre', value: 'Cierre' },
     { label: 'No cierre', value: 'No cierre' },
   ];
+  offers = offers;
   disable = false;
 
   constructor(
@@ -86,8 +100,9 @@ export class SupervisorCreateOppComponent implements OnInit {
       commentary: ['', Validators.required],
       contactName: ['', Validators.required],
       contactNumber: ['', Validators.required],
-      units: ['', Validators.required],
       email: ['', Validators.required],
+      units: ['', Validators.required],
+      offer: ['', Validators.required],
       userId: userId,
     });
     this.errors = Object.keys(this.opportunityForm.controls).map((key) => ({
@@ -95,25 +110,28 @@ export class SupervisorCreateOppComponent implements OnInit {
       message: '',
     }));
   }
-  ngOnInit(): void {
-    this.products = [
-      { label: 'DBI-Fibra Óptica', value: 'DBI-Fibra Óptica' },
-      { label: 'DBI-Radio Enlace', value: 'DBI-Radio Enlace' },
-      { label: 'DBI-Fija', value: 'DBI-Fija' },
-      { label: 'DBI-GPON', value: 'DBI-GPON' },
-      { label: 'Nube Pública', value: 'Nube Pública' },
-      { label: 'Antivirus', value: 'Antivirus' },
-      { label: 'Cloud Backup', value: 'Cloud Backup' },
-      { label: 'Central telefónica', value: 'Central telefónica' },
-      { label: 'Venta', value: 'Venta' },
-      { label: 'Portabilidad', value: 'Portabilidad' },
-      { label: 'GPON', value: 'GPON' },
-      { label: 'DBI', value: 'DBI' },
-      { label: 'SVA', value: 'SVA' },
-      { label: 'Móvil', value: 'Móvil' },
-      { label: 'Otros', value: 'Otros' },
-    ];
+  buildForm() {
+    const userId = Number(sessionStorage.getItem('userId'));
+    this.opportunityForm = this.fb.group({
+      ruc: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      businessName: ['', Validators.required],
+      SfaNumber: ['', Validators.required],
+      oppSfaDateCreation: ['', Validators.required],
+      type: ['', Validators.required],
+      amount: ['', Validators.required],
+      product: ['', Validators.required],
+      state: ['', Validators.required],
+      estimatedClosingDate: ['', Validators.required],
+      commentary: ['', Validators.required],
+      contactName: ['', Validators.required],
+      contactNumber: ['', Validators.required],
+      email: ['', Validators.required],
+      units: ['', Validators.required],
+      offer: ['', Validators.required],
+      userId: userId,
+    });
   }
+  ngOnInit(): void {}
   onSubmit() {
     if (this.opportunityForm.valid) {
       this.disable = true;
@@ -124,10 +142,13 @@ export class SupervisorCreateOppComponent implements OnInit {
           next: (response) => {
             alert('Creación exitosa');
             this.opportunityForm.reset();
+            this.buildForm();
             this.disable = false;
             this.errors.forEach((error) => (error.message = ''));
           },
-          error: (error) => console.error(error),
+          error: (error) => {
+            console.error(error), (this.disable = false);
+          },
         });
     } else {
       this.disable = false;

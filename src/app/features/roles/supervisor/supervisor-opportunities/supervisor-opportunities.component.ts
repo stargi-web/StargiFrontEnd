@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
+import { OpportunityService } from '../../../opportunities/services/opportunityService';
 import { OpportunityModel } from '../../../../core/models/opportunityModel';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';

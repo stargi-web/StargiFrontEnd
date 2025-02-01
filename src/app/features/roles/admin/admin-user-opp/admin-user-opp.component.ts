@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OpportunityModel } from '../../../../core/models/opportunityModel';
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
+import { OpportunityService } from '../../../opportunities/services/opportunityService';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { OpportunityRecordService } from '../../../../core/services/nestjs-services/opportunityRecordService';

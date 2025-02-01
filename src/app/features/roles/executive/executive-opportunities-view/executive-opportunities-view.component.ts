@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OpportunityModel } from '../../../../core/models/opportunityModel';
 import { CommonModule } from '@angular/common';
-import { OpportunityService } from '../../../../core/services/nestjs-services/opportunityService';
+import { OpportunityService } from '../../../opportunities/services/opportunityService';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';

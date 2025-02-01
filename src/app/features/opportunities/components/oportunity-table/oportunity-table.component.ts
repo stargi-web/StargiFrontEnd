@@ -9,18 +9,18 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { Table, TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { OpportunityService } from '../../../core/services/nestjs-services/opportunityService';
-import { OpportunityModel } from '../../../core/models/opportunityModel';
-import { ExecutiveRecordsOppDialogComponent } from '../../../features/roles/executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
+import { OpportunityService } from '../../services/opportunityService';
+import { OpportunityModel } from '../../../../core/models/opportunityModel';
+import { ExecutiveRecordsOppDialogComponent } from '../../../roles/executive/executive-records-opp-dialog/executive-records-opp-dialog.component';
 import { SimpleChanges } from '@angular/core';
 import {
   opportunityTypes,
   products,
   productTypes,
   states,
-} from '../../const/constantes';
-import { CustomConfirmDialogComponent } from '../custom-confirm-dialog/custom-confirm-dialog.component';
-import { MessageNotificationService } from '../message-toast/message-toast.service';
+} from '../../../../shared/const/constantes';
+import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
+import { MessageNotificationService } from '../../../../shared/components/message-toast/message-toast.service';
 
 @Component({
   selector: 'app-oportunity-table',
