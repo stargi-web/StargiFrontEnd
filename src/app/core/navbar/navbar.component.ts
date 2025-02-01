@@ -79,14 +79,9 @@ export class NavbarComponent {
           path: '/opportunities',
         },
         {
-          label: 'Oportunidades del equipo v2',
-          icon: 'pi pi-folder',
-          path: '/opportunities/view',
-        },
-        {
           label: 'Mis oportunidades',
           icon: 'pi pi-file',
-          path: '/opportunities',
+          path: '/opportunities/my-opportunities',
         },
         {
           label: 'Registrar Oportunidad',
@@ -101,12 +96,6 @@ export class NavbarComponent {
       path: '/opportunities',
       label: 'Oportunidades',
       roles: [ROLES.EXECUTIVE],
-      icon: 'pi pi-home',
-    },
-    {
-      path: '/opportunities/view',
-      label: 'Oportunidades v2 (Beta)',
-      roles: [ROLES.EXECUTIVE], // Múltiples roles
       icon: 'pi pi-home',
     },
     {

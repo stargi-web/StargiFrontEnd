@@ -3,7 +3,6 @@ import { AuthComponent } from './features/auth/auth.component';
 import { roleGuard } from './core/guards/authGuard';
 import { ProfileViewComponent } from './shared/components/profile-view/profile-view.component';
 import { FileStorageComponent } from './features/file-manager/file-storage/file-storage.component';
-import { ExecutiveOpportunitiesViewComponent } from './features/roles/executive/executive-opportunities-view/executive-opportunities-view.component';
 import { ExecutiveRegisterAttendanceComponent } from './features/roles/executive/executive-register-attendance/executive-register-attendance.component';
 import { AdminUsersViewComponent } from './features/roles/admin/admin-users-view/admin-users-view.component';
 import { AdminUserOppComponent } from './features/roles/admin/admin-user-opp/admin-user-opp.component';
@@ -22,6 +21,7 @@ import { ViewAssignedCollectionsComponent } from './shared/components/view-assig
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
 import { OpportunitiesRolePageComponent } from './features/opportunities/pages/opportunities-role-page/opportunities-role-page.component';
 import { CreateOpportunityPageComponent } from './features/opportunities/pages/create-opportunity-page/create-opportunity-page.component';
+import { SupervisorOpportunitiesComponent } from './features/roles/supervisor/supervisor-opportunities/supervisor-opportunities.component';
 
 export const routesnew: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -72,11 +72,13 @@ export const routesnew: Routes = [
         pathMatch: 'full',
       },
       { path: 'create', component: CreateOpportunityPageComponent },
-      { path: 'view', component: ExecutiveOpportunitiesViewComponent },
-
       {
         path: 'team-opportunities/:teamId',
         component: AdminViewTeamOpportunitiesComponent,
+      },
+      {
+        path: 'my-opportunities',
+        component: SupervisorOpportunitiesComponent,
       },
     ],
   },
