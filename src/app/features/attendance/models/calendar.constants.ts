@@ -1,45 +1,37 @@
-const DIAS_CORTOS = [
-    'LUN'
-  , 'MAR'
-  , 'MIÉ'
-  , 'JUE'
-  , 'VIE'
-  , 'SÁB'
-  , 'DOM'
-];
+const DIAS_CORTOS = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
 
 /**
-* @constant
-*/
+ * @constant
+ */
 const DIAS_LARGOS = [
-    'LUNES'
-  , 'MARTES'
-  , 'MIÉRCOLES'
-  , 'JUEVES'
-  , 'VIERNES'
-  , 'SÁBADO'
-  , 'DOMINGO'
+  'LUNES',
+  'MARTES',
+  'MIÉRCOLES',
+  'JUEVES',
+  'VIERNES',
+  'SÁBADO',
+  'DOMINGO',
 ];
 
 /**
-* @constant
-*/
+ * @constant
+ */
 const LISTA_CLASES = {
-    0 : 'cero'
-  , 1 : 'uno'
-  , 2 : 'dos'
-  , 3 : 'tres'
-  , 4 : 'cuatro'
-  , 5 : 'cinco'
-  , 6 : 'seis'
-  , 7 : 'siete'
-  , 8 : 'ocho'
-  , 9 : 'nueve'
-  , ':' : 'puntos'
-  , 'puntos': ':'
+  0: 'cero',
+  1: 'uno',
+  2: 'dos',
+  3: 'tres',
+  4: 'cuatro',
+  5: 'cinco',
+  6: 'seis',
+  7: 'siete',
+  8: 'ocho',
+  9: 'nueve',
+  ':': 'puntos',
+  puntos: ':',
 };
 
 /**
-* @exports
-*/
+ * @exports
+ */
 export { LISTA_CLASES, DIAS_LARGOS, DIAS_CORTOS };

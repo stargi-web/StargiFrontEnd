@@ -82,7 +82,7 @@ export class AuthService {
           break;
         case 'executive':
         case 'executivegpon':
-          this.router.navigate(['/opportunities']); // Ruta por defecto para executive
+          this.router.navigate(['/opportunities/user']); // Ruta por defecto para executive
           break;
         case 'HHRR':
           this.router.navigate(['/attendance/users']); // Ruta por defecto para HHRR

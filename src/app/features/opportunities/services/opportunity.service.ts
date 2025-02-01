@@ -20,10 +20,7 @@ export class OpportunityService {
     return Number(sessionStorage.getItem('teamId'));
   }
 
-  loadUsers(): Promise<SelectItemGroup[]> {
-    const role = this.getCurrentUserRole(); // Obtener el rol del usuario actual
-    const teamId = this.getCurrentTeamId(); // Obtener el teamId del usuario actual
-
+  loadUsers(teamId?: number): Promise<SelectItemGroup[]> {
     // Definir la estructura base de groupedUsers
     const groupedUsers: SelectItemGroup[] = [
       {
@@ -38,66 +35,52 @@ export class OpportunityService {
       },
     ];
 
-    // Cargar usuarios según el rol
-    switch (role) {
-      case 'admin':
-        // Admin: Cargar todos los usuarios
-        return this.userService
-          .getUsers()
-          .toPromise()
-          .then((users: any[]) => {
-            users.forEach((user: any) => {
-              if (user.role === 'executive') {
-                groupedUsers[0].items.push({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                });
-              } else if (user.role === 'supervisor') {
-                groupedUsers[1].items.push({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                });
-              }
-            });
-            return groupedUsers;
+    if (!teamId) {
+      return this.userService
+        .getUsers()
+        .toPromise()
+        .then((users: any[]) => {
+          users.forEach((user: any) => {
+            if (user.role === 'executive') {
+              groupedUsers[0].items.push({
+                label: `${user.firstName} ${user.lastName}`,
+                value: user.id,
+              });
+            } else if (user.role === 'supervisor') {
+              groupedUsers[1].items.push({
+                label: `${user.firstName} ${user.lastName}`,
+                value: user.id,
+              });
+            }
           });
-
-      case 'supervisor':
-        // Supervisor: Cargar solo los usuarios de su equipo
-        return this.userService
-          .getUsersByTeamId(teamId)
-          .toPromise()
-          .then((users: any[]) => {
-            users.forEach((user: any) => {
-              if (user.role === 'executive') {
-                groupedUsers[0].items.push({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                });
-              } else if (user.role === 'supervisor') {
-                groupedUsers[1].items.push({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                });
-              }
-            });
-            return groupedUsers;
+          return groupedUsers;
+        });
+    } else {
+      return this.userService
+        .getUsersByTeamId(teamId)
+        .toPromise()
+        .then((users: any[]) => {
+          users.forEach((user: any) => {
+            if (user.role === 'executive') {
+              groupedUsers[0].items.push({
+                label: `${user.firstName} ${user.lastName}`,
+                value: user.id,
+              });
+            } else if (user.role === 'supervisor') {
+              groupedUsers[1].items.push({
+                label: `${user.firstName} ${user.lastName}`,
+                value: user.id,
+              });
+            }
           });
-
-      case 'executive':
-        // Executive: No cargar ningún usuario
-        return Promise.resolve([]); // Devuelve la estructura vacía envuelta en una promesa
-
-      default:
-        // Rol no reconocido: No cargar ningún usuario
-        return Promise.resolve([]); // Devuelve la estructura vacía
+          return groupedUsers;
+        });
     }
   }
 
-  getFilters(): Promise<any> {
+  getFilters(teamId?: number): Promise<any> {
     const role = this.getCurrentUserRole();
     const userId = this.getCurrentUserId();
-    const teamId = this.getCurrentTeamId();
 
     const baseFilters = {
       isCurrent: { value: true },
@@ -113,15 +96,30 @@ export class OpportunityService {
 
     switch (role) {
       case 'admin':
-        return Promise.resolve(baseFilters); // Admin puede ver todo sin filtros adicionales
+        if (!teamId) {
+          return Promise.resolve(baseFilters);
+        }
+        return this.userService
+          .getUsersByTeamId(teamId)
+          .toPromise()
+          .then((users: any[]) => {
+            const userIds =
+              users.length > 0 ? users.map((user: any) => user.id) : [0];
+            return { ...baseFilters, user: { value: userIds } }; // Si está vacío, devuelve [0]
+          });
+
       case 'supervisor':
+        if (!teamId) {
+          teamId = this.getCurrentTeamId();
+        }
         // Obtener los IDs de los usuarios del equipo
         return this.userService
           .getUsersByTeamId(teamId)
           .toPromise()
           .then((users: any[]) => {
-            const userIds = users.map((user: any) => user.id);
-            return { ...baseFilters, user: { value: userIds } }; // Filtra por los IDs de los usuarios del equipo
+            const userIds =
+              users.length > 0 ? users.map((user: any) => user.id) : [0];
+            return { ...baseFilters, user: { value: userIds } }; // Si está vacío, devuelve [0]
           });
       case 'executive':
         return Promise.resolve({ ...baseFilters, user: { value: userId } }); // Executive filtra por su ID

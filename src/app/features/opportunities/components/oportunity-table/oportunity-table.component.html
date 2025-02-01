@@ -85,7 +85,7 @@
       </p-button>
 
       <p-button
-        *ngIf="userRole === 'admin' || userRole === 'supervisor'"
+        *ngIf="viewNotAsignedButton"
         [outlined]="true"
         [severity]="'info'"
         class="custom-button ml-2"

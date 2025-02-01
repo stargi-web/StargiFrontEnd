@@ -78,7 +78,7 @@ export class NavbarComponent {
         {
           label: 'Mis oportunidades',
           icon: 'pi pi-file',
-          path: '/opportunities/my-opportunities',
+          path: '/opportunities/user',
         },
         {
           label: 'Registrar Oportunidad',
@@ -90,7 +90,7 @@ export class NavbarComponent {
 
     // Rutas de ejecutivos
     {
-      path: '/opportunities',
+      path: '/opportunities/user',
       label: 'Oportunidades',
       roles: [ROLES.EXECUTIVE],
       icon: 'pi pi-home',
@@ -192,6 +192,7 @@ export class NavbarComponent {
     sessionStorage.removeItem('name');
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('role');
+    sessionStorage.removeItem('teamId');
 
     // Redirige al usuario a la página de login
     this.router.navigate(['/login']);

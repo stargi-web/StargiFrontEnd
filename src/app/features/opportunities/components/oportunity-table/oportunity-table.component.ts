@@ -45,6 +45,7 @@ export class OportunityTableComponent {
   opportunities: any[] = [];
   @Input() groupedUsers: any[] = [];
   @Input() filters: Record<string, { value: any | any[] }> = {};
+  @Input() viewNotAsignedButton: boolean = true;
   primeFilters: Record<string, { value: any | any[] }> = {};
   userRole: string = '';
 
@@ -420,6 +421,10 @@ export class OportunityTableComponent {
     ];
   }
   getGroupedUserIds(): any[] {
+    // Verificar que groupedUsers no sea undefined o null
+    if (!this.groupedUsers) {
+      return []; // O retornar un valor adecuado para tu lógica
+    }
     return this.groupedUsers
       .flatMap((group) => group.items) // Aplana todos los items de cada grupo
       .map((item) => item.value); // Extrae el valor de cada item
@@ -438,9 +443,9 @@ export class OportunityTableComponent {
     if (selectedItems.length === 0) {
       this.filters = {
         ...this.filters,
-        user: {
-          value: this.getGroupedUserIds(),
-        },
+        ...(this.getGroupedUserIds().length > 0 && {
+          user: { value: this.getGroupedUserIds() },
+        }),
       };
     } else {
       this.selectedUsers = selectedItems;

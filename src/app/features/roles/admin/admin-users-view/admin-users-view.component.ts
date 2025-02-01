@@ -69,7 +69,7 @@ export class AdminUsersViewComponent implements OnInit {
     });
   }
   viewOpportunities(userId: number) {
-    this.router.navigate([`/admin/users-opp/${userId}`]);
+    this.router.navigate([`/opportunities/user/${userId}`]);
   }
 
   deleteUser(userId: number, groupedUsers: any) {

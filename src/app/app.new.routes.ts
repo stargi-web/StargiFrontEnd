@@ -6,7 +6,7 @@ import { FileStorageComponent } from './features/file-manager/file-storage/file-
 import { AdminUsersViewComponent } from './features/roles/admin/admin-users-view/admin-users-view.component';
 import { AdminUserOppComponent } from './features/roles/admin/admin-user-opp/admin-user-opp.component';
 import { AdminTeamsViewComponent } from './features/roles/admin/admin-teams-view/admin-teams-view.component';
-import { AdminViewTeamOpportunitiesComponent } from './features/roles/admin/admin-view-team-opportunities/admin-view-team-opportunities.component';
+
 import { AdminViewBasesComponent } from './features/roles/admin/admin-view-bases/admin-view-bases.component';
 import { AdminBaseDetailsComponent } from './features/roles/admin/admin-base-details/admin-base-details.component';
 import { AdminCreateUserComponent } from './features/roles/admin/admin-create-user/admin-create-user.component';
@@ -15,11 +15,13 @@ import { SupervisorCreateMemberComponent } from './features/roles/supervisor/sup
 import { RrhhSurverysComponent } from './features/roles/rrhh/rrhh-surverys/rrhh-surverys.component';
 import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
-import { OpportunitiesRolePageComponent } from './features/opportunities/pages/opportunities-role-page/opportunities-role-page.component';
+
 import { CreateOpportunityPageComponent } from './features/opportunities/pages/create-opportunity-page/create-opportunity-page.component';
-import { SupervisorOpportunitiesComponent } from './features/roles/supervisor/supervisor-opportunities/supervisor-opportunities.component';
+
 import { RegisterAttendancePageComponent } from './features/attendance/pages/register-attendance-page/register-attendance-page.component';
 import { UsersAttendancePageComponent } from './features/attendance/pages/users-attendance-page/users-attendance-page.component';
+import { OpportunitiesTeamPageComponent } from './features/opportunities/pages/opportunities-team-page/opportunities-team-page.component';
+import { OpportunitiesUserPageComponent } from './features/opportunities/pages/opportunities-user-page/opportunities-user-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -66,17 +68,21 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: OpportunitiesRolePageComponent,
+        component: OpportunitiesTeamPageComponent,
         pathMatch: 'full',
       },
       { path: 'create', component: CreateOpportunityPageComponent },
       {
-        path: 'team-opportunities/:teamId',
-        component: AdminViewTeamOpportunitiesComponent,
+        path: 'team/:teamId',
+        component: OpportunitiesTeamPageComponent,
       },
       {
-        path: 'my-opportunities',
-        component: SupervisorOpportunitiesComponent,
+        path: 'user',
+        component: OpportunitiesUserPageComponent,
+      },
+      {
+        path: 'user/:userId',
+        component: OpportunitiesUserPageComponent,
       },
     ],
   },

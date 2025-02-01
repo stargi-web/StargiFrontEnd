@@ -2,15 +2,17 @@ import { Component } from '@angular/core';
 import { SelectItemGroup } from 'primeng/api';
 import { OpportunityService } from '../../services/opportunity.service';
 import { OportunityTableComponent } from '../../components/oportunity-table/oportunity-table.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-opportunities-role-page',
+  selector: 'app-opportunities-team-page',
   standalone: true,
   imports: [OportunityTableComponent],
-  templateUrl: './opportunities-role-page.component.html',
-  styleUrl: './opportunities-role-page.component.css',
+  templateUrl: './opportunities-team-page.component.html',
+  styleUrl: './opportunities-team-page.component.css',
 })
-export class OpportunitiesRolePageComponent {
+export class OpportunitiesTeamPageComponent {
+  teamId: number = 0;
   groupedUsers!: SelectItemGroup[];
   filters = {
     isCurrent: { value: true },
@@ -25,15 +27,22 @@ export class OpportunitiesRolePageComponent {
     user: { value: 0 },
   };
 
-  constructor(private opportunityService: OpportunityService) {}
+  constructor(
+    private opportunityService: OpportunityService,
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit(): Promise<void> {
+    this.teamId =
+      Number(this.route.snapshot.paramMap.get('teamId')) ||
+      this.opportunityService.getCurrentTeamId();
+
     await this.loadUsers();
-    this.filters = await this.opportunityService.getFilters();
+    this.filters = await this.opportunityService.getFilters(this.teamId);
     console.log('Filtros:', this.filters);
   }
 
   async loadUsers() {
-    this.groupedUsers = await this.opportunityService.loadUsers();
+    this.groupedUsers = await this.opportunityService.loadUsers(this.teamId);
   }
 }
