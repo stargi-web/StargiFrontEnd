@@ -4,7 +4,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageNotificationService } from './shared/components/message-toast/message-toast.service';
-import { NavbarComponent } from './core/navbar/navbar.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 
 @Component({

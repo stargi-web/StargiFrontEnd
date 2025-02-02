@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from './services/authService';
-import { LogInUser } from '../../core/models/LogInUser';
+import { LogInUser } from './models/LogInUser';
 import { MessageNotificationService } from '../../shared/components/message-toast/message-toast.service';
 
 @Component({

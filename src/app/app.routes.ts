@@ -4,8 +4,6 @@ import { roleGuard } from './core/guards/authGuard';
 import { FileStorageComponent } from './features/file-manager/pages/file-storage/file-storage.component';
 import { AdminViewBasesComponent } from './features/roles/admin/admin-view-bases/admin-view-bases.component';
 import { AdminBaseDetailsComponent } from './features/roles/admin/admin-base-details/admin-base-details.component';
-import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
-import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
 import { CreateOpportunityPageComponent } from './features/opportunities/pages/create-opportunity-page/create-opportunity-page.component';
 import { RegisterAttendancePageComponent } from './features/attendance/pages/register-attendance-page/register-attendance-page.component';
 import { UsersAttendancePageComponent } from './features/attendance/pages/users-attendance-page/users-attendance-page.component';
@@ -135,8 +133,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'members', pathMatch: 'full' },
       { path: 'list', component: TeamListPageComponent },
       { path: 'members', component: TeamMembersPageComponent },
-      { path: 'bases', component: ViewAssignedCollectionsComponent },
-      { path: 'base/:baseId/clients', component: ViewAssignedClientsComponent },
     ],
   },
 
@@ -149,7 +145,6 @@ export const routes: Routes = [
     },
     children: [
       // { path: '', component: RrhhSurverysComponent },
-      //{ path: 'create-user', component: AdminCreateUserComponent },
     ],
   },
 ];

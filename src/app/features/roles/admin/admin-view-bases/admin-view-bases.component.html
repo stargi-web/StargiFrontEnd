@@ -1,10 +1,8 @@
 <div class="card-container">
-    @for (collection of collections; track $index) {
-        <div  class="card">
-            <h3>{{ collection.name }}</h3>
-            <button (click)="viewDetails(collection.id)">Detalles</button>
-        </div>
-    }
-    
+  @for (collection of collections; track $index) {
+  <div class="card">
+    <h3>{{ collection.name }}</h3>
+    <button (click)="viewDetails(collection.id)">Detalles</button>
   </div>
-  
+  }
+</div>

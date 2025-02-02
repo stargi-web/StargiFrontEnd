@@ -2,10 +2,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../env/environment';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { LogInUser } from '../../../core/models/LogInUser';
+import { LogInUser } from '../models/LogInUser';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { ROLES } from '../../../core/models/roles';
+import { ROLES } from '../../../shared/models/roles';
 import { UserService } from '../../../features/user-management/services/userService';
 @Injectable({
   providedIn: 'root',
