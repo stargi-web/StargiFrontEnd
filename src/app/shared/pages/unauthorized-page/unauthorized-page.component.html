@@ -1,0 +1,20 @@
+<div class="unauthorized-container">
+  <div class="unauthorized-content p-card">
+    <div class="icon">
+      <i class="pi pi-ban" style="font-size: 4rem; color: #ff4444"></i>
+      <!-- Icono de prohibido de PrimeNG -->
+    </div>
+    <h1 class="title">Acceso no autorizado</h1>
+    <p class="message">
+      Lo sentimos, no tienes permisos para acceder a esta página. Por favor,
+      contacta al administrador si crees que esto es un error.
+    </p>
+    <p-button
+      type="button"
+      label="Volver al inicio"
+      icon="pi pi-home"
+      (click)="goBack()"
+      class="p-button-primary"
+    ></p-button>
+  </div>
+</div>

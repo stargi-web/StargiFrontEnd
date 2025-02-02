@@ -1,0 +1,64 @@
+<p-table
+  [value]="users"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 15, 20]"
+  [paginator]="true"
+  [loading]="false"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Nombre
+          <p-columnFilter type="text" field="firstName" display="menu" />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Apellido
+          <p-columnFilter type="text" field="lastName" display="menu" />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Nombre de usuario
+          <p-columnFilter type="text" field="userName" display="menu" />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Rol
+          <p-columnFilter type="text" field="role" display="menu" />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Eliminar
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td (click)="viewOpportunities(user.id)">
+        {{ user.firstName }}
+      </td>
+      <td>
+        {{ user.lastName }}
+      </td>
+      <td>
+        {{ user.userName }}
+      </td>
+      <td>
+        {{ user.role }}
+      </td>
+      <td>
+        <p-button
+          icon="pi pi-trash"
+          [rounded]="true"
+          (onClick)="deleteUser(user.id, groupedUsers)"
+        />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

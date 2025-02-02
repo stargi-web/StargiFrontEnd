@@ -1,8 +1,0 @@
-<h2 class="title">Seguro que desea eliminar al usuario?</h2>
-
-<p class="subtitle">Seleccione un usuario para que reciba las oportunidades del usuario a eliminar:</p>
-
-<div class="actions">
-  <p-dropdown [options]="groupedUsers" [(ngModel)]="selectedUser" [group]="true" class="dropdown"></p-dropdown>
-  <p-button label="Confirmar" (onClick)="changeAllOppToNewUser(selectedUser)" class="confirm-button"></p-button>
-</div>

@@ -1,0 +1,624 @@
+<app-custom-confirm-dialog
+  #deleteOportunityDialog
+  [message]="
+    selectedOpportunity
+      ? 'Seguro que quiere eliminar ' + selectedOpportunity.businessName + '?'
+      : ''
+  "
+  [header]="'Confirmación de eliminación de oportunidad'"
+  [icon]="'pi pi-trash'"
+  [acceptButtonStyleClass]="'p-button-danger'"
+  [rejectButtonStyleClass]="'p-button-secondary'"
+  (onAccept)="handleDeleteOportunity()"
+></app-custom-confirm-dialog>
+
+<p-table
+  #dataTable
+  [value]="opportunities"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 15, 20]"
+  [loading]="false"
+  [paginator]="true"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder"
+  [scrollable]="true"
+  [lazy]="true"
+  [totalRecords]="totalRecords"
+  (onLazyLoad)="loadOpportunities($event)"
+  [filters]="primeFilters"
+  [scrollHeight]="'68vh'"
+>
+  >
+  <ng-template pTemplate="caption">
+    <div class="status-summary mb-3">
+      <div class="status-item" *ngFor="let status of opportunityStateSummary">
+        <div class="status-sigla">{{ status.sigla }}</div>
+        <div class="status-count">{{ status.count }}</div>
+      </div>
+      <div class="status-item">
+        <div class="status-sigla">Total</div>
+        <div class="status-count">{{ totalRecords }}</div>
+      </div>
+    </div>
+    <div class="flex align-items-center">
+      <p-button
+        label="Limpiar Filtros"
+        [outlined]="true"
+        icon="pi pi-filter-slash"
+        (onClick)="clear(dataTable)"
+      />
+      <p-button
+        [outlined]="true"
+        [severity]="'info'"
+        class="custom-button"
+        (click)="viewDeleted()"
+        class="ml-2"
+      >
+        <ng-template pTemplate="content">
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="isViewDeleted"
+              (click)="viewDeleted()"
+            ></p-checkbox>
+            <label class="ml-1">{{ "Ver Borrados" }}</label>
+          </div>
+        </ng-template>
+      </p-button>
+
+      <p-button
+        [outlined]="true"
+        [severity]="'info'"
+        class="custom-button ml-2"
+        (click)="viewClosed()"
+      >
+        <ng-template pTemplate="content">
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="isViewClosed"
+              (click)="viewClosed()"
+            ></p-checkbox>
+            <label class="ml-1">{{ "Ver Cerrados/No Cerrados" }}</label>
+          </div>
+        </ng-template>
+      </p-button>
+
+      <p-button
+        *ngIf="viewNotAsignedButton"
+        [outlined]="true"
+        [severity]="'info'"
+        class="custom-button ml-2"
+        (click)="viewNotAsigned()"
+      >
+        <ng-template pTemplate="content">
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="isViewNotAsigned"
+              (click)="viewNotAsigned()"
+            ></p-checkbox>
+            <label class="ml-1">{{ "Ver No Asignados" }}</label>
+          </div>
+        </ng-template>
+      </p-button>
+
+      <div class="ml-auto">
+        <p-button
+          *ngIf="urgentOpportunitiesCount > 0"
+          icon="pi pi-exclamation-circle"
+          label="Urgentes: {{ urgentOpportunitiesCount }}"
+          class="p-button-danger"
+        ></p-button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th pFrozenColumn>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Acción
+        </div>
+      </th>
+      <th pFrozenColumn>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Asignado
+
+          <p-columnFilter
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            [showApplyButton]="false"
+            [showClearButton]="false"
+          >
+            <ng-template pTemplate="header">
+              <div class="px-3 pt-3 pb-0">
+                <span class="font-bold">Usuarios</span>
+              </div>
+            </ng-template>
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [(ngModel)]="selectedUsers"
+                [options]="groupedUsers"
+                [group]="true"
+                placeholder="Seleccione"
+                (onChange)="
+                  onAsignedUsersChanged($event.value); filter($event.value)
+                "
+                optionLabel="label"
+              >
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.label }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+              <div class="mt-5">
+                <p-button
+                  [outlined]="true"
+                  [severity]="'info'"
+                  label="Limpiar"
+                  (onClick)="cleanAsignedUsersFilter(); filter()"
+                ></p-button>
+              </div>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Ruc
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="ruc"
+            display="menu"
+          />
+        </div>
+      </th>
+
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Nombre
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="businessName"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Num Opp Sfa
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="SfaNumber"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Creación Sfa
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="oppSfaDateCreation"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Tipo
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="type"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Unidades
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="units"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Monto
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="amount"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Producto
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="product"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th pSortableColumn="createdAt">
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Creación
+          <p-sortIcon field="createdAt" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="createdAt"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Modificado
+          <p-sortIcon field="updatedAt" />
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="updatedAt"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Estado
+          <p-columnFilter
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            [showApplyButton]="false"
+            [showClearButton]="false"
+          >
+            <ng-template pTemplate="header">
+              <div class="px-3 pt-3 pb-0">
+                <span class="font-bold"></span>
+              </div>
+            </ng-template>
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [(ngModel)]="selectedStates"
+                [options]="states"
+                placeholder="Seleccione"
+                (onChange)="onStateChanged($event.value); filter($event.value)"
+                optionLabel="label"
+              >
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.label }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+              <div class="mt-5">
+                <p-button
+                  [outlined]="true"
+                  [severity]="'info'"
+                  label="Limpiar"
+                  (onClick)="cleanStatesFilter(); filter()"
+                ></p-button>
+              </div>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Prox. Interacción
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="nextInteraction"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Cierre
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="date"
+            field="estimatedClosingDate"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Comentario
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="commentary"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Persona Contactada
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="contactName"
+            display="menu"
+          />
+        </div>
+      </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Teléfono
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="contactNumber"
+            display="menu"
+          />
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
+    <tr [ngClass]="getRowClass(opportunity)">
+      <td pFrozenColumn>
+        @if(editingRowIndex===rowIndex){
+        <p-button
+          label="Guardar"
+          (onClick)="saveChanges(opportunity)"
+        ></p-button>
+        <p-button label="Cancelar" (onClick)="cancelEditing()"></p-button>
+        } @else{
+        <p-button
+          icon="pi pi-cog"
+          [rounded]="true"
+          (onClick)="startEditing(rowIndex)"
+          *ngIf="editingRowIndex !== rowIndex"
+        ></p-button>
+        <p-button
+          *ngIf="!isViewDeleted"
+          icon="pi pi-trash"
+          [rounded]="true"
+          (onClick)="showDeleteOpportunityDialog($event, opportunity)"
+        />
+        }
+      </td>
+      <td pFrozenColumn>
+        @if(assignUserMode&&indexAssignUserMode===rowIndex){
+        <p-dropdown
+          [options]="groupedUsers"
+          [(ngModel)]="selectedUser"
+          placeholder="Seleccione un usuario"
+          [group]="true"
+          appendTo="body"
+        >
+          <ng-template let-group pTemplate="group">
+            <div class="flex align-items-center">
+              <span>{{ group.label }}</span>
+            </div>
+          </ng-template>
+        </p-dropdown>
+        <i
+          class="pi pi-save"
+          style="cursor: pointer; margin-left: 0.5rem"
+          (click)="changeUser(selectedUser, opportunity.id)"
+        ></i>
+        <i
+          class="pi pi-times"
+          style="cursor: pointer; margin-left: 0.5rem"
+          (click)="disableEditUserMode()"
+        ></i>
+        } @else {
+        {{
+          opportunity.user
+            ? opportunity.user.firstName + " " + opportunity.user.lastName
+            : "No asignado"
+        }}<i
+          class="pi pi-cog ml-1"
+          style="cursor: pointer"
+          (click)="enableEditUserMode(rowIndex)"
+        ></i>
+        }
+      </td>
+      <td (click)="openRecordsDialog(opportunity.id)">
+        @if (editingRowIndex===rowIndex) {
+        <input type="text" pInputText [(ngModel)]="opportunity.ruc" />
+        } @else {
+        {{ opportunity.ruc }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex) {
+        <input type="text" pInputText [(ngModel)]="opportunity.businessName" />
+        } @else {
+        {{ opportunity.businessName }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex) {
+        <p-inputNumber [(ngModel)]="opportunity.SfaNumber" />
+        } @else {
+        {{ opportunity.SfaNumber }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex) {
+        <p-calendar
+          [(ngModel)]="opportunity.oppSfaDateCreation"
+          appendTo="body"
+          dateFormat="dd/mm/yy"
+        ></p-calendar>
+        } @else {
+        {{ opportunity.oppSfaDateCreation | date : "dd/MM/yyyy" }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex) {
+        <p-dropdown
+          [(ngModel)]="opportunity.type"
+          appendTo="body"
+          [options]="opportunityTypes"
+        ></p-dropdown>
+        } @else {
+        {{ opportunity.type }}
+        }
+      </td>
+      <td>
+        @if(editingRowIndex===rowIndex){
+        <p-inputNumber
+          [(ngModel)]="opportunity.units"
+          mode="decimal"
+          [useGrouping]="false"
+        />
+        } @else{
+        {{ opportunity.units }}
+        }
+      </td>
+      <td>
+        @if(editingRowIndex===rowIndex){
+        <p-inputNumber
+          [(ngModel)]="opportunity.amount"
+          mode="decimal"
+          [useGrouping]="false"
+        />
+        } @else{
+        {{ opportunity.amount }}
+        }
+      </td>
+      <td>
+        @if(editingRowIndex===rowIndex){
+        <p-dropdown
+          [(ngModel)]="opportunity.product"
+          appendTo="body"
+          [options]="products"
+        ></p-dropdown>
+        } @else {
+        {{ opportunity.product }}
+        }
+      </td>
+      <td>
+        {{ opportunity.createdAt | date : "dd/MM/yyyy" }}
+      </td>
+      <td>
+        {{ opportunity.updatedAt | date : "dd/MM/yyyy" }}
+      </td>
+      <td>
+        @if(editingRowIndex===rowIndex){
+        <p-dropdown
+          [(ngModel)]="opportunity.state"
+          appendTo="body"
+          [options]="states"
+        ></p-dropdown>
+        } @else {
+        {{ opportunity.state }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex) {
+        <p-calendar
+          [(ngModel)]="opportunity.nextInteraction"
+          appendTo="body"
+          dateFormat="dd/mm/yy"
+        ></p-calendar>
+        } @else {
+        {{ opportunity.nextInteraction | date : "dd/MM/yyyy" }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex) {
+        <p-calendar
+          [(ngModel)]="opportunity.estimatedClosingDate"
+          appendTo="body"
+          dateFormat="dd/mm/yy"
+        ></p-calendar>
+        } @else {
+        {{ opportunity.estimatedClosingDate | date : "dd/MM/yyyy" }}
+        }
+      </td>
+      <td>
+        @if(editingRowIndex===rowIndex){
+        <textarea
+          pInputTextarea
+          [(ngModel)]="opportunity.commentary"
+        ></textarea>
+        } @else {
+        {{ opportunity.commentary }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex){
+        <input type="text" pInputText [(ngModel)]="opportunity.contactName" />
+        } @else {
+        {{ opportunity.contactName }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex){
+        <input type="text" pInputText [(ngModel)]="opportunity.contactNumber" />
+        } @else {
+        {{ opportunity.contactNumber }}
+        }
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
