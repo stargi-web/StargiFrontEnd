@@ -24,7 +24,6 @@ export class OpportunitiesTeamPageComponent {
         'Prospecto desarrollado',
       ],
     },
-    user: { value: 0 },
   };
 
   constructor(
