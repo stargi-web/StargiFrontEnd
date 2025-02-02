@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../../core/services/nestjs-services/userService';
+import { UserService } from '../../../user-management/services/userService';
 import { OpportunityService } from '../../../opportunities/services/opportunityService';
 import { SelectItemGroup } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';

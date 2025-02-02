@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserService } from '../../../core/services/nestjs-services/userService';
+import { UserService } from '../../user-management/services/userService';
 import { SelectItemGroup } from 'primeng/api';
 
 @Injectable({

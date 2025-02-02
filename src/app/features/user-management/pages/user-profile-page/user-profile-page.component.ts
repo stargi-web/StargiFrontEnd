@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { UserModel } from '../../../core/models/userModel';
-import { UserService } from '../../../core/services/nestjs-services/userService';
+import { UserModel } from '../../models/userModel';
+import { UserService } from '../../services/userService';
 import { CardModule } from 'primeng/card';
 import { PasswordModule } from 'primeng/password';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+
 @Component({
-  selector: 'app-profile-view',
+  selector: 'app-user-profile-page',
   standalone: true,
   imports: [CardModule, PasswordModule, FormsModule, ButtonModule],
-  templateUrl: './profile-view.component.html',
-  styleUrl: './profile-view.component.css',
+  templateUrl: './user-profile-page.component.html',
+  styleUrl: './user-profile-page.component.css',
 })
-export class ProfileViewComponent implements OnInit {
+export class UserProfilePageComponent {
   user!: UserModel;
   password?: string;
   userId!: number;

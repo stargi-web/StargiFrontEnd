@@ -1,16 +1,14 @@
 import { Routes } from '@angular/router';
-import { AuthComponent } from './features/auth/auth.component';
+import { AuthComponent } from './core/auth/auth.component';
 import { roleGuard } from './core/guards/authGuard';
-import { ProfileViewComponent } from './shared/components/profile-view/profile-view.component';
-import { FileStorageComponent } from './features/file-manager/file-storage/file-storage.component';
-import { AdminUsersViewComponent } from './features/roles/admin/admin-users-view/admin-users-view.component';
+import { FileStorageComponent } from './features/file-manager/pages/file-storage/file-storage.component';
 import { AdminTeamsViewComponent } from './features/roles/admin/admin-teams-view/admin-teams-view.component';
 
 import { AdminViewBasesComponent } from './features/roles/admin/admin-view-bases/admin-view-bases.component';
 import { AdminBaseDetailsComponent } from './features/roles/admin/admin-base-details/admin-base-details.component';
-import { AdminCreateUserComponent } from './features/roles/admin/admin-create-user/admin-create-user.component';
+
 import { SupervisorTeamMembersComponent } from './features/roles/supervisor/supervisor-team-members/supervisor-team-members.component';
-import { SupervisorCreateMemberComponent } from './features/roles/supervisor/supervisor-create-member/supervisor-create-member.component';
+
 import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
 
@@ -20,6 +18,9 @@ import { RegisterAttendancePageComponent } from './features/attendance/pages/reg
 import { UsersAttendancePageComponent } from './features/attendance/pages/users-attendance-page/users-attendance-page.component';
 import { OpportunitiesTeamPageComponent } from './features/opportunities/pages/opportunities-team-page/opportunities-team-page.component';
 import { OpportunitiesUserPageComponent } from './features/opportunities/pages/opportunities-user-page/opportunities-user-page.component';
+import { UserListPageComponent } from './features/user-management/pages/user-list-page/user-list-page.component';
+import { CreateUserPageComponent } from './features/user-management/pages/create-user-page/create-user-page.component';
+import { UserProfilePageComponent } from './features/user-management/pages/user-profile-page/user-profile-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -28,7 +29,7 @@ export const routes: Routes = [
   // Rutas comunes
   {
     path: 'profile',
-    component: ProfileViewComponent,
+    component: UserProfilePageComponent,
     canActivate: [roleGuard],
     data: {
       expectedRoles: [
@@ -106,11 +107,28 @@ export const routes: Routes = [
     data: { expectedRoles: ['admin', 'HHRR'] },
     children: [
       { path: '', redirectTo: 'users', pathMatch: 'full' },
-      { path: 'users', component: AdminUsersViewComponent },
       { path: 'teams', component: AdminTeamsViewComponent },
       { path: 'bases', component: AdminViewBasesComponent },
       { path: 'base-detail/:id', component: AdminBaseDetailsComponent },
-      { path: 'create-user', component: AdminCreateUserComponent },
+    ],
+  },
+
+  {
+    path: 'user',
+    canActivate: [roleGuard],
+    data: {
+      expectedRoles: [
+        'admin',
+        'executive',
+        'executivegpon',
+        'supervisor',
+        'HHRR',
+      ],
+    },
+    children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      { path: 'list', component: UserListPageComponent },
+      { path: 'create', component: CreateUserPageComponent },
     ],
   },
 
@@ -122,7 +140,6 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'members', pathMatch: 'full' },
       { path: 'members', component: SupervisorTeamMembersComponent },
-      { path: 'create-user', component: SupervisorCreateMemberComponent },
       { path: 'bases', component: ViewAssignedCollectionsComponent },
       { path: 'base/:baseId/clients', component: ViewAssignedClientsComponent },
     ],

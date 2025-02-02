@@ -9,7 +9,7 @@ import { MessageService, SelectItemGroup } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../../../../core/services/nestjs-services/userService';
+import { UserService } from '../../../user-management/services/userService';
 @Component({
   selector: 'app-admin-base-details',
   standalone: true,

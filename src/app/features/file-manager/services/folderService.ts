@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; // Importamos HttpClient para hacer peticiones HTTP
 import { Observable } from 'rxjs'; // Para manejar las respuestas asincrónicas
 import { environment } from '../../../../env/environment'; // Asegúrate de tener la URL base de tu API
-import { Folder } from '../../../core/models/folderStorageModel';
+import { Folder } from '../models/folderStorageModel';
 
 @Injectable({
   providedIn: 'root',

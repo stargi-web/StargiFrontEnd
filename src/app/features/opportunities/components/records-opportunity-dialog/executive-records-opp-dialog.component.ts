@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { OpportunityRecordModel } from '../../../../core/models/opportunityRecordMode';
+import { OpportunityRecordModel } from '../../models/opportunityRecordMode';
 import { OpportunityRecordService } from '../../services/opportunityRecordService';
 @Component({
   selector: 'app-executive-records-opp-dialog',

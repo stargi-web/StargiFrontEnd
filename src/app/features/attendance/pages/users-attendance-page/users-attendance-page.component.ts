@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../../core/services/nestjs-services/userService';
+import { UserService } from '../../../user-management/services/userService';
 import { AttendanceService } from '../../services/attendanceService';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { saveAs } from 'file-saver';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { DeleteUserDialogComponent } from '../../../../shared/components/delete-user-dialog/delete-user-dialog.component';
+import { DeleteUserDialogComponent } from '../../../user-management/components/delete-user-dialog/delete-user-dialog.component';
 import { AttendanceTableComponent } from '../../components/attendance-table/attendance-table.component';
 
 @Component({

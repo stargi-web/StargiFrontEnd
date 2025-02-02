@@ -3,21 +3,42 @@
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="p-field">
         <label for="firstName">Nombre</label>
-        <input id="firstName" type="text" pInputText formControlName="firstName" />
+        <input
+          id="firstName"
+          type="text"
+          pInputText
+          formControlName="firstName"
+        />
       </div>
       <div class="p-field">
         <label for="lastName">Apellido</label>
-        <input id="lastName" type="text" pInputText formControlName="lastName" />
+        <input
+          id="lastName"
+          type="text"
+          pInputText
+          formControlName="lastName"
+        />
       </div>
       <div class="p-field">
         <label for="userName">Nombre de usuario</label>
-        <input id="userName" type="text" pInputText formControlName="userName" />
+        <input
+          id="userName"
+          type="text"
+          pInputText
+          formControlName="userName"
+        />
       </div>
       <div class="p-field">
         <label for="password">Contraseña</label>
-        <input id="password" type="password" pPassword formControlName="password" [feedback]="false"/>
+        <input
+          id="password"
+          type="password"
+          pPassword
+          formControlName="password"
+          [feedback]="false"
+        />
       </div>
-      <div class="p-field">
+      <div class="p-field" *ngIf="!isSupervisor">
         <label for="role">Rol</label>
         <p-dropdown
           id="role"

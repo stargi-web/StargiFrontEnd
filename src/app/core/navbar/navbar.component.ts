@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api'; // Importa MenuItem de PrimeNG
 import { MenubarModule } from 'primeng/menubar'; // Importa el módulo de Menubar
 import { ROLES } from '../models/roles';
-import { AuthService } from '../../features/auth/services/authService';
+import { AuthService } from '../auth/services/authService';
 import { Button } from 'primeng/button';
 
 @Component({
@@ -22,15 +22,15 @@ export class NavbarComponent {
   navLinks = [
     // Rutas de administración
     {
-      path: '/admin/users',
+      path: '/user/list',
       label: 'Usuarios',
       roles: [ROLES.ADMIN],
       icon: 'pi pi-user',
     },
     {
-      path: '/admin/create-user',
+      path: '/user/create',
       label: 'Crear Usuario',
-      roles: [ROLES.ADMIN, ROLES.HHRR], // Múltiples roles
+      roles: [ROLES.ADMIN, ROLES.HHRR, ROLES.SUPERVISOR], // Múltiples roles
       icon: 'pi pi-user-plus',
     },
     {
@@ -56,13 +56,6 @@ export class NavbarComponent {
       label: 'Equipo',
       roles: [ROLES.SUPERVISOR],
       icon: 'pi pi-users',
-    },
-
-    {
-      path: '/team/create-user',
-      label: 'Crear Usuario',
-      roles: [ROLES.SUPERVISOR], // Múltiples roles
-      icon: 'pi pi-user-plus',
     },
 
     {

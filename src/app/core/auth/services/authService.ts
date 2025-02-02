@@ -6,7 +6,7 @@ import { LogInUser } from '../../../core/models/LogInUser';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { ROLES } from '../../../core/models/roles';
-import { UserService } from '../../../core/services/nestjs-services/userService';
+import { UserService } from '../../../features/user-management/services/userService';
 @Injectable({
   providedIn: 'root',
 })
@@ -68,7 +68,7 @@ export class AuthService {
       // Redirige a la ruta por defecto según el rol
       switch (role) {
         case 'admin':
-          this.router.navigate(['/admin/users']); // Ruta por defecto para admin
+          this.router.navigate(['/user']); // Ruta por defecto para admin
           break;
         case 'supervisor':
           this.userService.getLeadingTeamInfo(this.userId).subscribe({

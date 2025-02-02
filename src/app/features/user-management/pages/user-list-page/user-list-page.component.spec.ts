@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminCreateUserComponent } from './admin-create-user.component';
+import { UserListPageComponent } from './user-list-page.component';
 
-describe('AdminCreateUserComponent', () => {
-  let component: AdminCreateUserComponent;
-  let fixture: ComponentFixture<AdminCreateUserComponent>;
+describe('UserListPageComponent', () => {
+  let component: UserListPageComponent;
+  let fixture: ComponentFixture<UserListPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminCreateUserComponent]
+      imports: [UserListPageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AdminCreateUserComponent);
+    fixture = TestBed.createComponent(UserListPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

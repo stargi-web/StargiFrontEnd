@@ -5,8 +5,8 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
-import { UserService } from '../../../../core/services/nestjs-services/userService';
-import { UserModel } from '../../../../core/models/userModel';
+import { UserService } from '../../../user-management/services/userService';
+import { UserModel } from '../../../user-management/models/userModel';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({

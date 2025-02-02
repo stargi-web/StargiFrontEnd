@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { UserService } from '../../../../core/services/nestjs-services/userService';
-import { UserModel } from '../../../../core/models/userModel';
+import { UserService } from '../../../user-management/services/userService';
+import { UserModel } from '../../../user-management/models/userModel';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-supervisor-team-members',
