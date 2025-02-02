@@ -12,7 +12,6 @@ export const roleGuard: CanActivateFn = (route, state) => {
   if (currentRole && expectedRoles.includes(currentRole)) {
     return true;
   } else {
-    console.log('No tiene permisos para acceder');
     router.navigate(['/unauthorized']);
     return false;
   }

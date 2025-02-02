@@ -191,6 +191,6 @@ export class NavbarComponent {
   }
 
   goToProfile() {
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/user/profile']);
   }
 }

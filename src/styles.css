@@ -2,16 +2,4 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
-.small-font {
-    font-size: 12px; 
-}
-p-menubar {
-    position: relative;
-    z-index: 1000; /* Un número alto para asegurarte de que esté por encima de otros elementos */
-  }
-  .ui-dropdown-panel,
-  .ui-multiselect-panel,
-  .ui-calendar .ui-datepicker {
-    z-index: 1050 !important; 
-}
-  
+@import "primeflex/primeflex.css";
