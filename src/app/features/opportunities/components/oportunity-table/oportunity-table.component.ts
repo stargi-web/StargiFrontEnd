@@ -20,7 +20,7 @@ import {
   states,
 } from '../../models/constantes';
 import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
-import { MessageNotificationService } from '../../../../shared/components/message-toast/message-toast.service';
+import { MessageNotificationService } from '../../../../shared/services/message-toast.service';
 
 @Component({
   selector: 'app-oportunity-table',

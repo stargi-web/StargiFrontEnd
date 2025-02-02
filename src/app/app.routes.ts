@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 import { AuthComponent } from './core/auth/auth.component';
 import { roleGuard } from './core/guards/authGuard';
 import { FileStorageComponent } from './features/file-manager/pages/file-storage/file-storage.component';
-import { AdminViewBasesComponent } from './features/roles/admin/admin-view-bases/admin-view-bases.component';
-import { AdminBaseDetailsComponent } from './features/roles/admin/admin-base-details/admin-base-details.component';
 import { CreateOpportunityPageComponent } from './features/opportunities/pages/create-opportunity-page/create-opportunity-page.component';
 import { RegisterAttendancePageComponent } from './features/attendance/pages/register-attendance-page/register-attendance-page.component';
 import { UsersAttendancePageComponent } from './features/attendance/pages/users-attendance-page/users-attendance-page.component';
@@ -14,10 +12,14 @@ import { CreateUserPageComponent } from './features/user-management/pages/create
 import { UserProfilePageComponent } from './features/user-management/pages/user-profile-page/user-profile-page.component';
 import { TeamListPageComponent } from './features/team-management/pages/team-list-page/team-list-page.component';
 import { TeamMembersPageComponent } from './features/team-management/pages/team-members-page/team-members-page.component';
+import { ClientCollectionsPageComponent } from './features/client-management/pages/client-collections-page/client-collections-page.component';
+import { ClientCollectionDetailsPageComponent } from './features/client-management/pages/client-collection-details-page/client-collection-details-page.component';
+import { UnauthorizedPageComponent } from './shared/pages/unauthorized-page/unauthorized-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: AuthComponent },
+  { path: 'unauthorized', component: UnauthorizedPageComponent },
 
   // Rutas comunes
   {
@@ -93,18 +95,6 @@ export const routes: Routes = [
     ],
   },
 
-  // Rutas de administración
-  {
-    path: 'admin',
-    canActivate: [roleGuard],
-    data: { expectedRoles: ['admin', 'HHRR'] },
-    children: [
-      { path: '', redirectTo: 'users', pathMatch: 'full' },
-      { path: 'bases', component: AdminViewBasesComponent },
-      { path: 'base-detail/:id', component: AdminBaseDetailsComponent },
-    ],
-  },
-
   {
     path: 'user',
     canActivate: [roleGuard],
@@ -133,6 +123,19 @@ export const routes: Routes = [
       { path: '', redirectTo: 'members', pathMatch: 'full' },
       { path: 'list', component: TeamListPageComponent },
       { path: 'members', component: TeamMembersPageComponent },
+    ],
+  },
+  {
+    path: 'client',
+    canActivate: [roleGuard],
+    data: { expectedRoles: ['admin', 'supervisor'] },
+    children: [
+      { path: '', redirectTo: 'collection', pathMatch: 'full' },
+      { path: 'collection', component: ClientCollectionsPageComponent },
+      {
+        path: 'collection/:id',
+        component: ClientCollectionDetailsPageComponent,
+      },
     ],
   },
 

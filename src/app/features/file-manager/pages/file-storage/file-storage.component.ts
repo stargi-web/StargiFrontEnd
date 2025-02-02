@@ -11,7 +11,7 @@ import { UserService } from '../../../user-management/services/userService';
 import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { FirebaseCloudStorageService } from '../../services/firebaseCloudStorageService';
-import { MessageNotificationService } from '../../../../shared/components/message-toast/message-toast.service';
+import { MessageNotificationService } from '../../../../shared/services/message-toast.service';
 import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
 
 @Component({

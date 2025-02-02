@@ -20,7 +20,6 @@ export class NavbarComponent {
 
   // Arreglo de enlaces con sus roles permitidos
   navLinks = [
-    // Rutas de administración
     {
       path: '/user/list',
       label: 'Usuarios',
@@ -46,7 +45,7 @@ export class NavbarComponent {
       icon: 'pi pi-users',
     },
     {
-      path: '/admin/bases',
+      path: '/client/collection',
       label: 'Bases',
       roles: [ROLES.ADMIN],
       icon: 'pi pi-database',

@@ -4,13 +4,13 @@ import { ClientCollectionService } from '../../../../core/services/nestjs-servic
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-admin-view-bases',
+  selector: 'app-client-collections-page',
   standalone: true,
   imports: [],
-  templateUrl: './admin-view-bases.component.html',
-  styleUrl: './admin-view-bases.component.css',
+  templateUrl: './client-collections-page.component.html',
+  styleUrl: './client-collections-page.component.css',
 })
-export class AdminViewBasesComponent implements OnInit {
+export class ClientCollectionsPageComponent {
   collections: ClientCollection[] = [];
   constructor(
     private clientCollectionService: ClientCollectionService,
@@ -25,6 +25,6 @@ export class AdminViewBasesComponent implements OnInit {
     });
   }
   viewDetails(id: string) {
-    this.router.navigate(['/admin/base-detail', id]);
+    this.router.navigate(['/client/collection', id]);
   }
 }

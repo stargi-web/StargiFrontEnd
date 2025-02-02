@@ -11,7 +11,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../user-management/services/userService';
 @Component({
-  selector: 'app-admin-base-details',
+  selector: 'app-client-collection-details-page',
   standalone: true,
   imports: [
     TableModule,
@@ -22,11 +22,10 @@ import { UserService } from '../../../user-management/services/userService';
     FormsModule,
     MultiSelectModule,
   ],
-  providers: [MessageService],
-  templateUrl: './admin-base-details.component.html',
-  styleUrl: './admin-base-details.component.css',
+  templateUrl: './client-collection-details-page.component.html',
+  styleUrl: './client-collection-details-page.component.css',
 })
-export class AdminBaseDetailsComponent implements OnInit {
+export class ClientCollectionDetailsPageComponent {
   groupedUsers!: SelectItemGroup[];
   uploadedFiles: any[] = [];
   disable = false;
