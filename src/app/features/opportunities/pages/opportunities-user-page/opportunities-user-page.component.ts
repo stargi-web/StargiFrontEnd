@@ -26,10 +26,7 @@ export class OpportunitiesUserPageComponent {
     user: { value: 0 },
   };
 
-  constructor(
-    private opportunityService: OpportunityService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.userId =

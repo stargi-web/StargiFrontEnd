@@ -14,17 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 export class OpportunitiesTeamPageComponent {
   teamId: number = 0;
   groupedUsers!: SelectItemGroup[];
-  filters = {
-    isCurrent: { value: true },
-    state: {
-      value: [
-        'Potenciales',
-        'Prospecto',
-        'Prospecto calificado',
-        'Prospecto desarrollado',
-      ],
-    },
-  };
+  filters = {};
 
   constructor(
     private opportunityService: OpportunityService,
@@ -38,7 +28,6 @@ export class OpportunitiesTeamPageComponent {
 
     await this.loadUsers();
     this.filters = await this.opportunityService.getFilters(this.teamId);
-    console.log('Filtros:', this.filters);
   }
 
   async loadUsers() {
