@@ -2,18 +2,11 @@ import { Routes } from '@angular/router';
 import { AuthComponent } from './core/auth/auth.component';
 import { roleGuard } from './core/guards/authGuard';
 import { FileStorageComponent } from './features/file-manager/pages/file-storage/file-storage.component';
-import { AdminTeamsViewComponent } from './features/roles/admin/admin-teams-view/admin-teams-view.component';
-
 import { AdminViewBasesComponent } from './features/roles/admin/admin-view-bases/admin-view-bases.component';
 import { AdminBaseDetailsComponent } from './features/roles/admin/admin-base-details/admin-base-details.component';
-
-import { SupervisorTeamMembersComponent } from './features/roles/supervisor/supervisor-team-members/supervisor-team-members.component';
-
 import { ViewAssignedCollectionsComponent } from './shared/components/view-assigned-collections/view-assigned-collections.component';
 import { ViewAssignedClientsComponent } from './shared/components/view-assigned-clients/view-assigned-clients.component';
-
 import { CreateOpportunityPageComponent } from './features/opportunities/pages/create-opportunity-page/create-opportunity-page.component';
-
 import { RegisterAttendancePageComponent } from './features/attendance/pages/register-attendance-page/register-attendance-page.component';
 import { UsersAttendancePageComponent } from './features/attendance/pages/users-attendance-page/users-attendance-page.component';
 import { OpportunitiesTeamPageComponent } from './features/opportunities/pages/opportunities-team-page/opportunities-team-page.component';
@@ -21,6 +14,8 @@ import { OpportunitiesUserPageComponent } from './features/opportunities/pages/o
 import { UserListPageComponent } from './features/user-management/pages/user-list-page/user-list-page.component';
 import { CreateUserPageComponent } from './features/user-management/pages/create-user-page/create-user-page.component';
 import { UserProfilePageComponent } from './features/user-management/pages/user-profile-page/user-profile-page.component';
+import { TeamListPageComponent } from './features/team-management/pages/team-list-page/team-list-page.component';
+import { TeamMembersPageComponent } from './features/team-management/pages/team-members-page/team-members-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -107,7 +102,6 @@ export const routes: Routes = [
     data: { expectedRoles: ['admin', 'HHRR'] },
     children: [
       { path: '', redirectTo: 'users', pathMatch: 'full' },
-      { path: 'teams', component: AdminTeamsViewComponent },
       { path: 'bases', component: AdminViewBasesComponent },
       { path: 'base-detail/:id', component: AdminBaseDetailsComponent },
     ],
@@ -136,10 +130,11 @@ export const routes: Routes = [
   {
     path: 'team',
     canActivate: [roleGuard],
-    data: { expectedRoles: ['supervisor'] },
+    data: { expectedRoles: ['admin', 'supervisor'] },
     children: [
       { path: '', redirectTo: 'members', pathMatch: 'full' },
-      { path: 'members', component: SupervisorTeamMembersComponent },
+      { path: 'list', component: TeamListPageComponent },
+      { path: 'members', component: TeamMembersPageComponent },
       { path: 'bases', component: ViewAssignedCollectionsComponent },
       { path: 'base/:baseId/clients', component: ViewAssignedClientsComponent },
     ],

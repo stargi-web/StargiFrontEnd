@@ -4,15 +4,15 @@ import { UserService } from '../../../user-management/services/userService';
 import { UserModel } from '../../../user-management/models/userModel';
 import { CommonModule } from '@angular/common';
 @Component({
-  selector: 'app-supervisor-team-members',
+  selector: 'app-team-members-page',
   standalone: true,
   imports: [TableModule, CommonModule],
-  templateUrl: './supervisor-team-members.component.html',
-  styleUrl: './supervisor-team-members.component.css',
+  templateUrl: './team-members-page.component.html',
+  styleUrl: './team-members-page.component.css',
 })
-export class SupervisorTeamMembersComponent implements OnInit {
+export class TeamMembersPageComponent {
   users!: UserModel[];
-  loading = true;
+
   teamId!: number;
   constructor(private userService: UserService) {}
   ngOnInit(): void {
@@ -25,7 +25,6 @@ export class SupervisorTeamMembersComponent implements OnInit {
       this.userService.getUsersByTeamId(this.teamId).subscribe({
         next: (response) => {
           this.users = response;
-          this.loading = false;
         },
         error: (error) => {
           console.error(error);

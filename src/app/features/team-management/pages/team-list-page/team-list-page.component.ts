@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TeamCardModel } from '../../../../core/models/teamCardModel';
-import { TeamService } from '../../../../core/services/nestjs-services/teamService';
+import { TeamCardModel } from '../../models/teamCardModel';
+import { TeamService } from '../../services/teamService';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -9,19 +9,20 @@ import { UserService } from '../../../user-management/services/userService';
 import { UserModel } from '../../../user-management/models/userModel';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
 @Component({
-  selector: 'app-admin-teams-view',
+  selector: 'app-team-list-page',
   standalone: true,
   imports: [CardModule, TableModule, ButtonModule, DropdownModule, FormsModule],
-  templateUrl: './admin-teams-view.component.html',
-  styleUrl: './admin-teams-view.component.css',
+  templateUrl: './team-list-page.component.html',
+  styleUrl: './team-list-page.component.css',
 })
-export class AdminTeamsViewComponent implements OnInit {
+export class TeamListPageComponent {
   editingRowIndex: number | null = null;
   supervisors?: UserModel[];
   selectedSupervisor?: UserModel;
   teams!: TeamCardModel[];
-  loading = true;
+
   constructor(
     private teamService: TeamService,
     private userService: UserService,
@@ -35,7 +36,6 @@ export class AdminTeamsViewComponent implements OnInit {
     this.teamService.getTeams().subscribe({
       next: (response) => {
         this.teams = response;
-        this.loading = false;
       },
       error: (error) => console.error(error),
     });

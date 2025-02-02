@@ -5,7 +5,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { TeamService } from '../../../../core/services/nestjs-services/teamService';
+import { TeamService } from '../../../team-management/services/teamService';
 import { UserService } from '../../services/userService';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';

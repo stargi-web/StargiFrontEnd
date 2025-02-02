@@ -40,7 +40,7 @@ export class NavbarComponent {
       icon: 'pi pi-envelope',
     },
     {
-      path: '/admin/teams',
+      path: '/team/list',
       label: 'Equipos',
       roles: [ROLES.ADMIN],
       icon: 'pi pi-users',

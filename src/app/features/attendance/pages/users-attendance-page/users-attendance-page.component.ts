@@ -29,7 +29,6 @@ import { AttendanceTableComponent } from '../../components/attendance-table/atte
 export class UsersAttendancePageComponent {
   showAttendanceTable = false;
   users: any;
-  loading = true;
   constructor(
     public dialogService: DialogService,
     private userService: UserService,
@@ -47,7 +46,6 @@ export class UsersAttendancePageComponent {
     this.userService.getUsers().subscribe({
       next: (response) => {
         this.users = response;
-        this.loading = false;
       },
       error: (error) => console.error(error),
     });

@@ -22,7 +22,7 @@
   <!-- Renderización condicional del AttendanceTableComponent -->
   <app-attendance-table *ngIf="showAttendanceTable"></app-attendance-table>
 
-  <p-table [value]="users" [loading]="loading">
+  <p-table [value]="users">
     <ng-template pTemplate="header">
       <tr>
         <th>Nombre</th>

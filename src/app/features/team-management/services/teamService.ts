@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../env/environment';
 import { Observable } from 'rxjs';
-import { CreateTeamDto } from '../../models/createTeamDto';
-import { AssignLeaderTeamDto } from '../../models/assingLeaderTeamDto';
-import { AssignTeamMemberDto } from '../../models/assingTeamMemberDto';
+import { CreateTeamDto } from '../models/createTeamDto';
+import { AssignLeaderTeamDto } from '../../../features/team-management/models/assingLeaderTeamDto';
+import { AssignTeamMemberDto } from '../../../features/team-management/models/assingTeamMemberDto';
 
 @Injectable({
   providedIn: 'root',

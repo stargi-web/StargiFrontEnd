@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-import { TeamService } from '../../../../core/services/nestjs-services/teamService';
+import { TeamService } from '../../services/teamService';
 import { ButtonModule } from 'primeng/button';
 @Component({
-  selector: 'app-admin-create-team-dialog',
+  selector: 'app-create-team-dialog',
   standalone: true,
   imports: [InputTextModule, FormsModule, ButtonModule],
-  templateUrl: './admin-create-team-dialog.component.html',
-  styleUrl: './admin-create-team-dialog.component.css',
+  templateUrl: './create-team-dialog.component.html',
+  styleUrl: './create-team-dialog.component.css',
 })
-export class AdminCreateTeamDialogComponent {
+export class CreateTeamDialogComponent {
   name?: string;
   constructor(
     private ref: DynamicDialogRef,
