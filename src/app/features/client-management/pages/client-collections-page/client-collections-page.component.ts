@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientCollection } from '../../../../core/models/collectionModel';
-import { ClientCollectionService } from '../../../../core/services/nestjs-services/clientCollectionService';
+import { ClientCollection } from '../../models/collectionModel';
+import { ClientCollectionService } from '../../services/clientCollectionService';
 import { Router } from '@angular/router';
 
 @Component({
