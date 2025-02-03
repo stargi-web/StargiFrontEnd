@@ -57,10 +57,6 @@ export const routes: Routes = [
 
   {
     path: 'surveys',
-    canActivate: [roleGuard],
-    data: {
-      expectedRoles: ['executive', 'supervisor', 'HHRR'],
-    },
     loadChildren: () =>
       import('./features/surveys/surveys.routes').then((m) => m.SURVEY_ROUTES),
   },
