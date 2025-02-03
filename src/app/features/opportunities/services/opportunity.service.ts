@@ -127,4 +127,18 @@ export class OpportunityService {
         return Promise.resolve(baseFilters);
     }
   }
+  getSoloFilters(userId: number): Promise<any> {
+    const baseFilters = {
+      isCurrent: { value: true },
+      state: {
+        value: [
+          'Potenciales',
+          'Prospecto',
+          'Prospecto calificado',
+          'Prospecto desarrollado',
+        ],
+      },
+    };
+    return Promise.resolve({ ...baseFilters, user: { value: userId } });
+  }
 }
