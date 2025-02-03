@@ -13,31 +13,20 @@ import { ActivatedRoute } from '@angular/router';
 export class OpportunitiesUserPageComponent {
   userId: number = 0;
   groupedUsers!: SelectItemGroup[];
-  filters = {
-    isCurrent: { value: true },
-    state: {
-      value: [
-        'Potenciales',
-        'Prospecto',
-        'Prospecto calificado',
-        'Prospecto desarrollado',
-      ],
-    },
-    user: { value: 0 },
-  };
+  filters = {};
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private opportunityService: OpportunityService
+  ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.userId =
       Number(this.route.snapshot.paramMap.get('userId')) ||
       Number(sessionStorage.getItem('userId')) ||
       0;
 
-    this.filters = {
-      ...this.filters,
-      user: { value: this.userId },
-    };
+    this.filters = await this.opportunityService.getSoloFilters(this.userId);
     console.log('Filtros:', this.filters);
   }
 }
