@@ -382,19 +382,21 @@ export class OportunityTableComponent {
     this.opportunityService
       .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
       .subscribe((data) => {
-        this.opportunities = data.items;
-        // Acumula las nuevas oportunidades
+        if (!data.items) return;
+
+        this.opportunities = data.items.map((opp: OpportunityModel) => ({
+          ...opp,
+          oppSfaDateCreation: new Date(opp.oppSfaDateCreation),
+          createdAt: new Date(opp.createdAt),
+          updatedAt: new Date(opp.updatedAt),
+          estimatedClosingDate: new Date(opp.estimatedClosingDate),
+          nextInteraction: opp.nextInteraction
+            ? new Date(opp.nextInteraction)
+            : null,
+        }));
+
         this.loadStateSummary(data.stateSummary);
         this.totalRecords = data.total;
-        this.opportunities.forEach((opp) => {
-          opp.oppSfaDateCreation = new Date(opp.oppSfaDateCreation);
-          opp.createdAt = new Date(opp.createdAt);
-          opp.updatedAt = new Date(opp.updatedAt);
-          opp.estimatedClosingDate = new Date(opp.estimatedClosingDate);
-          if (opp.nextInteraction) {
-            opp.nextInteraction = new Date(opp.nextInteraction);
-          }
-        });
         this.calculateUrgentOpportunities();
       });
   }
