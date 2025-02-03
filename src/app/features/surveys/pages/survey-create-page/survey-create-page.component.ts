@@ -8,6 +8,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DividerModule } from 'primeng/divider';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SurveyService } from '../../services/survey.service';
 
 @Component({
   selector: 'app-survey-create-page',
@@ -22,6 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     InputTextareaModule,
     ReactiveFormsModule,
   ],
+  providers: [SurveyService],
   templateUrl: './survey-create-page.component.html',
   styleUrl: './survey-create-page.component.css',
 })
@@ -33,7 +35,7 @@ export class SurveyCreatePageComponent {
     { label: 'Selección múltiple', value: 'multiple' },
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private surveyService: SurveyService) {
     this.surveyForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -89,7 +91,18 @@ export class SurveyCreatePageComponent {
         })),
       };
       console.log('Formulario a enviar:', formValue);
-      // Aquí iría la llamada a tu API
+
+      this.surveyService.createSurvey(formValue).subscribe({
+        next: (response) => {
+          this.resetForm(); // Reiniciar el formulario
+        },
+      });
     }
+  }
+
+  resetForm() {
+    this.surveyForm.reset();
+    this.surveyForm.markAsPristine();
+    this.surveyForm.markAsUntouched();
   }
 }
