@@ -23,7 +23,7 @@ import { SurveyService } from '../../services/survey.service';
     InputTextareaModule,
     ReactiveFormsModule,
   ],
-  providers: [SurveyService],
+  providers: [],
   templateUrl: './survey-create-page.component.html',
   styleUrl: './survey-create-page.component.css',
 })

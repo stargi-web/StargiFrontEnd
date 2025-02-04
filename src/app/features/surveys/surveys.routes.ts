@@ -1,9 +1,16 @@
 import { Routes } from '@angular/router';
 import { SurveyCreatePageComponent } from './pages/survey-create-page/survey-create-page.component';
 import { roleGuard } from '../../core/guards/authGuard';
+import { SurveyListPageComponent } from './pages/survey-list-page/survey-list-page.component';
 
 export const SURVEY_ROUTES: Routes = [
-  { path: '', redirectTo: 'create', pathMatch: 'full' },
+  { path: '', redirectTo: 'list', pathMatch: 'full' },
+  {
+    path: 'list',
+    component: SurveyListPageComponent,
+    canActivate: [roleGuard],
+    data: { expectedRoles: ['executive', 'supervisor', 'admin', 'HHRR'] },
+  },
   {
     path: 'create',
     component: SurveyCreatePageComponent,

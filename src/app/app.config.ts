@@ -17,6 +17,7 @@ import {
 } from '@angular/common/http';
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,5 +30,6 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([tokenInterceptor, loadingInterceptor])
     ),
     importProvidersFrom([BrowserAnimationsModule]),
+    MessageService,
   ],
 };

@@ -14,6 +14,17 @@ export class SurveyService {
     private httpClient: HttpClient,
     private messageNotificationService: MessageNotificationService
   ) {}
+
+  getAllSurveys(): Observable<Survey[]> {
+    return this.httpClient.get<Survey[]>(`${this.apiUrl}`).pipe(
+      catchError((error) => {
+        // Manejar el error y mostrar notificación
+        this.handleError(error);
+        return throwError(() => new Error('Error al obtener las encuestas'));
+      })
+    );
+  }
+
   createSurvey(survey: Survey): Observable<Survey> {
     const headers = { 'Content-Type': 'application/json' };
     return this.httpClient
