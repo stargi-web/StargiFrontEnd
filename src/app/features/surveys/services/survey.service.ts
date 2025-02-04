@@ -25,6 +25,16 @@ export class SurveyService {
     );
   }
 
+  getSurveyById(surveyId: number): Observable<Survey> {
+    return this.httpClient.get<Survey>(`${this.apiUrl}/${surveyId}`).pipe(
+      catchError((error) => {
+        // Manejar el error y mostrar notificación
+        this.handleError(error);
+        return throwError(() => new Error('Error al obtener la encuesta'));
+      })
+    );
+  }
+
   createSurvey(survey: Survey): Observable<Survey> {
     const headers = { 'Content-Type': 'application/json' };
     return this.httpClient
@@ -40,6 +50,25 @@ export class SurveyService {
           // Manejar el error y mostrar notificación
           this.handleError(error);
           return throwError(() => new Error('Error al crear la encuesta'));
+        })
+      );
+  }
+
+  sendSurveyResponse(response: any): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.httpClient
+      .post<any>(`${this.apiUrl}/response`, response, { headers })
+      .pipe(
+        tap(() => {
+          // Mostrar mensaje de éxito
+          this.messageNotificationService.showSuccess(
+            'Respuesta enviada con éxito'
+          );
+        }),
+        catchError((error) => {
+          // Manejar el error y mostrar notificación
+          this.handleError(error);
+          return throwError(() => new Error('Error al enviar la respuesta'));
         })
       );
   }

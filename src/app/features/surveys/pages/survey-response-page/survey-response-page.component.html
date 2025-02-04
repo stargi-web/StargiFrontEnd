@@ -1,1 +1,57 @@
-<p>survey-response-page works!</p>
+<div *ngIf="survey" class="flex justify-content-center flex-wrap">
+  <form [formGroup]="responseForm" (ngSubmit)="onSubmit()" class="w-4">
+    <!-- Encabezado -->
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold mb-2">{{ survey.title }}</h2>
+      <p class="mb-4">{{ survey.description }}</p>
+    </div>
+
+    <!-- Preguntas -->
+    <div formArrayName="responses">
+      <div
+        *ngFor="let question of survey.questions; let i = index"
+        class="mb-3"
+      >
+        <div class="p-card p-4">
+          <p class="font-semibold">{{ question.text }}</p>
+
+          <!-- Respuesta de texto -->
+          <div *ngIf="question.type === 'text'">
+            <input
+              type="text"
+              pInputText
+              [formControlName]="i.toString()"
+              class="w-full"
+              placeholder="Escribe tu respuesta"
+            />
+          </div>
+
+          <!-- Selección múltiple -->
+          <div *ngIf="question.type === 'multiple_choice'">
+            <div
+              *ngFor="let option of question.options; let j = index"
+              class="mb-2"
+            >
+              <p-radioButton
+                [formControlName]="i.toString()"
+                [value]="option"
+                [name]="i.toString()"
+              ></p-radioButton>
+              <label class="ml-2">{{ option }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="flex justify-start mt-4">
+      <button
+        pButton
+        label="Enviar respuestas"
+        class="p-button-primary"
+        [disabled]="!responseForm.valid"
+      ></button>
+    </div>
+  </form>
+</div>

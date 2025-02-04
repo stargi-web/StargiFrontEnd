@@ -1,6 +1,6 @@
 <!-- survey-list-page.component.html -->
 
-<div class="flex flex-column mb-3 align-items-center">
+<div class="flex flex-column mb-3 align-items-center pt-4">
   <div class="flex mb-4">
     <button
       pButton
@@ -67,7 +67,7 @@
               label="Responder encuesta"
               icon="pi pi-download"
               class="p-button-primary w-full"
-              (click)="goToResponseSurveyPage()"
+              (click)="goToResponseSurveyPage(survey.id)"
             ></button>
           </ng-template>
         </p-card>

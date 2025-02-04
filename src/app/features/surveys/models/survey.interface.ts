@@ -11,8 +11,9 @@ export interface Survey {
 }
 
 export interface Question {
+  id?: number;
   text: string;
   options?: string[];
-  type?: 'text' | 'multiple-choice';
+  type?: 'text' | 'multiple_choice';
   surveyId?: number;
 }

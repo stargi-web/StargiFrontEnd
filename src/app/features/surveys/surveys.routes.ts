@@ -19,7 +19,7 @@ export const SURVEY_ROUTES: Routes = [
     data: { expectedRoles: ['admin', 'HHRR'] },
   },
   {
-    path: 'response',
+    path: ':surveyId',
     component: SurveyResponsePageComponent,
     canActivate: [roleGuard],
     data: { expectedRoles: ['executive', 'supervisor', 'admin', 'HHRR'] },

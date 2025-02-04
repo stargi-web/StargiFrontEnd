@@ -52,7 +52,8 @@ export class SurveyListPageComponent {
   goToCreateSurveyPage() {
     this.router.navigate([`/surveys/create`]);
   }
-  goToResponseSurveyPage() {
-    this.router.navigate([`/surveys/response`]);
+  goToResponseSurveyPage(surveyId: number | undefined) {
+    if (!surveyId) return;
+    this.router.navigate([`/surveys`, surveyId]);
   }
 }
