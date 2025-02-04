@@ -1,6 +1,8 @@
+import { UserModel } from '../../user-management/models/userModel';
+
 export interface Survey {
   id?: number;
-  userId: number;
+  user: UserModel;
   title: string;
   description?: string;
   questions: Question[];

@@ -1,53 +1,73 @@
 <!-- survey-list-page.component.html -->
-<div class="flex justify-content-center mb-3">
-  <div class="flex flex-row flex-wrap w-8 gap-4">
-    <p-card *ngFor="let survey of paginatedSurveys">
-      <!-- Parte superior: fecha creada -->
-      <ng-template pTemplate="header">
-        <div class="flex"></div>
-      </ng-template>
 
-      <!-- Cuerpo de la carta -->
-      <ng-template pTemplate="body">
-        <div class="flex flex-column h-full">
-          <!-- Título, quien lo creó y número de preguntas -->
-          <span>{{ survey.dateCreated | date : "short" }}</span>
-          <h3>{{ survey.title }}</h3>
-          <p><strong>Creador:</strong> Usuario {{ survey.userId }}</p>
-          <p>
-            <strong>Número de preguntas:</strong> {{ survey.questions.length }}
-          </p>
+<div class="flex flex-column mb-3 align-items-center">
+  <div class="flex mb-4">
+    <button
+      pButton
+      label="Crear encuesta"
+      icon="pi pi-download"
+      class="p-button-primary"
+      (click)="goToCreateSurvey()"
+    ></button>
+  </div>
+  <div class="w-9">
+    <div class="grid gap-4 justify-content-center">
+      <div *ngFor="let survey of paginatedSurveys" class="cardSurvey col-fixed">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="flex"></div>
+          </ng-template>
 
-          <!-- Botones -->
-          <div class="p-d-flex p-jc-between p-mt-auto">
-            <!-- Botón de Descargar Excel -->
-            <button
-              pButton
-              label="Descargar Excel"
-              icon="pi pi-download"
-              class="p-button-success"
-              (click)="downloadExcel(survey)"
-            ></button>
+          <!-- Cuerpo de la carta -->
+          <ng-template pTemplate="body">
+            <!-- Título, quien lo creó y número de preguntas -->
+            <div
+              class="flex flex-row justify-content-between align-items-center"
+            >
+              <p>
+                Creado por <strong>{{ survey.user.firstName }}</strong>
+              </p>
+              <span>{{ survey.dateCreated | date : "short" }}</span>
+            </div>
 
-            <!-- Botón de Cerrar Survey -->
-            <button
-              pButton
-              label="Cerrar Survey"
-              icon="pi pi-times"
-              class="p-button-danger"
-              (click)="closeSurvey(survey)"
-            ></button>
-          </div>
-        </div>
-      </ng-template>
-    </p-card>
+            <h3>{{ survey.title }}</h3>
+
+            <p>
+              {{ survey.questions.length }}
+              pregunta(s)
+            </p>
+
+            <!-- Botones -->
+            <div class="p-d-flex p-jc-between p-mt-auto">
+              <!-- Botón de Descargar Excel -->
+              <button
+                pButton
+                label="Descargar Excel"
+                icon="pi pi-download"
+                class="p-button-success"
+                (click)="downloadExcel(survey)"
+              ></button>
+
+              <!-- Botón de Cerrar Survey -->
+              <button
+                pButton
+                label="Cerrar Survey"
+                icon="pi pi-times"
+                class="p-button-danger"
+                (click)="closeSurvey(survey)"
+              ></button>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
   </div>
 </div>
 <!-- Paginador -->
 <p-paginator
-  [rows]="6"
+  [rows]="3"
   [totalRecords]="surveys.length"
-  [rowsPerPageOptions]="[6]"
+  [rowsPerPageOptions]="[3]"
   (onPageChange)="onPageChange($event)"
   class="p-mt-4"
 ></p-paginator>

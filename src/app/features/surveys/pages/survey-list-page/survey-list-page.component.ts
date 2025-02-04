@@ -24,6 +24,7 @@ export class SurveyListPageComponent {
   ngOnInit(): void {
     this.surveyService.getAllSurveys().subscribe((response) => {
       this.surveys = response;
+      console.log('Encuestas:', this.surveys);
       this.updatePage();
     });
   }
@@ -47,5 +48,10 @@ export class SurveyListPageComponent {
     // Lógica para cerrar la encuesta
     console.log('Cerrando la encuesta:', survey);
     // Actualiza el estado de la encuesta o realiza la acción correspondiente
+  }
+  goToCreateSurvey() {
+    // Navegar a la página de creación de encuestas
+    console.log('Navegando a la página de creación de encuestas');
+    // Puedes usar el router de Angular para navegar a la página de cre
   }
 }
