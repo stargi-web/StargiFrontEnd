@@ -14,4 +14,5 @@ export const EXECUTIVE_LINKS: MenuItem[] = [
     mobile: false, // No se muestra en dispositivos móviles
   },
   { path: '/files', label: 'Archivos', icon: 'pi pi-file' },
+  { path: '/surveys', label: 'Encuestas', icon: 'pi pi-file' },
 ];

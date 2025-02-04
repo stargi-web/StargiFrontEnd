@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyService } from '../../services/survey.service';
 import { Survey } from '../../models/survey.interface';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -31,7 +31,8 @@ export class SurveyResponsePageComponent {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private surveyService: SurveyService
+    private surveyService: SurveyService,
+    private router: Router
   ) {
     this.responseForm = this.fb.group({
       responses: this.fb.array([]),
@@ -82,7 +83,15 @@ export class SurveyResponsePageComponent {
       };
 
       console.log('Respuestas enviadas:', surveyResponse);
-      this.surveyService.sendSurveyResponse(surveyResponse).subscribe();
+      this.surveyService
+        .sendSurveyResponse(surveyResponse)
+        .subscribe((response) => {
+          // Si la respuesta es exitosa, redirige al list page
+          this.goToSurveyListPage();
+        });
     }
+  }
+  goToSurveyListPage() {
+    this.router.navigate([`/surveys/list`]);
   }
 }

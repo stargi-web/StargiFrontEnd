@@ -25,6 +25,18 @@ export class SurveyService {
     );
   }
 
+  getAllSurveysWithHasAnswered(userId: number): Observable<Survey[]> {
+    return this.httpClient.get<Survey[]>(`${this.apiUrl}/user/${userId}`).pipe(
+      catchError((error) => {
+        // Manejar el error y mostrar notificación
+        this.handleError(error);
+        return throwError(
+          () => new Error('Error al obtener las encuestas del usuario')
+        );
+      })
+    );
+  }
+
   getSurveyById(surveyId: number): Observable<Survey> {
     return this.httpClient.get<Survey>(`${this.apiUrl}/${surveyId}`).pipe(
       catchError((error) => {

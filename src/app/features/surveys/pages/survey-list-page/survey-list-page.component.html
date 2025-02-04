@@ -3,6 +3,7 @@
 <div class="flex flex-column mb-3 align-items-center pt-4">
   <div class="flex mb-4">
     <button
+      *ngIf="hasAdminPermission()"
       pButton
       label="Crear encuesta"
       icon="pi pi-plus"
@@ -21,15 +22,17 @@
               <!-- Botones -->
               <!-- Botón de Descargar Excel -->
               <button
+                *ngIf="hasAdminPermission()"
                 pButton
                 label=""
-                icon="pi pi-download"
+                icon="pi pi-file-excel"
                 class="p-button-success mr-2"
                 (click)="downloadExcel(survey)"
               ></button>
 
               <!-- Botón de Cerrar Survey -->
               <button
+                *ngIf="hasAdminPermission()"
                 pButton
                 label=""
                 icon="pi pi-trash"
@@ -57,15 +60,18 @@
 
             <p class="flex justify-content-end">
               {{ survey.questions.length }}
-              pregunta(s)
+              pregunta{{ survey.questions.length > 1 ? "s" : "" }}
             </p>
           </ng-template>
           <ng-template pTemplate="footer">
             <!-- Botones -->
             <button
               pButton
-              label="Responder encuesta"
-              icon="pi pi-download"
+              [disabled]="survey.hasAnswered"
+              [label]="
+                survey.hasAnswered ? 'Ya has respondido' : 'Responder encuesta'
+              "
+              [icon]="survey.hasAnswered ? 'pi pi-check' : 'pi pi-download'"
               class="p-button-primary w-full"
               (click)="goToResponseSurveyPage(survey.id)"
             ></button>

@@ -8,6 +8,8 @@ export interface Survey {
   questions: Question[];
   isActive?: boolean;
   dateCreated?: Date;
+  // Propiedad para mostrar si el usuario ya respondió la encuesta
+  hasAnswered?: boolean;
 }
 
 export interface Question {
@@ -15,5 +17,14 @@ export interface Question {
   text: string;
   options?: string[];
   type?: 'text' | 'multiple_choice';
+  surveyId?: number;
+}
+
+export interface Response {
+  id: number;
+  answer: string;
+  dateAnswered?: Date;
+  questionId: number;
+  userId: number;
   surveyId?: number;
 }

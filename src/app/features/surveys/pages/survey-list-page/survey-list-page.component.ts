@@ -17,16 +17,26 @@ import { Router } from '@angular/router';
   styleUrl: './survey-list-page.component.css',
 })
 export class SurveyListPageComponent {
+  userId!: number;
+  userRole!: string;
   surveys: Survey[] = [];
   paginatedSurveys: Survey[] = [];
   first: number = 0;
   constructor(private surveyService: SurveyService, private router: Router) {}
 
   ngOnInit(): void {
-    this.surveyService.getAllSurveys().subscribe((response) => {
-      this.surveys = response;
-      this.updatePage();
-    });
+    this.userId = Number(sessionStorage.getItem('userId'));
+    this.userRole = sessionStorage.getItem('role') || '';
+    this.surveyService
+      .getAllSurveysWithHasAnswered(this.userId)
+      .subscribe((response) => {
+        this.surveys = response;
+
+        this.updatePage();
+      });
+  }
+  hasAdminPermission(): boolean {
+    return this.userRole === 'admin' || this.userRole === 'HHRR';
   }
 
   updatePage() {
