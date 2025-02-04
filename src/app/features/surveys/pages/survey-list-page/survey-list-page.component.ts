@@ -6,6 +6,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-survey-list-page',
@@ -19,12 +20,11 @@ export class SurveyListPageComponent {
   surveys: Survey[] = [];
   paginatedSurveys: Survey[] = [];
   first: number = 0;
-  constructor(private surveyService: SurveyService) {}
+  constructor(private surveyService: SurveyService, private router: Router) {}
 
   ngOnInit(): void {
     this.surveyService.getAllSurveys().subscribe((response) => {
       this.surveys = response;
-      console.log('Encuestas:', this.surveys);
       this.updatePage();
     });
   }
@@ -49,9 +49,10 @@ export class SurveyListPageComponent {
     console.log('Cerrando la encuesta:', survey);
     // Actualiza el estado de la encuesta o realiza la acción correspondiente
   }
-  goToCreateSurvey() {
-    // Navegar a la página de creación de encuestas
-    console.log('Navegando a la página de creación de encuestas');
-    // Puedes usar el router de Angular para navegar a la página de cre
+  goToCreateSurveyPage() {
+    this.router.navigate([`/surveys/create`]);
+  }
+  goToResponseSurveyPage() {
+    this.router.navigate([`/surveys/response`]);
   }
 }

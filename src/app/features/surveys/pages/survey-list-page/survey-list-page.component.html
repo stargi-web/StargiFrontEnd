@@ -5,17 +5,38 @@
     <button
       pButton
       label="Crear encuesta"
-      icon="pi pi-download"
+      icon="pi pi-plus"
       class="p-button-primary"
-      (click)="goToCreateSurvey()"
+      (click)="goToCreateSurveyPage()"
     ></button>
   </div>
   <div class="w-9">
     <div class="grid gap-4 justify-content-center">
-      <div *ngFor="let survey of paginatedSurveys" class="cardSurvey col-fixed">
-        <p-card>
+      <div *ngFor="let survey of paginatedSurveys" class="col-fixed">
+        <p-card [style]="{ width: '400px' }">
           <ng-template pTemplate="header">
-            <div class="flex"></div>
+            <div
+              class="flex flex-row justify-content-end align-items-center pt-3 px-3"
+            >
+              <!-- Botones -->
+              <!-- Botón de Descargar Excel -->
+              <button
+                pButton
+                label=""
+                icon="pi pi-download"
+                class="p-button-success mr-2"
+                (click)="downloadExcel(survey)"
+              ></button>
+
+              <!-- Botón de Cerrar Survey -->
+              <button
+                pButton
+                label=""
+                icon="pi pi-trash"
+                class="p-button-danger"
+                (click)="closeSurvey(survey)"
+              ></button>
+            </div>
           </ng-template>
 
           <!-- Cuerpo de la carta -->
@@ -30,33 +51,24 @@
               <span>{{ survey.dateCreated | date : "short" }}</span>
             </div>
 
-            <h3>{{ survey.title }}</h3>
+            <h3 style="word-wrap: break-word; white-space: normal">
+              {{ survey.title }}
+            </h3>
 
-            <p>
+            <p class="flex justify-content-end">
               {{ survey.questions.length }}
               pregunta(s)
             </p>
-
+          </ng-template>
+          <ng-template pTemplate="footer">
             <!-- Botones -->
-            <div class="p-d-flex p-jc-between p-mt-auto">
-              <!-- Botón de Descargar Excel -->
-              <button
-                pButton
-                label="Descargar Excel"
-                icon="pi pi-download"
-                class="p-button-success"
-                (click)="downloadExcel(survey)"
-              ></button>
-
-              <!-- Botón de Cerrar Survey -->
-              <button
-                pButton
-                label="Cerrar Survey"
-                icon="pi pi-times"
-                class="p-button-danger"
-                (click)="closeSurvey(survey)"
-              ></button>
-            </div>
+            <button
+              pButton
+              label="Responder encuesta"
+              icon="pi pi-download"
+              class="p-button-primary w-full"
+              (click)="goToResponseSurveyPage()"
+            ></button>
           </ng-template>
         </p-card>
       </div>
