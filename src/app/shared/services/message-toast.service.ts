@@ -14,8 +14,33 @@ export class MessageNotificationService {
       detail: message,
     });
   }
-  showError(message: any): void {
-    const errorMessage = (message && message.message) || 'Error desconocido';
+  showError(error: any): void {
+    let errorMessage: string;
+
+    console.log('Error:', error);
+
+    // Verificar si el error es un string
+    if (typeof error === 'string') {
+      errorMessage = error;
+    }
+    // Si el error es un objeto de tipo Error
+    else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    // Verificar si el error es un objeto con un mensaje estructurado
+    else if (error && typeof error === 'object') {
+      // Intenta acceder a los campos comunes como 'message', 'error', 'detail'
+      errorMessage =
+        error.error.message ||
+        error.message ||
+        error.error ||
+        error.detail ||
+        'Error desconocido';
+    }
+    // En caso de que no se pueda determinar el tipo de error
+    else {
+      errorMessage = 'Error desconocido';
+    }
     this.messageService.add({
       severity: 'error',
       summary: 'Error',
