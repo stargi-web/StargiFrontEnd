@@ -20,7 +20,7 @@ export interface Question {
   surveyId?: number;
 }
 
-export interface Response {
+export interface Answer {
   id: number;
   answer: string;
   dateAnswered?: Date;

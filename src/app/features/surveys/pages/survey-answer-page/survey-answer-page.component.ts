@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
-  selector: 'app-survey-response-page',
+  selector: 'app-survey-answer-page',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,10 +19,10 @@ import { InputTextModule } from 'primeng/inputtext';
     ReactiveFormsModule,
     InputTextModule,
   ],
-  templateUrl: './survey-response-page.component.html',
-  styleUrl: './survey-response-page.component.css',
+  templateUrl: './survey-answer-page.component.html',
+  styleUrl: './survey-answer-page.component.css',
 })
-export class SurveyResponsePageComponent {
+export class SurveyAnswerPageComponent {
   userId!: number;
   survey!: Survey;
   surveyId!: number;
@@ -35,7 +35,7 @@ export class SurveyResponsePageComponent {
     private router: Router
   ) {
     this.responseForm = this.fb.group({
-      responses: this.fb.array([]),
+      answers: this.fb.array([]),
     });
   }
 
@@ -50,25 +50,25 @@ export class SurveyResponsePageComponent {
   }
 
   initializeForm() {
-    const responseArray = this.fb.array([]);
+    const answerArray = this.fb.array([]);
     this.survey.questions.forEach((question) => {
       if (question.type === 'multiple_choice') {
-        responseArray.push(this.fb.control('', Validators.required)); // For multiple choice questions
+        answerArray.push(this.fb.control('', Validators.required)); // For multiple choice questions
       } else if (question.type === 'text') {
-        responseArray.push(this.fb.control('', Validators.required)); // For text questions
+        answerArray.push(this.fb.control('', Validators.required)); // For text questions
       }
     });
 
-    this.responseForm.setControl('responses', responseArray);
+    this.responseForm.setControl('answers', answerArray);
   }
 
-  get responses() {
-    return (this.responseForm.get('responses') as FormArray).controls;
+  get answers() {
+    return (this.responseForm.get('answers') as FormArray).controls;
   }
 
   onSubmit() {
     if (this.responseForm.valid) {
-      const responses = this.responseForm.value.responses.map(
+      const answers = this.responseForm.value.answers.map(
         (answer: string, index: number) => {
           return {
             questionId: this.survey.questions[index].id, // Usamos el ID de la pregunta
@@ -79,7 +79,7 @@ export class SurveyResponsePageComponent {
 
       const surveyResponse = {
         userId: this.userId,
-        responses: responses,
+        answers: answers,
       };
 
       console.log('Respuestas enviadas:', surveyResponse);

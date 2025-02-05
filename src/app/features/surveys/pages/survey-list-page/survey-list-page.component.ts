@@ -49,9 +49,9 @@ export class SurveyListPageComponent {
   }
 
   downloadExcel(survey: Survey) {
-    // Lógica para descargar la encuesta en formato Excel
-    console.log('Descargando Excel para la encuesta:', survey);
-    // Aquí puedes integrar una librería como xlsx para generar el archivo Excel
+    if (survey.id !== undefined) {
+      this.surveyService.downloadSurveyExcel(survey.id);
+    }
   }
 
   closeSurvey(survey: Survey) {

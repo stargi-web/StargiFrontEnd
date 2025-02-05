@@ -66,10 +66,10 @@ export class SurveyService {
       );
   }
 
-  sendSurveyResponse(response: any): Observable<any> {
+  sendSurveyResponse(answer: any): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
     return this.httpClient
-      .post<any>(`${this.apiUrl}/response`, response, { headers })
+      .post<any>(`${this.apiUrl}/answer`, answer, { headers })
       .pipe(
         tap(() => {
           // Mostrar mensaje de éxito
@@ -85,9 +85,35 @@ export class SurveyService {
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    console.error('An error occurred:', error);
+  downloadSurveyExcel(surveyId: number): void {
+    const url = `${this.apiUrl}/download/${surveyId}`;
 
+    this.httpClient
+      .get(url, { responseType: 'blob' })
+      .pipe(
+        catchError((error) => {
+          this.handleError(error); // Usar el método handleError para manejar el error
+          return throwError(
+            () => new Error('Error al descargar el archivo Excel')
+          );
+        })
+      )
+      .subscribe({
+        next: (blob) => {
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          a.href = objectUrl;
+          a.download = `survey_${surveyId}.xlsx`;
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+        },
+        error: (error) => {
+          this.handleError(error); // Manejar cualquier error que ocurra durante la descarga
+        },
+      });
+  }
+
+  private handleError(error: HttpErrorResponse) {
     // Mostrar mensaje de error al usuario
     this.messageNotificationService.showError(error);
 
