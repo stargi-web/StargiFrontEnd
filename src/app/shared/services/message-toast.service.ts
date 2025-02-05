@@ -17,7 +17,7 @@ export class MessageNotificationService {
   showError(error: any): void {
     let errorMessage: string;
 
-    console.log('Error:', error);
+    //console.log('Error:', error);
 
     // Verificar si el error es un string
     if (typeof error === 'string') {

@@ -20,11 +20,7 @@ export class AuthComponent {
   userName: string = '';
   password: string = '';
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private messageNotificationService: MessageNotificationService
-  ) {}
+  constructor(private router: Router, private authService: AuthService) {}
   logIn() {
     const logInUser: LogInUser = {
       userName: this.userName,
@@ -33,9 +29,6 @@ export class AuthComponent {
     this.authService.logIn(logInUser).subscribe({
       next: (response) => {
         this.authService.redirectToRoleBasedComponent();
-      },
-      error: (error) => {
-        this.messageNotificationService.showError(error);
       },
     });
   }

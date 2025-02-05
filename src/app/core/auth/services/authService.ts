@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { ROLES } from '../../../shared/models/roles';
 import { UserService } from '../../../features/user-management/services/userService';
+import { MessageNotificationService } from '../../../shared/services/message-toast.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,7 +18,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private messageNotificationService: MessageNotificationService
   ) {
     // Recupera el rol desde sessionStorage al inicializar el servicio
     const storedRole = sessionStorage.getItem('role');
@@ -47,7 +49,11 @@ export class AuthService {
         this.userId = response.userId;
         this.setUserRole(response.role);
       }),
-      catchError(this.handleError)
+      catchError((error) => {
+        // Manejar el error y mostrar notificación
+        this.handleError(error);
+        return throwError(() => new Error('Error al iniciar sesión'));
+      })
     );
   }
   decodeToken(token: string) {
@@ -97,12 +103,12 @@ export class AuthService {
       this.router.navigate(['/login']); // Redirige al login si no hay token
     }
   }
+
   private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      console.error('Se ha producio un error ', error.error);
-    } else {
-      console.error('Backend retornó el código de estado ', error);
-    }
+    // Mostrar mensaje de error al usuario
+    this.messageNotificationService.showError(error);
+
+    // Devolver un mensaje genérico para el componente (opcional)
     return throwError(
       () => new Error('Algo falló. Por favor intente nuevamente.')
     );
