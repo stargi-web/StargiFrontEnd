@@ -1,6 +1,7 @@
 import { MenuItem } from 'primeng/api';
 
 export const SUPERVISOR_LINKS: MenuItem[] = [
+  { path: '/user/create', label: 'Crear Usuario', icon: 'pi pi-user-plus' },
   { path: '/team/members', label: 'Equipo', icon: 'pi pi-users' },
   {
     label: 'Oportunidades',
@@ -35,5 +36,5 @@ export const SUPERVISOR_LINKS: MenuItem[] = [
     mobile: false, // No se muestra en dispositivos móviles
   },
   { path: '/files', label: 'Archivos', icon: 'pi pi-file' },
-  { path: '/surveys', label: 'Encuestas', icon: 'pi pi-clipboarde' },
+  { path: '/surveys', label: 'Encuestas', icon: 'pi pi-clipboard' },
 ];
