@@ -1,0 +1,100 @@
+<div *ngIf="surveys.length > 0; else noSurveys">
+  <div class="flex flex-column mb-3 align-items-center pt-4">
+    <div class="flex mb-4">
+      <button
+        *ngIf="hasAdminPermission()"
+        pButton
+        label="Crear encuesta"
+        icon="pi pi-plus"
+        class="p-button-primary"
+        (click)="goToCreateSurveyPage()"
+      ></button>
+    </div>
+    <div class="w-9">
+      <div class="grid justify-content-center">
+        <div *ngFor="let survey of paginatedSurveys" class="col-fixed">
+          <p-card [style]="{ width: '400px' }">
+            <ng-template pTemplate="header">
+              <div
+                class="flex flex-row justify-content-end align-items-center pt-3 px-3"
+              >
+                <!-- Botones -->
+                <!-- Botón de Descargar Excel -->
+                <button
+                  *ngIf="hasAdminPermission()"
+                  pButton
+                  label=""
+                  icon="pi pi-file-excel"
+                  class="p-button-success mr-2"
+                  (click)="downloadExcel(survey)"
+                ></button>
+
+                <!-- Botón de Cerrar Survey 
+                <button
+                  *ngIf="hasAdminPermission()"
+                  pButton
+                  label=""
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  (click)="closeSurvey(survey)"
+                ></button>
+                -->
+              </div>
+            </ng-template>
+
+            <!-- Cuerpo de la carta -->
+            <ng-template pTemplate="body">
+              <!-- Título, quien lo creó y número de preguntas -->
+              <div
+                class="flex flex-row justify-content-between align-items-center"
+              >
+                <p>
+                  Creado por <strong>{{ survey.user.firstName }}</strong>
+                </p>
+                <span>{{ survey.dateCreated | date : "short" }}</span>
+              </div>
+
+              <h3 style="word-wrap: break-word; white-space: normal">
+                {{ survey.title }}
+              </h3>
+
+              <p class="flex justify-content-end">
+                {{ survey.questions.length }}
+                pregunta{{ survey.questions.length > 1 ? "s" : "" }}
+              </p>
+            </ng-template>
+            <ng-template pTemplate="footer">
+              <!-- Botones -->
+              <button
+                pButton
+                [disabled]="survey.hasAnswered"
+                [label]="
+                  survey.hasAnswered
+                    ? 'Ya has respondido'
+                    : 'Responder encuesta'
+                "
+                [icon]="survey.hasAnswered ? 'pi pi-check' : 'pi pi-download'"
+                class="p-button-primary w-full"
+                (click)="goToResponseSurveyPage(survey.id)"
+              ></button>
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Paginador -->
+  <p-paginator
+    [rows]="6"
+    [totalRecords]="surveys.length"
+    [rowsPerPageOptions]="[6]"
+    (onPageChange)="onPageChange($event)"
+    class="p-mt-4"
+  ></p-paginator>
+</div>
+<ng-template #noSurveys>
+  <div class="no-surveys pt-5">
+    <i class="pi pi-check-circle"></i>
+    <p>No hay encuestas activas</p>
+  </div>
+</ng-template>

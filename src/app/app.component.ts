@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageNotificationService } from './shared/services/message-toast.service';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
     ToastModule,
     NavbarComponent,
   ],
-  providers: [MessageService, MessageNotificationService],
+  providers: [MessageNotificationService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientService } from '../../../../core/services/nestjs-services/clientService';
+import { ClientService } from '../../services/clientService';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { FileUploadModule } from 'primeng/fileupload';

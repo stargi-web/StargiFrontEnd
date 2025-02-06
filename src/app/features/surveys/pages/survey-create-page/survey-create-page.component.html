@@ -1,0 +1,148 @@
+<div class="flex justify-content-center flex-wrap mt-4">
+  <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()" class="w-4">
+    <!-- Encabezado -->
+    <div class="mb-4">
+      <input
+        type="text"
+        pInputText
+        formControlName="title"
+        placeholder="Título de la encuesta"
+        class="w-full text-2xl font-bold mb-2"
+      />
+      <div
+        *ngIf="
+          surveyForm.get('title')?.invalid && surveyForm.get('title')?.touched
+        "
+        class="text-red-500 text-sm"
+      >
+        El título es obligatorio.
+      </div>
+
+      <textarea
+        pInputTextarea
+        formControlName="description"
+        placeholder="Descripción de la encuesta"
+        rows="3"
+        class="w-full"
+      ></textarea>
+      <div
+        *ngIf="
+          surveyForm.get('description')?.invalid &&
+          surveyForm.get('description')?.touched
+        "
+        class="text-red-500 text-sm"
+      >
+        La descripción es obligatoria.
+      </div>
+    </div>
+
+    <!-- Preguntas -->
+    <div formArrayName="questions">
+      <div
+        *ngFor="let question of questions.controls; let i = index"
+        class="mb-3"
+      >
+        <div class="p-card p-4" [formGroupName]="i">
+          <div class="flex-wrap">
+            <p-dropdown
+              formControlName="type"
+              [options]="questionTypes"
+              optionLabel="label"
+              optionValue="value"
+              styleClass="w-13rem"
+            ></p-dropdown>
+            <div class="flex mt-2 mb-4">
+              <input
+                type="text"
+                pInputText
+                formControlName="text"
+                placeholder="Pregunta"
+                class="flex flex-1 w-full"
+              />
+              <button
+                pButton
+                class="flex flex-1"
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-danger p-button-text"
+                (click)="removeQuestion(i)"
+              ></button>
+            </div>
+            <div
+              *ngIf="
+                questions.at(i).get('text')?.invalid &&
+                questions.at(i).get('text')?.touched
+              "
+              class="text-red-500 text-sm mb-4"
+            >
+              La pregunta es obligatoria.
+            </div>
+          </div>
+
+          <!-- Opciones para selección múltiple -->
+          <div *ngIf="questions.at(i).get('type')?.value === 'multiple'">
+            <div formArrayName="options">
+              <div
+                class="flex mb-2"
+                *ngFor="let option of getOptions(i).controls; let j = index"
+              >
+                <input
+                  type="text"
+                  pInputText
+                  [formControlName]="j"
+                  placeholder="Opción"
+                  class="flex flex-1 w-full"
+                />
+                <div
+                  *ngIf="
+                    getOptions(i).at(j)?.invalid && getOptions(i).at(j)?.touched
+                  "
+                  class="text-red-500 text-sm"
+                >
+                  La opción es obligatoria.
+                </div>
+                <button
+                  class="flex flex-1"
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  class="p-button-danger p-button-text"
+                  (click)="removeOption(i, j)"
+                ></button>
+              </div>
+            </div>
+            <div *ngIf="getOptions(i).length < 2" class="text-red-500 text-sm">
+              Debe haber al menos 2 opciones.
+            </div>
+            <p-button
+              type="button"
+              icon="pi pi-plus"
+              label="Agregar opción"
+              class="p-button-text"
+              (click)="addOption(i)"
+            ></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex flex-column row-gap-6 justify-start">
+      <button
+        class="flex p-button-outlined w-5"
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        label="Agregar pregunta"
+        (click)="addQuestion()"
+      ></button>
+
+      <button
+        pButton
+        label="Crear encuesta"
+        class="p-button-primary"
+        [disabled]="surveyForm.invalid"
+      ></button>
+    </div>
+  </form>
+</div>
