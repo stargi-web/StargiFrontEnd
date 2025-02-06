@@ -31,7 +31,6 @@ export class SurveyListPageComponent {
       .getAllSurveysWithHasAnswered(this.userId)
       .subscribe((response) => {
         this.surveys = response;
-
         this.updatePage();
       });
   }
