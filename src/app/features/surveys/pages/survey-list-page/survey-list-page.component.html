@@ -1,17 +1,17 @@
-<div *ngIf="surveys.length > 0; else noSurveys">
-  <div class="flex flex-column mb-3 align-items-center pt-4">
-    <div class="flex mb-4">
-      <button
-        *ngIf="hasAdminPermission()"
-        pButton
-        label="Crear encuesta"
-        icon="pi pi-plus"
-        class="p-button-primary"
-        (click)="goToCreateSurveyPage()"
-      ></button>
-    </div>
-    <div class="w-9">
-      <div class="grid justify-content-center">
+<div class="flex flex-column mb-3 align-items-center pt-4">
+  <div class="flex mb-4">
+    <button
+      *ngIf="hasAdminPermission()"
+      pButton
+      label="Crear encuesta"
+      icon="pi pi-plus"
+      class="p-button-primary"
+      (click)="goToCreateSurveyPage()"
+    ></button>
+  </div>
+  <div *ngIf="surveys.length > 0; else noSurveys">
+    <div class="flex flex-row justify-content-center">
+      <div class="flex flex-row justify-content-center grid w-9">
         <div *ngFor="let survey of paginatedSurveys" class="col-fixed">
           <p-card [style]="{ width: '400px' }">
             <ng-template pTemplate="header">
@@ -82,15 +82,16 @@
         </div>
       </div>
     </div>
+
+    <!-- Paginador -->
+    <p-paginator
+      [rows]="6"
+      [totalRecords]="surveys.length"
+      [rowsPerPageOptions]="[6]"
+      (onPageChange)="onPageChange($event)"
+      class="p-mt-4"
+    ></p-paginator>
   </div>
-  <!-- Paginador -->
-  <p-paginator
-    [rows]="6"
-    [totalRecords]="surveys.length"
-    [rowsPerPageOptions]="[6]"
-    (onPageChange)="onPageChange($event)"
-    class="p-mt-4"
-  ></p-paginator>
 </div>
 <ng-template #noSurveys>
   <div class="no-surveys pt-5">
