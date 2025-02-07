@@ -18,6 +18,7 @@ import {
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { MessageService } from 'primeng/api';
+import { httpErrorInterceptor } from './core/interceptors/httpError.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,7 +28,11 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideHttpClient(
       withFetch(),
-      withInterceptors([tokenInterceptor, loadingInterceptor])
+      withInterceptors([
+        tokenInterceptor,
+        loadingInterceptor,
+        httpErrorInterceptor,
+      ])
     ),
     importProvidersFrom([BrowserAnimationsModule]),
     MessageService,

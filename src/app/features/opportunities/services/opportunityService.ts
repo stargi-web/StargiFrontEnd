@@ -14,53 +14,6 @@ export class OpportunityService {
   private apiUrl = `${environment.apiUrl}/opportunity`;
   constructor(private httpClient: HttpClient) {}
 
-  getOpportunitiesByUserId(userId: number) {
-    return this.httpClient.get<any>(`${this.apiUrl}/${userId}`).pipe(
-      tap((response) => {}),
-      catchError(this.handleError)
-    );
-  }
-  getAllOpportunities() {
-    return this.httpClient.get<any>(`${this.apiUrl}`);
-  }
-  getAllOpportunitiesDeleted() {
-    return this.httpClient.get<any>(`${this.apiUrl}/deleted`);
-  }
-  getAllOpportunitiesPaginated(page: number, limit: number, filter: any) {
-    return this.httpClient.post<any>(
-      `${this.apiUrl}/filter/${page}/page/${limit}/limit`,
-      filter
-    );
-  }
-  getOpportunitiesByTeamIdPaginatedAndFiltered(
-    teamId: number,
-    page: number,
-    limit: number,
-    filter: any
-  ) {
-    return this.httpClient.post<any>(
-      `${this.apiUrl}/${teamId}/team/filter/${page}/page/${limit}/limit`,
-      filter
-    );
-  }
-  getOpportunitiesByUserIdPaginatedAndFiltered(
-    userId: number,
-    page: number,
-    limit: number,
-    filter: any
-  ) {
-    return this.httpClient.post<any>(
-      `${this.apiUrl}/${userId}/user/${page}/page/${limit}/limit`,
-      filter
-    );
-  }
-  getOpportunitiesByTeamId(teamId: number): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/${teamId}/team`);
-  }
-  getOpportunitiesDeletedByTeamId(teamId: number): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/${teamId}/team/deleted`);
-  }
-
   createOpportunity(body: any) {
     console.log('Entrando al servicio de creación');
     return this.httpClient.post<any>(`${this.apiUrl}`, body).pipe(

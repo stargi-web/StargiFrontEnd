@@ -50,8 +50,6 @@ export class AuthService {
         this.setUserRole(response.role);
       }),
       catchError((error) => {
-        // Manejar el error y mostrar notificación
-        this.handleError(error);
         return throwError(() => new Error('Error al iniciar sesión'));
       })
     );
@@ -102,15 +100,5 @@ export class AuthService {
       console.error('No se encontró el token en sessionStorage');
       this.router.navigate(['/login']); // Redirige al login si no hay token
     }
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    // Mostrar mensaje de error al usuario
-    this.messageNotificationService.showError(error);
-
-    // Devolver un mensaje genérico para el componente (opcional)
-    return throwError(
-      () => new Error('Algo falló. Por favor intente nuevamente.')
-    );
   }
 }
