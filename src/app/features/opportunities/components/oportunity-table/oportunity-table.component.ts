@@ -18,7 +18,7 @@ import {
   products,
   productTypes,
   states,
-} from '../../models/constantes';
+} from '../../models/constants';
 import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
 
 @Component({
