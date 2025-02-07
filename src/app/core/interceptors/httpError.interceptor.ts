@@ -8,8 +8,9 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error) => {
+      //console.error('HTTP Error:', error);
       messageService.showError(error); //Toast message error
-      return throwError(() => new Error(error));
+      return throwError(() => error);
     })
   );
 };
