@@ -6,50 +6,79 @@ import {
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../env/environment';
 import { catchError, Observable, tap, throwError } from 'rxjs';
+import { MessageNotificationService } from '../../../shared/services/message-toast.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OpportunityService {
   private apiUrl = `${environment.apiUrl}/opportunity`;
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private messageNotificationService: MessageNotificationService
+  ) {}
 
-  createOpportunity(body: any) {
+  createOpportunity(body: any): Observable<any> {
     console.log('Entrando al servicio de creación');
-    return this.httpClient.post<any>(`${this.apiUrl}`, body).pipe(
-      tap((response) => console.log('Enviando opp')),
-      catchError(this.handleError)
-    );
+    return this.httpClient
+      .post<any>(`${this.apiUrl}`, body)
+      .pipe(
+        tap(() =>
+          this.messageNotificationService.showSuccess(
+            'Oportunidad creada con éxito'
+          )
+        )
+      );
   }
-  editOpportunity(body: any) {
+
+  editOpportunity(body: any): Observable<any> {
     return this.httpClient
       .patch<any>(`${this.apiUrl}/edit`, body)
-      .pipe(catchError(this.handleError));
+      .pipe(
+        tap(() =>
+          this.messageNotificationService.showSuccess(
+            'Oportunidad editada con éxito'
+          )
+        )
+      );
   }
+
   deleteOpportunity(oppId: number): Observable<any> {
-    return this.httpClient.delete(`${this.apiUrl}/${oppId}`);
+    return this.httpClient
+      .delete<any>(`${this.apiUrl}/${oppId}`)
+      .pipe(
+        tap(() =>
+          this.messageNotificationService.showSuccess(
+            'Oportunidad eliminada con éxito'
+          )
+        )
+      );
   }
+
   changeUser(body: { userId: number; opportunityId: number }): Observable<any> {
-    return this.httpClient.patch(`${this.apiUrl}/change-user`, body);
+    return this.httpClient
+      .patch<any>(`${this.apiUrl}/change-user`, body)
+      .pipe(
+        tap(() =>
+          this.messageNotificationService.showSuccess(
+            'Usuario cambiado con éxito'
+          )
+        )
+      );
   }
-  changeAllOppToNewUser(body: { userId: number; newUserId: number }) {
+
+  changeAllOppToNewUser(body: {
+    userId: number;
+    newUserId: number;
+  }): Observable<any> {
     return this.httpClient.patch<any>(
       `${this.apiUrl}/migrate-opps-to-other-executive`,
       body
     );
   }
-  deleteUser(userId: Number) {
+
+  deleteUser(userId: number): Observable<any> {
     return this.httpClient.delete<any>(`${this.apiUrl}/${userId}/user`);
-  }
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      console.error('Se ha producio un error ', error.error);
-    } else {
-      console.error('Backend retornó el código de estado ', error);
-    }
-    return throwError(
-      () => new Error('Algo falló. Por favor intente nuevamente.')
-    );
   }
 
   getOpportunities(

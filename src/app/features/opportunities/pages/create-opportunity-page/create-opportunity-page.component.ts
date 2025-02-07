@@ -133,6 +133,7 @@ export class CreateOpportunityPageComponent {
   }
   ngOnInit(): void {}
   onSubmit() {
+    console.log(this.opportunityForm.value);
     if (this.opportunityForm.valid) {
       this.disable = true;
       console.log(this.opportunityForm.value);
@@ -140,7 +141,6 @@ export class CreateOpportunityPageComponent {
         .createOpportunity(this.opportunityForm.value)
         .subscribe({
           next: (response) => {
-            alert('Creación exitosa');
             this.opportunityForm.reset();
             this.buildForm();
             this.disable = false;
