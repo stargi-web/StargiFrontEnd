@@ -102,7 +102,7 @@ export class SurveyService {
           const a = document.createElement('a');
           const objectUrl = URL.createObjectURL(blob);
           a.href = objectUrl;
-          a.download = `survey_${surveyId}.xlsx`;
+          a.download = `encuesta_${surveyId}.xlsx`;
           a.click();
           URL.revokeObjectURL(objectUrl);
         },
