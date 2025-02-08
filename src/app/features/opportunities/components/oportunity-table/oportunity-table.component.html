@@ -121,7 +121,7 @@
           Acción
         </div>
       </th>
-      <th pFrozenColumn>
+      <th pFrozenColumn [frozen]="viewNotAsignedButton">
         <div class="flex align-items-center" style="min-width: 10rem">
           Asignado
 
@@ -417,33 +417,54 @@
           />
         </div>
       </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Email
+          <p-columnFilter
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            type="text"
+            field="email"
+            display="menu"
+          />
+        </div>
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-opportunity let-rowIndex="rowIndex">
     <tr [ngClass]="getRowClass(opportunity)">
       <td pFrozenColumn>
         @if(editingRowIndex===rowIndex){
-        <p-button
-          label="Guardar"
-          (onClick)="saveChanges(opportunity)"
-        ></p-button>
-        <p-button label="Cancelar" (onClick)="cancelEditing()"></p-button>
+        <div class="flex flex-column gap-1">
+          <p-button
+            label="Guardar"
+            (onClick)="saveChanges(opportunity)"
+          ></p-button>
+          <p-button
+            label="Cancelar"
+            severity="secondary"
+            (onClick)="cancelEditing()"
+          ></p-button>
+        </div>
         } @else{
         <p-button
-          icon="pi pi-cog"
+          icon="pi pi-pencil"
           [rounded]="true"
           (onClick)="startEditing(rowIndex)"
           *ngIf="editingRowIndex !== rowIndex"
         ></p-button>
         <p-button
+          class="ml-1"
           *ngIf="!isViewDeleted"
           icon="pi pi-trash"
           [rounded]="true"
+          severity="danger"
           (onClick)="showDeleteOpportunityDialog($event, opportunity)"
         />
         }
       </td>
-      <td pFrozenColumn>
+      <td pFrozenColumn [frozen]="viewNotAsignedButton">
         @if(assignUserMode&&indexAssignUserMode===rowIndex){
         <p-dropdown
           [options]="groupedUsers"
@@ -496,7 +517,11 @@
       </td>
       <td>
         @if (editingRowIndex===rowIndex) {
-        <p-inputNumber [(ngModel)]="opportunity.SfaNumber" />
+        <p-inputNumber
+          mode="decimal"
+          [useGrouping]="false"
+          [(ngModel)]="opportunity.SfaNumber"
+        />
         } @else {
         {{ opportunity.SfaNumber }}
         }
@@ -617,6 +642,13 @@
         <input type="text" pInputText [(ngModel)]="opportunity.contactNumber" />
         } @else {
         {{ opportunity.contactNumber }}
+        }
+      </td>
+      <td>
+        @if (editingRowIndex===rowIndex){
+        <input type="text" pInputText [(ngModel)]="opportunity.email" />
+        } @else {
+        {{ opportunity.email }}
         }
       </td>
     </tr>

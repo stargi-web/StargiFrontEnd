@@ -201,6 +201,7 @@ export class OportunityTableComponent {
       newCommentary: opportunity.commentary,
       contactName: opportunity.contactName || '',
       contactNumber: opportunity.contactNumber || '',
+      email: opportunity.email || '',
       nextInteraction: opportunity.nextInteraction,
       userId: Number(sessionStorage.getItem('userId')),
     };
