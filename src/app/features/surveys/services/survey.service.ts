@@ -19,7 +19,7 @@ export class SurveyService {
     return this.httpClient.get<Survey[]>(`${this.apiUrl}`).pipe(
       catchError((error) => {
         // Manejar el error y mostrar notificación
-        this.handleError(error);
+
         return throwError(() => new Error('Error al obtener las encuestas'));
       })
     );
@@ -29,7 +29,7 @@ export class SurveyService {
     return this.httpClient.get<Survey[]>(`${this.apiUrl}/user/${userId}`).pipe(
       catchError((error) => {
         // Manejar el error y mostrar notificación
-        this.handleError(error);
+
         return throwError(
           () => new Error('Error al obtener las encuestas del usuario')
         );
@@ -41,7 +41,7 @@ export class SurveyService {
     return this.httpClient.get<Survey>(`${this.apiUrl}/${surveyId}`).pipe(
       catchError((error) => {
         // Manejar el error y mostrar notificación
-        this.handleError(error);
+
         return throwError(() => new Error('Error al obtener la encuesta'));
       })
     );
@@ -60,7 +60,7 @@ export class SurveyService {
         }),
         catchError((error) => {
           // Manejar el error y mostrar notificación
-          this.handleError(error);
+
           return throwError(() => new Error('Error al crear la encuesta'));
         })
       );
@@ -79,7 +79,7 @@ export class SurveyService {
         }),
         catchError((error) => {
           // Manejar el error y mostrar notificación
-          this.handleError(error);
+
           return throwError(() => new Error('Error al enviar la respuesta'));
         })
       );
@@ -92,7 +92,6 @@ export class SurveyService {
       .get(url, { responseType: 'blob' })
       .pipe(
         catchError((error) => {
-          this.handleError(error); // Usar el método handleError para manejar el error
           return throwError(
             () => new Error('Error al descargar el archivo Excel')
           );
@@ -103,23 +102,11 @@ export class SurveyService {
           const a = document.createElement('a');
           const objectUrl = URL.createObjectURL(blob);
           a.href = objectUrl;
-          a.download = `survey_${surveyId}.xlsx`;
+          a.download = `encuesta_${surveyId}.xlsx`;
           a.click();
           URL.revokeObjectURL(objectUrl);
         },
-        error: (error) => {
-          this.handleError(error); // Manejar cualquier error que ocurra durante la descarga
-        },
+        error: (error) => {},
       });
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    // Mostrar mensaje de error al usuario
-    this.messageNotificationService.showError(error);
-
-    // Devolver un mensaje genérico para el componente (opcional)
-    return throwError(
-      () => new Error('Something bad happened; please try again later.')
-    );
   }
 }

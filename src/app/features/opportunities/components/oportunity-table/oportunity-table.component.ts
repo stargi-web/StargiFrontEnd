@@ -18,9 +18,8 @@ import {
   products,
   productTypes,
   states,
-} from '../../models/constantes';
+} from '../../models/constants';
 import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
-import { MessageNotificationService } from '../../../../shared/services/message-toast.service';
 
 @Component({
   selector: 'app-oportunity-table',
@@ -98,8 +97,7 @@ export class OportunityTableComponent {
   @ViewChild('dataTable') dataTable: any;
   constructor(
     public dialogService: DialogService,
-    private opportunityService: OpportunityService,
-    private messageNotificationService: MessageNotificationService
+    private opportunityService: OpportunityService
   ) {}
   ref: DynamicDialogRef | undefined;
 
@@ -123,15 +121,12 @@ export class OportunityTableComponent {
   }
   changeUser(userId: number, oppId: number) {
     this.opportunityService
-      .changeUser({ userId: userId, opportunityId: oppId })
-      .subscribe({
-        next: (response) => {
-          this.messageNotificationService.showSuccess(response.message);
-        },
-        error: (error) => {
-          this.messageNotificationService.showError(error);
-        },
-      });
+      .changeUser({
+        userId: userId,
+        opportunityId: oppId,
+      })
+      .subscribe();
+
     this.assignUserMode = false;
   }
   isNearClosingDate(opportunity: OpportunityModel): boolean {
@@ -210,31 +205,14 @@ export class OportunityTableComponent {
       userId: Number(sessionStorage.getItem('userId')),
     };
 
-    this.opportunityService.editOpportunity(editCommand).subscribe({
-      next: (response) => {
-        this.messageNotificationService.showSuccess(response.message);
-        this.editingRowIndex = null;
-      },
-      error: (error) => {
-        this.messageNotificationService.showError(error);
-        this.editingRowIndex = null;
-      },
-    });
+    this.opportunityService.editOpportunity(editCommand).subscribe();
   }
 
   cancelEditing() {
     this.editingRowIndex = null;
   }
   deleteOpportunity(name: string, id: number) {
-    this.opportunityService.deleteOpportunity(id).subscribe({
-      next: (response) => {
-        this.opportunities = this.opportunities.filter((o) => o.id !== id);
-        this.messageNotificationService.showSuccess(response.message);
-      },
-      error: (error) => {
-        this.messageNotificationService.showError(error);
-      },
-    });
+    this.opportunityService.deleteOpportunity(id).subscribe();
   }
   openRecordsDialog(oppId: number) {
     if (this.editingRowIndex == null) {
