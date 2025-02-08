@@ -17,6 +17,7 @@ import {
   productTypes,
   states,
 } from '../../models/constants';
+
 interface FieldError {
   field: string;
   message: string;
@@ -57,7 +58,7 @@ export class CreateOpportunityPageComponent {
       ruc: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
       businessName: ['', Validators.required],
       SfaNumber: ['', Validators.required],
-      oppSfaDateCreation: ['', Validators.required],
+      oppSfaDateCreation: [new Date(), Validators.required],
       type: ['', Validators.required],
       amount: ['0', Validators.required],
       product: ['', Validators.required],
@@ -68,7 +69,7 @@ export class CreateOpportunityPageComponent {
       contactNumber: ['', Validators.required],
       email: ['', Validators.required],
       units: ['0', Validators.required],
-      offer: ['', Validators.required],
+      offer: [offers[0].value, Validators.required],
     });
     this.errors = Object.keys(this.opportunityForm.controls).map((key) => ({
       field: key,
@@ -135,8 +136,10 @@ export class CreateOpportunityPageComponent {
 
   resetForm() {
     this.opportunityForm.reset({
+      oppSfaDateCreation: new Date(),
       amount: '0',
       units: '0',
+      offer: offers[0].value,
     });
 
     this.opportunityForm.markAsPristine();
