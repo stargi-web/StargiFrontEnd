@@ -187,7 +187,7 @@
       </th>
 
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 12rem">
           Nombre
           <p-columnFilter
             [showMatchModes]="false"
@@ -200,7 +200,7 @@
         </div>
       </th>
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 9rem">
           Num Opp Sfa
           <p-columnFilter
             [showMatchModes]="false"
@@ -226,7 +226,7 @@
         </div>
       </th>
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 8rem">
           Tipo
           <p-columnFilter
             [showMatchModes]="false"
@@ -239,7 +239,7 @@
         </div>
       </th>
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 8rem">
           Unidades
           <p-columnFilter
             [showMatchModes]="false"
@@ -252,7 +252,7 @@
         </div>
       </th>
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 8rem">
           Monto
           <p-columnFilter
             [showMatchModes]="false"
@@ -405,7 +405,7 @@
         </div>
       </th>
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 8rem">
           Teléfono
           <p-columnFilter
             [showMatchModes]="false"
@@ -467,7 +467,7 @@
         }
       </td>
       <td pFrozenColumn [frozen]="viewNotAsignedButton">
-        @if(assignUserMode&&indexAssignUserMode===rowIndex){
+        @if(assignUserMode&&indexAssignUserMode===rowIndex ){
         <p-dropdown
           [options]="groupedUsers"
           [(ngModel)]="selectedUser"
@@ -497,6 +497,7 @@
             ? opportunity.user.firstName + " " + opportunity.user.lastName
             : "No asignado"
         }}<i
+          *ngIf="viewNotAsignedButton"
           class="pi pi-cog ml-1"
           style="cursor: pointer"
           (click)="enableEditUserMode(rowIndex)"
@@ -512,7 +513,11 @@
       </td>
       <td>
         @if (editingRowIndex===rowIndex) {
-        <input type="text" pInputText [(ngModel)]="opportunity.businessName" />
+        <textarea
+          pInputTextarea
+          [(ngModel)]="opportunity.businessName"
+          [autoResize]="true"
+        ></textarea>
         } @else {
         {{ opportunity.businessName }}
         }
@@ -627,6 +632,7 @@
         <textarea
           pInputTextarea
           [(ngModel)]="opportunity.commentary"
+          [autoResize]="true"
         ></textarea>
         } @else {
         {{ opportunity.commentary }}
