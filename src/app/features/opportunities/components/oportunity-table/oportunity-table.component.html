@@ -117,7 +117,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th pFrozenColumn>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 6rem">
           Acción
         </div>
       </th>
@@ -436,17 +436,19 @@
     <tr [ngClass]="getRowClass(opportunity)">
       <td pFrozenColumn>
         @if(editingRowIndex===rowIndex){
-        <div class="flex flex-column gap-1">
-          <p-button
-            label="Guardar"
-            (onClick)="saveChanges(opportunity)"
-          ></p-button>
-          <p-button
-            label="Cancelar"
-            severity="secondary"
-            (onClick)="cancelEditing()"
-          ></p-button>
-        </div>
+        <p-button
+          icon="pi pi-check"
+          [rounded]="true"
+          severity="success"
+          (onClick)="saveChanges(opportunity)"
+        ></p-button>
+        <p-button
+          class="ml-1"
+          icon="pi pi-times"
+          severity="secondary"
+          [rounded]="true"
+          (onClick)="cancelEditing()"
+        ></p-button>
         } @else{
         <p-button
           icon="pi pi-pencil"
@@ -625,6 +627,7 @@
         <textarea
           pInputTextarea
           [(ngModel)]="opportunity.commentary"
+          rows="6"
         ></textarea>
         } @else {
         {{ opportunity.commentary }}
