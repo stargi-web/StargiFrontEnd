@@ -13,6 +13,7 @@ import { OpportunityService } from '../../services/opportunityService';
 import { OpportunityModel } from '../../models/opportunityModel';
 import { ExecutiveRecordsOppDialogComponent } from '../records-opportunity-dialog/executive-records-opp-dialog.component';
 import { SimpleChanges } from '@angular/core';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import {
   opportunityTypes,
   products,
@@ -28,6 +29,7 @@ import { CustomConfirmDialogComponent } from '../../../../shared/components/cust
   imports: [
     MultiSelectModule,
     InputTextModule,
+    InputTextareaModule,
     DropdownModule,
     FormsModule,
     CalendarModule,
