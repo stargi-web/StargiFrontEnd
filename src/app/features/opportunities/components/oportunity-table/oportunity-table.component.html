@@ -306,7 +306,7 @@
         </div>
       </th>
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 13rem">
           Estado
           <p-columnFilter
             matchMode="in"
@@ -379,7 +379,7 @@
         </div>
       </th>
       <th>
-        <div class="flex align-items-center" style="min-width: 10rem">
+        <div class="flex align-items-center" style="min-width: 12rem">
           Comentario
           <p-columnFilter
             [showMatchModes]="false"
@@ -443,7 +443,7 @@
           (onClick)="saveChanges(opportunity)"
         ></p-button>
         <p-button
-          class="ml-1"
+          class="ml-2"
           icon="pi pi-times"
           severity="secondary"
           [rounded]="true"
@@ -457,7 +457,7 @@
           *ngIf="editingRowIndex !== rowIndex"
         ></p-button>
         <p-button
-          class="ml-1"
+          class="ml-2"
           *ngIf="!isViewDeleted"
           icon="pi pi-trash"
           [rounded]="true"
@@ -627,7 +627,6 @@
         <textarea
           pInputTextarea
           [(ngModel)]="opportunity.commentary"
-          rows="6"
         ></textarea>
         } @else {
         {{ opportunity.commentary }}
