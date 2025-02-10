@@ -24,7 +24,7 @@ export class SessionStorageService {
 
   // Recupera un valor de sessionStorage
   getItem(key: string): string | null {
-    return this.isBrowser ? sessionStorage.getItem(key) : null;
+    return sessionStorage.getItem(key);
   }
 
   // Elimina un ítem de sessionStorage
