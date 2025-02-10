@@ -28,6 +28,8 @@ export class NavbarComponent {
   menuItems: MenuItem[] = [];
   isMobile: boolean = false;
 
+  isEmpty: boolean = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -45,7 +47,7 @@ export class NavbarComponent {
     this.name = String(this.sessionStorageService.getItem(SESSION_ITEMS.NAME));
 
     this.authService.getCurrentUserRole().subscribe((role) => {
-      console.log('Rol actual:', role);
+      //console.log('Rol actual:', role);
       this.userRole = role;
       this.updateMenuItems(); // Actualiza los ítems del menú cuando cambia el rol
     });
@@ -77,6 +79,10 @@ export class NavbarComponent {
       // Incluir el enlace en todos los demás casos
       return true;
     });
+
+    if (this.menuItems.length === 0) {
+      this.isEmpty = true;
+    }
 
     // Filtra y mapea los navLinks para generar los ítems del menú
     this.menuItems = filteredMenuItems.map((link) => ({
