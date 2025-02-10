@@ -14,7 +14,7 @@ import { SESSION_ITEMS } from '../../../shared/models/session-items';
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
-  private currentUserRole = new BehaviorSubject<string>(ROLES.EXECUTIVE);
+  private currentUserRole = new BehaviorSubject<string>('');
   private userId = 0;
   constructor(
     private http: HttpClient,
