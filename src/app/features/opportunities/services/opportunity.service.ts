@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
 import { UserService } from '../../user-management/services/userService';
 import { SelectItemGroup } from 'primeng/api';
+import { SessionStorageService } from '../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../shared/models/session-items';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OpportunityService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private sessionStorageService: SessionStorageService
+  ) {}
 
   getCurrentUserRole(): string {
-    return sessionStorage.getItem('role') || '';
+    return this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) || '';
   }
 
   getCurrentUserId(): number {
-    return Number(sessionStorage.getItem('userId'));
+    return Number(this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID));
   }
 
   getCurrentTeamId(): number {
-    return Number(sessionStorage.getItem('teamId'));
+    return Number(this.sessionStorageService.getItem(SESSION_ITEMS.TEAM_ID));
   }
 
   loadUsers(teamId?: number): Promise<SelectItemGroup[]> {

@@ -10,6 +10,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../user-management/services/userService';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 @Component({
   selector: 'app-client-collection-details-page',
   standalone: true,
@@ -42,11 +44,14 @@ export class ClientCollectionDetailsPageComponent {
     private route: ActivatedRoute,
     private clientService: ClientService,
     private messageService: MessageService,
-    private userService: UserService
+    private userService: UserService,
+    private sessionStorageService: SessionStorageService
   ) {}
   ngOnInit(): void {
     this.collectionId = Number(this.route.snapshot.paramMap.get('id'));
-    this.userId = Number(sessionStorage.getItem('userId'));
+    this.userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
 
     this.clientService
       .getByCollectionId(this.collectionId)

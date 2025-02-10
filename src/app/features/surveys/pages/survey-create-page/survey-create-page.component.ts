@@ -9,6 +9,8 @@ import { DividerModule } from 'primeng/divider';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SurveyService } from '../../services/survey.service';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-survey-create-page',
@@ -35,7 +37,11 @@ export class SurveyCreatePageComponent {
     { label: 'Selección múltiple', value: 'multiple' },
   ];
 
-  constructor(private fb: FormBuilder, private surveyService: SurveyService) {
+  constructor(
+    private fb: FormBuilder,
+    private surveyService: SurveyService,
+    private sessionStorageService: SessionStorageService
+  ) {
     this.surveyForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -46,7 +52,9 @@ export class SurveyCreatePageComponent {
   }
 
   ngOnInit() {
-    this.userId = Number(sessionStorage.getItem('userId'));
+    this.userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
   }
   get questions() {
     return this.surveyForm.get('questions') as FormArray;

@@ -21,6 +21,8 @@ import {
   states,
 } from '../../models/constants';
 import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-oportunity-table',
@@ -99,12 +101,14 @@ export class OportunityTableComponent {
   @ViewChild('dataTable') dataTable: any;
   constructor(
     public dialogService: DialogService,
-    private opportunityService: OpportunityService
+    private opportunityService: OpportunityService,
+    private sessionStorageService: SessionStorageService
   ) {}
   ref: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
-    this.userRole = sessionStorage.getItem('role') || '';
+    this.userRole =
+      this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) || '';
     this.loadOpportunities({ first: 0, rows: 10 });
   }
 
@@ -205,7 +209,7 @@ export class OportunityTableComponent {
       contactNumber: opportunity.contactNumber || '',
       email: opportunity.email || '',
       nextInteraction: opportunity.nextInteraction,
-      userId: Number(sessionStorage.getItem('userId')),
+      userId: Number(this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)),
     };
 
     this.opportunityService.editOpportunity(editCommand).subscribe();

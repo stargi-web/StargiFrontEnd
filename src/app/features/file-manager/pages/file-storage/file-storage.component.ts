@@ -13,6 +13,8 @@ import { Button } from 'primeng/button';
 import { FirebaseCloudStorageService } from '../../services/firebaseCloudStorageService';
 import { MessageNotificationService } from '../../../../shared/services/message-toast.service';
 import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-file-storage',
@@ -36,7 +38,7 @@ export class FileStorageComponent implements OnInit {
   uploadURL: string = ''; // Para almacenar la URL del archivo cargado
   folderHistory: Folder[] = []; // Pila de historial de carpetas
   newFolderName: string = '';
-  userId = Number(sessionStorage.getItem('userId'));
+  userId = Number(this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID));
 
   userName: string = '';
   userRole: string = '';
@@ -73,16 +75,19 @@ export class FileStorageComponent implements OnInit {
     private fileService: FileStorageService,
     private userService: UserService,
     private firebaseCloudStorageService: FirebaseCloudStorageService,
-    private messageNotificationService: MessageNotificationService
+    private messageNotificationService: MessageNotificationService,
+    private sessionStorageService: SessionStorageService
   ) {}
 
   ngOnInit(): void {
-    this.userRole = sessionStorage.getItem('role') || '';
+    this.userRole =
+      this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) || '';
     if (this.userRole === 'admin') {
       this.adminLoadAllUserFolders();
       this.isAdminParent = true;
     } else {
-      this.userName = sessionStorage.getItem('username') || '';
+      this.userName =
+        this.sessionStorageService.getItem(SESSION_ITEMS.USERNAME) || '';
       this.loadParentFolders(this.userId);
     }
   }

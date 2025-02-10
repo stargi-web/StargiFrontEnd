@@ -85,28 +85,15 @@ export class SurveyService {
       );
   }
 
-  downloadSurveyExcel(surveyId: number): void {
+  downloadSurveyExcel(surveyId: number): Observable<Blob> {
     const url = `${this.apiUrl}/download/${surveyId}`;
 
-    this.httpClient
-      .get(url, { responseType: 'blob' })
-      .pipe(
-        catchError((error) => {
-          return throwError(
-            () => new Error('Error al descargar el archivo Excel')
-          );
-        })
-      )
-      .subscribe({
-        next: (blob) => {
-          const a = document.createElement('a');
-          const objectUrl = URL.createObjectURL(blob);
-          a.href = objectUrl;
-          a.download = `encuesta_${surveyId}.xlsx`;
-          a.click();
-          URL.revokeObjectURL(objectUrl);
-        },
-        error: (error) => {},
-      });
+    return this.httpClient.get(url, { responseType: 'blob' }).pipe(
+      catchError((error) => {
+        return throwError(
+          () => new Error('Error al descargar el archivo Excel')
+        );
+      })
+    );
   }
 }

@@ -3,6 +3,8 @@ import { SelectItemGroup } from 'primeng/api';
 import { OpportunityService } from '../../services/opportunity.service';
 import { OportunityTableComponent } from '../../components/oportunity-table/oportunity-table.component';
 import { ActivatedRoute } from '@angular/router';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 @Component({
   selector: 'app-opportunities-user-page',
   standalone: true,
@@ -17,13 +19,14 @@ export class OpportunitiesUserPageComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private opportunityService: OpportunityService
+    private opportunityService: OpportunityService,
+    private sessionStorageService: SessionStorageService
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.userId =
       Number(this.route.snapshot.paramMap.get('userId')) ||
-      Number(sessionStorage.getItem('userId')) ||
+      Number(this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)) ||
       0;
 
     this.filters = await this.opportunityService.getSoloFilters(this.userId);

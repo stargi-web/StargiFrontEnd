@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { ROLES } from '../../../shared/models/roles';
 import { UserService } from '../../../features/user-management/services/userService';
-import { MessageNotificationService } from '../../../shared/services/message-toast.service';
+import { SessionStorageService } from '../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../shared/models/session-items';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,10 +20,10 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private userService: UserService,
-    private messageNotificationService: MessageNotificationService
+    private sessionStorageService: SessionStorageService
   ) {
     // Recupera el rol desde sessionStorage al inicializar el servicio
-    const storedRole = sessionStorage.getItem('role');
+    const storedRole = this.sessionStorageService.getItem(SESSION_ITEMS.ROLE);
     if (storedRole) {
       this.currentUserRole.next(storedRole); // Actualiza el BehaviorSubject
     }
@@ -41,11 +42,18 @@ export class AuthService {
   logIn(body: LogInUser): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}`, body).pipe(
       tap((response) => {
-        sessionStorage.setItem('userId', response.userId);
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('name', response.name);
-        sessionStorage.setItem('username', response.userName);
-        sessionStorage.setItem('role', response.role);
+        this.sessionStorageService.setItem(
+          SESSION_ITEMS.USER_ID,
+          response.userId
+        );
+        this.sessionStorageService.setItem(SESSION_ITEMS.TOKEN, response.token);
+        this.sessionStorageService.setItem(SESSION_ITEMS.NAME, response.name);
+        this.sessionStorageService.setItem(
+          SESSION_ITEMS.USERNAME,
+          response.userName
+        );
+        this.sessionStorageService.setItem(SESSION_ITEMS.ROLE, response.role);
+
         this.userId = response.userId;
         this.setUserRole(response.role);
       }),
@@ -63,11 +71,11 @@ export class AuthService {
     }
   }
   redirectToRoleBasedComponent() {
-    const token = sessionStorage.getItem('token');
+    const token = this.sessionStorageService.getItem(SESSION_ITEMS.TOKEN);
     if (token) {
       const decodedToken: any = this.decodeToken(token);
       const role = decodedToken?.role || [];
-      sessionStorage.setItem('role', role);
+      this.sessionStorageService.setItem(SESSION_ITEMS.ROLE, role);
 
       // Redirige a la ruta por defecto según el rol
       switch (role) {
@@ -78,7 +86,10 @@ export class AuthService {
           this.userService.getLeadingTeamInfo(this.userId).subscribe({
             next: (response) => {
               if (response.teamId) {
-                sessionStorage.setItem('teamId', response.teamId);
+                this.sessionStorageService.setItem(
+                  SESSION_ITEMS.TEAM_ID,
+                  response.teamId
+                );
               }
               this.router.navigate(['/team/members']); // Ruta por defecto para supervisor
             },
