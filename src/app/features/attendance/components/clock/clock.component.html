@@ -1,6 +1,8 @@
 <div class="clock-display">
   <div class="clock-weekdays-block">
-    <span *ngFor="let day of days" [class.active]="day === getDay()">{{ day }}</span>
+    <span *ngFor="let day of days" [class.active]="day === getDay()">{{
+      day
+    }}</span>
   </div>
 
   <div class="clock-time">

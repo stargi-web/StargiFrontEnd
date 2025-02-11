@@ -7,6 +7,8 @@ import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-survey-list-page',
@@ -22,11 +24,18 @@ export class SurveyListPageComponent {
   surveys: Survey[] = [];
   paginatedSurveys: Survey[] = [];
   first: number = 0;
-  constructor(private surveyService: SurveyService, private router: Router) {}
+  constructor(
+    private surveyService: SurveyService,
+    private router: Router,
+    private sessionStorageService: SessionStorageService
+  ) {}
 
   ngOnInit(): void {
-    this.userId = Number(sessionStorage.getItem('userId'));
-    this.userRole = sessionStorage.getItem('role') || '';
+    this.userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
+    this.userRole =
+      this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) || '';
     this.surveyService
       .getAllSurveysWithHasAnswered(this.userId)
       .subscribe((response) => {
@@ -49,7 +58,16 @@ export class SurveyListPageComponent {
 
   downloadExcel(survey: Survey) {
     if (survey.id !== undefined) {
-      this.surveyService.downloadSurveyExcel(survey.id);
+      this.surveyService.downloadSurveyExcel(survey.id).subscribe({
+        next: (blob) => {
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          a.href = objectUrl;
+          a.download = `encuesta_${survey.id}.xlsx`;
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+        },
+      });
     }
   }
 

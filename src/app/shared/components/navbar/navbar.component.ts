@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api'; // Importa MenuItem de PrimeNG
 import { MenubarModule } from 'primeng/menubar'; // Importa el módulo de Menubar
@@ -10,6 +10,8 @@ import { ADMIN_LINKS } from './models/navlinks/admin-links';
 import { SUPERVISOR_LINKS } from './models/navlinks/supervisor-links';
 import { EXECUTIVE_LINKS } from './models/navlinks/executive-links';
 import { HHRR_LINKS } from './models/navlinks/hhrr-links';
+import { SessionStorageService } from '../../services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../models/session-items';
 
 @Component({
   selector: 'app-navbar',
@@ -24,16 +26,28 @@ export class NavbarComponent {
 
   // Arreglo de ítems para el menú de PrimeNG
   menuItems: MenuItem[] = [];
+  isMobile: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  isEmpty: boolean = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sessionStorageService: SessionStorageService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
-    // Obtén el nombre del usuario desde sessionStorage
-    this.name = String(sessionStorage.getItem('name'));
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth <= 768; // Safe to use window here
+      console.log('Es móvil:', this.isMobile);
+    }
 
-    // Escucha los cambios en el rol del usuario
+    // Obtén el nombre del usuario desde sessionStorage
+    this.name = String(this.sessionStorageService.getItem(SESSION_ITEMS.NAME));
+
     this.authService.getCurrentUserRole().subscribe((role) => {
-      console.log('Rol actual:', role);
+      //console.log('Rol actual:', role);
       this.userRole = role;
       this.updateMenuItems(); // Actualiza los ítems del menú cuando cambia el rol
     });
@@ -57,31 +71,35 @@ export class NavbarComponent {
         this.menuItems = [];
         break;
     }
+    const filteredMenuItems = this.menuItems.filter((link) => {
+      // Si es un dispositivo móvil y el enlace no debe mostrarse en móviles, excluirlo
+      if (this.isMobile && link['mobile'] === false) {
+        return false;
+      }
+      // Incluir el enlace en todos los demás casos
+      return true;
+    });
 
-    const isMobile = window.innerWidth <= 768; // Verifica si es un dispositivo móvil
+    if (this.menuItems.length === 0) {
+      this.isEmpty = true;
+    }
 
     // Filtra y mapea los navLinks para generar los ítems del menú
-    this.menuItems = this.menuItems
-      .filter((link) => {
-        // Verifica si el enlace debe mostrarse en dispositivos móviles
-        const isVisibleOnMobile = link['mobile'] !== false; // true por defecto
-        return isVisibleOnMobile || !isMobile;
-      })
-      .map((link) => ({
-        label: link['label'],
-        icon: link['icon'],
-        routerLink: link['items'] ? undefined : link['path'], // Usa routerLink si no tiene elementos anidados
-        command: link['items']
-          ? undefined
-          : () => this.router.navigate([link['path']]), // Navega a la ruta si no tiene elementos anidados
-        items: link['items']
-          ? link['items'].map((subLink) => ({
-              label: subLink['label'],
-              icon: subLink['icon'],
-              command: () => this.router.navigate([subLink['path']]),
-            }))
-          : undefined, // Mapea los elementos anidados
-      }));
+    this.menuItems = filteredMenuItems.map((link) => ({
+      label: link['label'],
+      icon: link['icon'],
+      routerLink: link['items'] ? undefined : link['path'], // Usa routerLink si no tiene elementos anidados
+      command: link['items']
+        ? undefined
+        : () => this.router.navigate([link['path']]), // Navega a la ruta si no tiene elementos anidados
+      items: link['items']
+        ? link['items'].map((subLink) => ({
+            label: subLink['label'],
+            icon: subLink['icon'],
+            command: () => this.router.navigate([subLink['path']]),
+          }))
+        : undefined, // Mapea los elementos anidados
+    }));
 
     // Agrega el ítem de "Cerrar sesión" al final
     this.menuItems.push({
@@ -95,14 +113,8 @@ export class NavbarComponent {
 
   // Método para cerrar sesión
   logout() {
-    // Limpia el sessionStorage
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('name');
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('role');
-    sessionStorage.removeItem('teamId');
-
+    // Limpia todos los datos de la sesión
+    this.sessionStorageService.clear();
     // Redirige al usuario a la página de login
     this.router.navigate(['/login']);
   }

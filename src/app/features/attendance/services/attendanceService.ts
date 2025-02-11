@@ -1,15 +1,34 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../env/environment';
 import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, tap, throwError } from 'rxjs';
+import { MessageNotificationService } from '../../../shared/services/message-toast.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AttendanceService {
   private apiUrl = `${environment.apiUrl}/attendance`;
-  constructor(private httpClient: HttpClient) {}
-  registerAttendance(userId: number) {
-    return this.httpClient.post<any>(`${this.apiUrl}/register/${userId}`, null);
+  constructor(
+    private httpClient: HttpClient,
+    private messageNotificationService: MessageNotificationService
+  ) {}
+
+  registerAttendance(userId: number): Observable<any> {
+    return this.httpClient
+      .post<any>(`${this.apiUrl}/register/${userId}`, null)
+      .pipe(
+        tap(() => {
+          // Mostrar mensaje de éxito
+          this.messageNotificationService.showSuccess('Asistencia registrada');
+        }),
+        catchError((error) => {
+          // Manejar el error y mostrar notificación
+          return throwError(
+            () => new Error('Error al registrar la asistencia')
+          );
+        })
+      );
   }
   getAttendancesByUserAndDates(
     userId: number,

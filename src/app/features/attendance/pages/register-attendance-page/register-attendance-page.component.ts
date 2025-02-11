@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ClockComponent } from '../../components/clock/clock.component';
 import { AttendanceService } from '../../services/attendanceService';
 import { ButtonModule } from 'primeng/button';
 import { AttendanceMonthSummaryComponent } from '../../components/attendance-month-summary/attendance-month-summary.component';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-register-attendance-page',
@@ -12,9 +14,17 @@ import { AttendanceMonthSummaryComponent } from '../../components/attendance-mon
   styleUrl: './register-attendance-page.component.css',
 })
 export class RegisterAttendancePageComponent {
-  constructor(private attendanceService: AttendanceService) {}
+  @ViewChild(AttendanceMonthSummaryComponent)
+  private attendanceSummary!: AttendanceMonthSummaryComponent;
+
+  constructor(
+    private attendanceService: AttendanceService,
+    private sessionStorageService: SessionStorageService
+  ) {}
   registerAttendance() {
-    const userId = Number(sessionStorage.getItem('userId'));
+    const userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
     if (userId) {
       this.attendanceService.registerAttendance(userId).subscribe({
         next: (response) => {
@@ -22,10 +32,8 @@ export class RegisterAttendancePageComponent {
           console.log(isoDate);
           const peruvianDate = this.converttoPeruvianDate(isoDate);
           console.log(peruvianDate);
-          alert(`Asistencia registrada con éxito el ${peruvianDate}`);
+          this.attendanceSummary.updateSummary();
         },
-        error: (error) =>
-          alert('Error, probablemente ya registraste tu asistencia de hoy'),
       });
     }
   }

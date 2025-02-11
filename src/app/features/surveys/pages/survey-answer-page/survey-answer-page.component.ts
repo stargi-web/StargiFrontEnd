@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-survey-answer-page',
@@ -32,7 +34,8 @@ export class SurveyAnswerPageComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private surveyService: SurveyService,
-    private router: Router
+    private router: Router,
+    private sessionStorageService: SessionStorageService
   ) {
     this.responseForm = this.fb.group({
       answers: this.fb.array([]),
@@ -40,7 +43,9 @@ export class SurveyAnswerPageComponent {
   }
 
   ngOnInit(): void {
-    this.userId = Number(sessionStorage.getItem('userId'));
+    this.userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
     this.surveyId = Number(this.route.snapshot.paramMap.get('surveyId'));
 
     this.surveyService.getSurveyById(this.surveyId).subscribe((response) => {

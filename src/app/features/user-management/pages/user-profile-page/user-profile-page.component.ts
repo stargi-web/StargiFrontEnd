@@ -5,6 +5,8 @@ import { CardModule } from 'primeng/card';
 import { PasswordModule } from 'primeng/password';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-user-profile-page',
@@ -18,9 +20,14 @@ export class UserProfilePageComponent {
   password?: string;
   userId!: number;
   disable = false;
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private sessionStorageService: SessionStorageService
+  ) {}
   ngOnInit(): void {
-    this.userId = Number(sessionStorage.getItem('userId'));
+    this.userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
     this.userService.getUserById(this.userId).subscribe({
       next: (response) => {
         this.user = response;

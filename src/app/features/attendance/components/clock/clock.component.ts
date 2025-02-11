@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -7,17 +7,28 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './clock.component.html',
-  styleUrl: './clock.component.css'
+  styleUrl: './clock.component.css',
 })
 export class ClockComponent implements OnInit {
   currentTime: Date = new Date();
   days: string[] = ['DOM', 'LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
+  private intervalId: any;
 
   ngOnInit(): void {
-    setInterval(() => {
-      this.currentTime = new Date();
-    }, 1000);
+    this.ngZone.runOutsideAngular(() => {
+      this.intervalId = setInterval(() => {
+        this.ngZone.run(() => {
+          this.currentTime = new Date();
+        });
+      }, 1000);
+    });
   }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalId);
+  }
+
+  constructor(private ngZone: NgZone) {}
 
   to2Digit(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
@@ -48,7 +59,7 @@ export class ClockComponent implements OnInit {
     return this.currentTime.toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   }
 }

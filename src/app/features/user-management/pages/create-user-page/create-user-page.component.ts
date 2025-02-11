@@ -13,6 +13,8 @@ import { PasswordModule } from 'primeng/password';
 import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { catchError, map, of, switchMap } from 'rxjs';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 @Component({
   selector: 'app-create-user-page',
@@ -30,7 +32,9 @@ import { catchError, map, of, switchMap } from 'rxjs';
 })
 export class CreateUserPageComponent {
   isSupervisor = false;
-  teamId: number = Number(sessionStorage.getItem('teamId'));
+  teamId: number = Number(
+    this.sessionStorageService.getItem(SESSION_ITEMS.TEAM_ID)
+  );
   userForm: FormGroup;
   roles = [
     { label: 'Ejecutivo', value: 'executive' },
@@ -40,7 +44,8 @@ export class CreateUserPageComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private sessionStorageService: SessionStorageService
   ) {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -52,7 +57,9 @@ export class CreateUserPageComponent {
   }
 
   ngOnInit() {
-    if (sessionStorage.getItem('role') === 'supervisor') {
+    if (
+      this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) === 'supervisor'
+    ) {
       this.isSupervisor = true;
     }
   }

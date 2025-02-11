@@ -17,6 +17,8 @@ import {
   productTypes,
   states,
 } from '../../models/constants';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 interface FieldError {
   field: string;
@@ -52,7 +54,8 @@ export class CreateOpportunityPageComponent {
 
   constructor(
     private fb: FormBuilder,
-    private opportunityService: OpportunityService
+    private opportunityService: OpportunityService,
+    private sessionStorageService: SessionStorageService
   ) {
     this.opportunityForm = this.fb.group({
       ruc: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
@@ -78,7 +81,9 @@ export class CreateOpportunityPageComponent {
   }
 
   ngOnInit(): void {
-    this.userId = Number(sessionStorage.getItem('userId'));
+    this.userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
   }
   onSubmit() {
     console.log(this.opportunityForm.value);

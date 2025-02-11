@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AttendanceService } from '../../services/attendanceService';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip';
+import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
+import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
 interface Attendance {
   date: string;
@@ -20,10 +22,15 @@ export class AttendanceMonthSummaryComponent implements OnInit {
   attendances: Attendance[] = [];
   userId!: number;
 
-  constructor(private attendanceService: AttendanceService) {}
+  constructor(
+    private attendanceService: AttendanceService,
+    private sessionStorageService: SessionStorageService
+  ) {}
 
   ngOnInit(): void {
-    this.userId = Number(sessionStorage.getItem('userId'));
+    this.userId = Number(
+      this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+    );
     this.initializeWeekdaysInMonth();
     this.fetchAttendances();
   }
@@ -141,5 +148,9 @@ export class AttendanceMonthSummaryComponent implements OnInit {
     }
 
     return 'No tiene registrada la asistencia para este día';
+  }
+
+  public updateSummary(): void {
+    this.fetchAttendances();
   }
 }
