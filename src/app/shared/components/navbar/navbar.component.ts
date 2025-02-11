@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api'; // Importa MenuItem de PrimeNG
@@ -12,15 +12,24 @@ import { EXECUTIVE_LINKS } from './models/navlinks/executive-links';
 import { HHRR_LINKS } from './models/navlinks/hhrr-links';
 import { SessionStorageService } from '../../services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../models/session-items';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { Sidebar } from 'primeng/sidebar';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MenubarModule, Button],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MenubarModule,
+    Button,
+    SidebarComponent,
+  ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
+  @ViewChild(SidebarComponent) sidebar!: SidebarComponent;
   userRole: string = ''; // Rol inicial
   name?: string;
 

@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, signal } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageNotificationService } from './shared/services/message-toast.service';
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { MainComponent } from './shared/pages/main/main.component';
+import { AuthComponent } from './core/auth/auth.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,9 @@ import { CommonModule } from '@angular/common';
     RouterOutlet,
     NgxSpinnerModule,
     ToastModule,
-    NavbarComponent,
+    SidebarComponent,
+    MainComponent,
+    AuthComponent,
   ],
   providers: [MessageNotificationService],
   templateUrl: './app.component.html',
@@ -25,13 +29,35 @@ import { CommonModule } from '@angular/common';
 export class AppComponent implements OnInit {
   // Propiedad para determinar si la ruta actual es la de login
   isLoginPage: boolean = false;
+  isLeftSidebarCollapsed = signal<boolean>(false);
+  screenWidth = signal<number>(0);
   constructor(private primengConfig: PrimeNGConfig, private router: Router) {
     // Escucha los cambios de ruta
     this.router.events.subscribe(() => {
       this.isLoginPage = this.router.url === '/login'; // Ajusta la ruta de login según tu aplicación
     });
+
+    if (typeof window !== 'undefined') {
+      this.screenWidth.set(window.innerWidth);
+      window.addEventListener('resize', this.onResize.bind(this));
+    }
   }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (typeof window !== 'undefined') {
+      this.screenWidth.set(window.innerWidth);
+      if (this.screenWidth() < 768) {
+        this.isLeftSidebarCollapsed.set(true);
+      }
+    }
+  }
+  changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
+    this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
+  }
+
   ngOnInit(): void {
+    this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
     this.primengConfig.setTranslation({
       startsWith: 'Empieza con',
       contains: 'Contiene',
