@@ -149,4 +149,8 @@ export class AttendanceMonthSummaryComponent implements OnInit {
 
     return 'No tiene registrada la asistencia para este día';
   }
+
+  public updateSummary(): void {
+    this.fetchAttendances();
+  }
 }

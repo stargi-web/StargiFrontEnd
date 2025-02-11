@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ClockComponent } from '../../components/clock/clock.component';
 import { AttendanceService } from '../../services/attendanceService';
 import { ButtonModule } from 'primeng/button';
@@ -14,6 +14,9 @@ import { SESSION_ITEMS } from '../../../../shared/models/session-items';
   styleUrl: './register-attendance-page.component.css',
 })
 export class RegisterAttendancePageComponent {
+  @ViewChild(AttendanceMonthSummaryComponent)
+  private attendanceSummary!: AttendanceMonthSummaryComponent;
+
   constructor(
     private attendanceService: AttendanceService,
     private sessionStorageService: SessionStorageService
@@ -29,10 +32,8 @@ export class RegisterAttendancePageComponent {
           console.log(isoDate);
           const peruvianDate = this.converttoPeruvianDate(isoDate);
           console.log(peruvianDate);
-          alert(`Asistencia registrada con éxito el ${peruvianDate}`);
+          this.attendanceSummary.updateSummary();
         },
-        error: (error) =>
-          alert('Error, probablemente ya registraste tu asistencia de hoy'),
       });
     }
   }
