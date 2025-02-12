@@ -94,3 +94,32 @@
 .active .sidenav-link-text {
   color: #000;
 }
+
+.submenu {
+  list-style: none;
+  padding-left: 20px;
+  margin: 0;
+  display: block;
+}
+
+.sidenav-subnav-link {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  padding: 5px;
+  border-radius: 0.625rem;
+}
+
+.sidenav-subnav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.expand-icon {
+  margin-left: auto;
+  transition: transform 0.3s;
+}
+
+.sidenav-nav-item.expanded .expand-icon {
+  transform: rotate(180deg);
+}

@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from './services/authService';
 import { LogInUser } from './models/LogInUser';
+import { SessionStorageService } from '../../shared/services/sessionStorage.service';
 
 @Component({
   selector: 'app-auth',
@@ -19,7 +20,12 @@ export class AuthComponent {
   userName: string = '';
   password: string = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private sessionStorageService: SessionStorageService
+  ) {
+    this.sessionStorageService.clear();
+  }
   logIn() {
     const logInUser: LogInUser = {
       userName: this.userName,

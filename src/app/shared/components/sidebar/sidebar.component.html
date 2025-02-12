@@ -13,21 +13,41 @@
     </button>
     }
   </div>
+
   <div class="sidenav-nav">
-    <div class="text-white">En desarrollo...</div>
-    @for (item of items; track $index) {
-    <li class="sidenav-nav-item">
+    @for (item of items; track item.label) {
+    <li class="sidenav-nav-item" (click)="toggleSubMenu($index)">
       <a
         class="sidenav-nav-link"
-        [routerLink]="item.routeLink"
+        [routerLink]="item['path']"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
         <i class="sidenav-link-icon" [class]="item.icon"></i>
         @if (!isLeftSidebarCollapsed()) {
         <span class="sidenav-link-text">{{ item.label }}</span>
-        }
+        @if (item.items) {
+        <i class="pi pi-chevron-down expand-icon p-2"></i>
+        } }
       </a>
+
+      <!-- Submenú -->
+      <ul *ngIf="expandedIndex === $index" class="submenu">
+        @for (subItem of item.items; track subItem.label) {
+        <li class="sidenav-nav-item">
+          <a
+            class="sidenav-subnav-link"
+            [routerLink]="subItem['path']"
+            routerLinkActive="subActive"
+          >
+            <i class="p-2 sidenav-link-icon" [class]="subItem.icon"></i>
+            @if (!isLeftSidebarCollapsed()) {
+            <span class="sidenav-link-text">{{ subItem.label }}</span>
+            }
+          </a>
+        </li>
+        }
+      </ul>
     </li>
     }
   </div>
