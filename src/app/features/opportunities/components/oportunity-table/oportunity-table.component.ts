@@ -363,27 +363,29 @@ export class OportunityTableComponent {
       ...this.parseData(this.primeFilters),
     };
 
-    //console.log('MERGED', this.filters); // Muestra el resultado en consola
-    this.opportunityService
-      .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
-      .subscribe((data) => {
-        if (!data.items) return;
+    if (Object.keys(this.filters).length > 0) {
+      //console.log('MERGED', this.filters); // Muestra el resultado en consola
+      this.opportunityService
+        .getOpportunities(page, size, this.filters, this.sortField, sortOrder)
+        .subscribe((data) => {
+          if (!data.items) return;
 
-        this.opportunities = data.items.map((opp: OpportunityModel) => ({
-          ...opp,
-          oppSfaDateCreation: new Date(opp.oppSfaDateCreation),
-          createdAt: new Date(opp.createdAt),
-          updatedAt: new Date(opp.updatedAt),
-          estimatedClosingDate: new Date(opp.estimatedClosingDate),
-          nextInteraction: opp.nextInteraction
-            ? new Date(opp.nextInteraction)
-            : null,
-        }));
+          this.opportunities = data.items.map((opp: OpportunityModel) => ({
+            ...opp,
+            oppSfaDateCreation: new Date(opp.oppSfaDateCreation),
+            createdAt: new Date(opp.createdAt),
+            updatedAt: new Date(opp.updatedAt),
+            estimatedClosingDate: new Date(opp.estimatedClosingDate),
+            nextInteraction: opp.nextInteraction
+              ? new Date(opp.nextInteraction)
+              : null,
+          }));
 
-        this.loadStateSummary(data.stateSummary);
-        this.totalRecords = data.total;
-        this.calculateUrgentOpportunities();
-      });
+          this.loadStateSummary(data.stateSummary);
+          this.totalRecords = data.total;
+          this.calculateUrgentOpportunities();
+        });
+    }
   }
 
   refreshOpportunityTable() {

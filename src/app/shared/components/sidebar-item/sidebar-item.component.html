@@ -1,0 +1,44 @@
+<li *ngIf="item">
+  <ng-container *ngIf="item.items && item.items.length; else leafItem">
+    <a
+      pRipple
+      pStyleClass="@next"
+      enterFromClass="hidden"
+      enterActiveClass="slidedown"
+      leaveToClass="hidden"
+      leaveActiveClass="slideup"
+      class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+    >
+      <i [ngClass]="item.icon" class="mr-2"></i>
+      @if (!isLeftSidebarCollapsed) {
+      <span class="font-medium">{{ item.label }}</span>
+      <i class="pi pi-chevron-down ml-auto"></i>
+      }
+    </a>
+    <ul
+      class="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out"
+      [class.pl-3]="!isLeftSidebarCollapsed"
+      [class.pl-0]="isLeftSidebarCollapsed"
+    >
+      <app-sidebar-item
+        [isLeftSidebarCollapsed]="isLeftSidebarCollapsed"
+        [item]="child"
+        *ngFor="let child of item.items"
+      ></app-sidebar-item>
+    </ul>
+  </ng-container>
+
+  <ng-template #leafItem>
+    <a
+      pRipple
+      class="no-underline flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+      [routerLink]="item['path']"
+      routerLinkActive="active-link"
+    >
+      <i [ngClass]="item.icon" class="mr-2"></i>
+      @if (!isLeftSidebarCollapsed) {
+      <span class="font-medium">{{ item.label }}</span>
+      }
+    </a>
+  </ng-template>
+</li>

@@ -17,13 +17,14 @@
 
           <!-- Respuesta de texto -->
           <div *ngIf="question.type === 'text'">
-            <input
-              type="text"
-              pInputText
-              [formControlName]="i.toString()"
+            <textarea
               class="w-full"
+              rows="3"
+              pInputTextarea
+              [formControlName]="i.toString()"
               placeholder="Escribe tu respuesta"
-            />
+              maxlength="150"
+            ></textarea>
           </div>
 
           <!-- Selección múltiple -->

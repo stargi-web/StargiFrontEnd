@@ -1,79 +1,80 @@
 <div
-  class="sidenav"
+  class="sidenav flex flex-column"
   [ngClass]="isLeftSidebarCollapsed() ? 'sidenav-collapsed' : ''"
 >
-  <div class="logo-container">
-    <button class="logo" (click)="toggleCollapse()">
-      <i class="pi pi-bars"></i>
-    </button>
-    @if (!isLeftSidebarCollapsed()) {
-    <div class="logo-text">Stargi</div>
-    <button class="btn-close" (click)="closeSidenav()">
-      <i class="pi pi-times close-icon"></i>
-    </button>
-    }
-  </div>
-
-  <div class="sidenav-nav">
-    <div class="flex flex-column flex-grow-1">
-      @for (item of items; track item.label) {
-      <li class="sidenav-nav-item" (click)="toggleSubMenu($index)">
-        <a
-          class="sidenav-nav-link"
-          [routerLink]="item['path']"
-          routerLinkActive="active"
-        >
-          <i
-            class="sidenav-link-icon align-items-center"
-            [class]="item.icon"
-          ></i>
-          @if (!isLeftSidebarCollapsed()) {
-          <span class="sidenav-link-text">{{ item.label }}</span>
-          @if (item.items) {
-          <i class="pi pi-chevron-down expand-icon p-2"></i>
-          } }
-        </a>
-
-        <!-- Submenú -->
-        <ul
-          *ngIf="expandedIndex === $index || isSubMenuActive(item.items ?? [])"
-          class="submenu"
-          [ngClass]="{ 'submenu-collapsed': isLeftSidebarCollapsed() }"
-        >
-          @for (subItem of item.items; track subItem.label) {
-          <li class="sidenav-nav-item mt-3">
-            <a
-              class="sidenav-subnav-link"
-              [routerLink]="subItem['path']"
-              routerLinkActive="subActive"
-              [routerLinkActiveOptions]="{ exact: true }"
-            >
-              <i class="p-2 sidenav-link-icon" [class]="subItem.icon"></i>
-              @if (!isLeftSidebarCollapsed()) {
-              <span class="sidenav-link-text">{{ subItem.label }}</span>
-              }
-            </a>
-          </li>
-          }
-        </ul>
-      </li>
-      }
-    </div>
-
-    <div
-      class="user-icon flex flex-row align-content-center align-items-center"
-      (click)="goToProfile()"
+  <div
+    class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0"
+  >
+    <span
+      class="inline-flex align-items-center gap-2 cursor-pointer"
+      (click)="toggleCollapse()"
     >
-      <p-avatar
-        [label]="name ? name[0].toUpperCase() : 'N'"
-        styleClass="mr-2"
-        size="large"
-        shape="circle"
+      <img
+        src="stargi-logo.svg"
+        alt="Logo"
+        width="33"
+        height="35"
+        viewBox="0 0 33 35"
+        class="block mx-auto"
       />
 
       @if (!isLeftSidebarCollapsed()) {
-      <p class="text-white font-medium">{{ name }}</p>
+      <span class="font-semibold text-2xl text-primary text-color">Stargi</span>
       }
+    </span>
+    <span>
+      @if (!isLeftSidebarCollapsed()) {
+      <p-button
+        type="button"
+        icon="pi pi-times"
+        rounded="true"
+        outlined="true"
+        styleClass="h-2rem w-2rem  text-600"
+        (click)="toggleCollapse()"
+      ></p-button>
+      }
+    </span>
+  </div>
+  <div class="overflow-y-auto">
+    <ul class="list-none p-3 m-0">
+      <li>
+        <ul class="list-none p-0 m-0 overflow-hidden">
+          <app-sidebar-item
+            [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+            [item]="item"
+            *ngFor="let item of items"
+          ></app-sidebar-item>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="mt-auto">
+    <div class="list-none p-3 m-0">
+      <a
+        pRipple
+        (click)="logout()"
+        class="no-underline flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+      >
+        <i class="pi pi-sign-out mr-2"></i>
+        @if (!isLeftSidebarCollapsed()) {
+        <span class="font-medium">Cerrar sesión</span>
+        }
+      </a>
     </div>
+    <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
+    <a
+      pRipple
+      (click)="goToProfile()"
+      class="mx-auto my-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+    >
+      <p-avatar
+        styleClass="m-2"
+        [label]="name ? name[0].toUpperCase() : 'N'"
+        shape="circle"
+      />
+      @if (!isLeftSidebarCollapsed()) {
+      <span class="font-bold">{{ name }}</span>
+      }
+    </a>
   </div>
 </div>

@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../../../shared/models/session-items';
@@ -20,6 +21,7 @@ import { SESSION_ITEMS } from '../../../../shared/models/session-items';
     RadioButtonModule,
     ReactiveFormsModule,
     InputTextModule,
+    InputTextareaModule,
   ],
   templateUrl: './survey-answer-page.component.html',
   styleUrl: './survey-answer-page.component.css',

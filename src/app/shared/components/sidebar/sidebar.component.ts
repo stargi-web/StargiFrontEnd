@@ -12,11 +12,24 @@ import { SUPERVISOR_LINKS } from '../navbar/models/navlinks/supervisor-links';
 import { ADMIN_LINKS } from '../navbar/models/navlinks/admin-links';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { StyleClassModule } from 'primeng/styleclass';
+import { SidebarItemComponent } from '../sidebar-item/sidebar-item.component';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule, AvatarModule, AvatarGroupModule],
+  imports: [
+    RouterModule,
+    CommonModule,
+    AvatarModule,
+    AvatarGroupModule,
+    ButtonModule,
+    RippleModule,
+    StyleClassModule,
+    SidebarItemComponent,
+  ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
@@ -91,15 +104,12 @@ export class SidebarComponent {
     if (this.isMobile) {
       this.items = this.items.filter((item) => item['mobile'] !== false);
     }
-
-    // Agrega el ítem de "Cerrar sesión" al final
-    this.items.push({
-      path: '/login',
-      label: 'Cerrar sesión',
-      icon: 'pi pi-sign-out',
-    });
   }
 
+  logout() {
+    this.sessionStorageService.clear();
+    this.router.navigate(['/login']);
+  }
   goToProfile() {
     this.router.navigate(['/user/profile']);
   }
