@@ -16,7 +16,6 @@ import { AuthComponent } from './core/auth/auth.component';
     CommonModule,
     RouterModule,
     RouterOutlet,
-    NgxSpinnerModule,
     ToastModule,
     SidebarComponent,
     MainComponent,

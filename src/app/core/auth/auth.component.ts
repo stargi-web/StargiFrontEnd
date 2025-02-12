@@ -7,11 +7,18 @@ import { Router } from '@angular/router';
 import { AuthService } from './services/authService';
 import { LogInUser } from './models/LogInUser';
 import { SessionStorageService } from '../../shared/services/sessionStorage.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [InputTextModule, PasswordModule, ButtonModule, FormsModule],
+  imports: [
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+    FormsModule,
+    NgxSpinnerModule,
+  ],
   providers: [],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',
