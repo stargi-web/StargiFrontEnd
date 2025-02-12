@@ -10,11 +10,13 @@ import { EXECUTIVE_LINKS } from '../navbar/models/navlinks/executive-links';
 import { HHRR_LINKS } from '../navbar/models/navlinks/hhrr-links';
 import { SUPERVISOR_LINKS } from '../navbar/models/navlinks/supervisor-links';
 import { ADMIN_LINKS } from '../navbar/models/navlinks/admin-links';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, AvatarModule, AvatarGroupModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
@@ -59,8 +61,13 @@ export class SidebarComponent {
     this.changeIsLeftSidebarCollapsed.emit(true);
   }
 
-  toggleSubMenu(index: number): void {
+  toggleSubMenu(index: number) {
+    // Si ya está expandido, colapsarlo; si no, expandirlo
     this.expandedIndex = this.expandedIndex === index ? null : index;
+  }
+
+  isSubMenuActive(subItems: MenuItem[]): boolean {
+    return subItems.some((item) => this.router.url.includes(item['path']));
   }
 
   updateMenuItems() {

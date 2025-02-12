@@ -15,43 +15,65 @@
   </div>
 
   <div class="sidenav-nav">
-    @for (item of items; track item.label) {
-    <li class="sidenav-nav-item" (click)="toggleSubMenu($index)">
-      <a
-        class="sidenav-nav-link"
-        [routerLink]="item['path']"
-        routerLinkActive="active"
-      >
-        <i class="sidenav-link-icon" [class]="item.icon"></i>
-        @if (!isLeftSidebarCollapsed()) {
-        <span class="sidenav-link-text">{{ item.label }}</span>
-        @if (item.items) {
-        <i class="pi pi-chevron-down expand-icon p-2"></i>
-        } }
-      </a>
+    <div class="flex flex-column flex-grow-1">
+      @for (item of items; track item.label) {
+      <li class="sidenav-nav-item" (click)="toggleSubMenu($index)">
+        <a
+          class="sidenav-nav-link"
+          [routerLink]="item['path']"
+          routerLinkActive="active"
+        >
+          <i
+            class="sidenav-link-icon align-items-center"
+            [class]="item.icon"
+          ></i>
+          @if (!isLeftSidebarCollapsed()) {
+          <span class="sidenav-link-text">{{ item.label }}</span>
+          @if (item.items) {
+          <i class="pi pi-chevron-down expand-icon p-2"></i>
+          } }
+        </a>
 
-      <!-- Submenú -->
-      <ul
-        *ngIf="expandedIndex === $index"
-        class="submenu"
-        [ngClass]="{ 'submenu-collapsed': isLeftSidebarCollapsed() }"
-      >
-        @for (subItem of item.items; track subItem.label) {
-        <li class="sidenav-nav-item">
-          <a
-            class="sidenav-subnav-link"
-            [routerLink]="subItem['path']"
-            routerLinkActive="subActive"
-          >
-            <i class="p-2 sidenav-link-icon" [class]="subItem.icon"></i>
-            @if (!isLeftSidebarCollapsed()) {
-            <span class="sidenav-link-text">{{ subItem.label }}</span>
-            }
-          </a>
-        </li>
-        }
-      </ul>
-    </li>
-    }
+        <!-- Submenú -->
+        <ul
+          *ngIf="expandedIndex === $index || isSubMenuActive(item.items ?? [])"
+          class="submenu"
+          [ngClass]="{ 'submenu-collapsed': isLeftSidebarCollapsed() }"
+        >
+          @for (subItem of item.items; track subItem.label) {
+          <li class="sidenav-nav-item mt-3">
+            <a
+              class="sidenav-subnav-link"
+              [routerLink]="subItem['path']"
+              routerLinkActive="subActive"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <i class="p-2 sidenav-link-icon" [class]="subItem.icon"></i>
+              @if (!isLeftSidebarCollapsed()) {
+              <span class="sidenav-link-text">{{ subItem.label }}</span>
+              }
+            </a>
+          </li>
+          }
+        </ul>
+      </li>
+      }
+    </div>
+
+    <div
+      class="user-icon flex flex-row align-content-center align-items-center"
+      (click)="goToProfile()"
+    >
+      <p-avatar
+        [label]="name ? name[0].toUpperCase() : 'N'"
+        styleClass="mr-2"
+        size="large"
+        shape="circle"
+      />
+
+      @if (!isLeftSidebarCollapsed()) {
+      <p class="text-white font-medium">{{ name }}</p>
+      }
+    </div>
   </div>
 </div>
