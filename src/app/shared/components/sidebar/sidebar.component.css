@@ -1,12 +1,14 @@
 .sidenav {
-  background: #012a5b;
+  background: #ffffff;
+  /* background: #012a5b; */
   transition: all 0.5s ease;
   position: fixed;
   z-index: 1;
   top: 0;
   width: 16.5625rem;
   height: 100vh;
-  box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+  /* box-shadow: 0.063rem 0 1.25rem 0 #8690a3; */
+  box-shadow: 0.063rem 0 1.25rem 0 #d7dbe1;
 }
 .sidenav-collapsed {
   width: 5rem;
