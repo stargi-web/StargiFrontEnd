@@ -107,7 +107,6 @@
   align-items: center;
   color: #fff;
   text-decoration: none;
-  padding: 5px;
   border-radius: 0.625rem;
 }
 
@@ -122,4 +121,12 @@
 
 .sidenav-nav-item.expanded .expand-icon {
   transform: rotate(180deg);
+}
+
+.submenu-collapsed {
+  list-style: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0;
+  display: block;
 }

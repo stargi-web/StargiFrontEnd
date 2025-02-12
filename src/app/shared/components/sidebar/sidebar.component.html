@@ -21,7 +21,6 @@
         class="sidenav-nav-link"
         [routerLink]="item['path']"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
       >
         <i class="sidenav-link-icon" [class]="item.icon"></i>
         @if (!isLeftSidebarCollapsed()) {
@@ -32,7 +31,11 @@
       </a>
 
       <!-- Submenú -->
-      <ul *ngIf="expandedIndex === $index" class="submenu">
+      <ul
+        *ngIf="expandedIndex === $index"
+        class="submenu"
+        [ngClass]="{ 'submenu-collapsed': isLeftSidebarCollapsed() }"
+      >
         @for (subItem of item.items; track subItem.label) {
         <li class="sidenav-nav-item">
           <a
