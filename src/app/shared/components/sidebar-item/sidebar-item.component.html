@@ -17,8 +17,11 @@
     </a>
     <ul
       class="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out"
+      [class.pl-3]="!isLeftSidebarCollapsed"
+      [class.pl-0]="isLeftSidebarCollapsed"
     >
       <app-sidebar-item
+        [isLeftSidebarCollapsed]="isLeftSidebarCollapsed"
         [item]="child"
         *ngFor="let child of item.items"
       ></app-sidebar-item>
