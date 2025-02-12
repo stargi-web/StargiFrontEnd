@@ -1,0 +1,57 @@
+<div
+  class="sidenav"
+  [ngClass]="isLeftSidebarCollapsed() ? 'sidenav-collapsed' : ''"
+>
+  <div class="logo-container">
+    <button class="logo" (click)="toggleCollapse()">
+      <i class="pi pi-bars"></i>
+    </button>
+    @if (!isLeftSidebarCollapsed()) {
+    <div class="logo-text">Stargi</div>
+    <button class="btn-close" (click)="closeSidenav()">
+      <i class="pi pi-times close-icon"></i>
+    </button>
+    }
+  </div>
+
+  <div class="sidenav-nav">
+    @for (item of items; track item.label) {
+    <li class="sidenav-nav-item" (click)="toggleSubMenu($index)">
+      <a
+        class="sidenav-nav-link"
+        [routerLink]="item['path']"
+        routerLinkActive="active"
+      >
+        <i class="sidenav-link-icon" [class]="item.icon"></i>
+        @if (!isLeftSidebarCollapsed()) {
+        <span class="sidenav-link-text">{{ item.label }}</span>
+        @if (item.items) {
+        <i class="pi pi-chevron-down expand-icon p-2"></i>
+        } }
+      </a>
+
+      <!-- Submenú -->
+      <ul
+        *ngIf="expandedIndex === $index"
+        class="submenu"
+        [ngClass]="{ 'submenu-collapsed': isLeftSidebarCollapsed() }"
+      >
+        @for (subItem of item.items; track subItem.label) {
+        <li class="sidenav-nav-item">
+          <a
+            class="sidenav-subnav-link"
+            [routerLink]="subItem['path']"
+            routerLinkActive="subActive"
+          >
+            <i class="p-2 sidenav-link-icon" [class]="subItem.icon"></i>
+            @if (!isLeftSidebarCollapsed()) {
+            <span class="sidenav-link-text">{{ subItem.label }}</span>
+            }
+          </a>
+        </li>
+        }
+      </ul>
+    </li>
+    }
+  </div>
+</div>
