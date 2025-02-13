@@ -41,7 +41,11 @@
       [routerLink]="item['path']"
       routerLinkActive="active-link"
     >
-      <i [ngClass]="item.icon" class="mr-2"></i>
+      <i
+        [ngClass]="item.icon"
+        [class.mr-2]="!isLeftSidebarCollapsed"
+        [class.mr-0]="isLeftSidebarCollapsed"
+      ></i>
       @if (!isLeftSidebarCollapsed) {
       <span class="font-medium">{{ item.label }}</span>
       }

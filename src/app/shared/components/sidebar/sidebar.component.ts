@@ -3,7 +3,6 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ROLES } from '../../models/roles';
-import { AuthService } from '../../../core/auth/services/authService';
 import { SessionStorageService } from '../../services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../models/session-items';
 import { EXECUTIVE_LINKS } from '../../models/navlinks/executive-links';
@@ -44,7 +43,6 @@ export class SidebarComponent {
   changeIsLeftSidebarCollapsed = output<boolean>();
 
   constructor(
-    private authService: AuthService,
     private router: Router,
     private sessionStorageService: SessionStorageService,
     @Inject(PLATFORM_ID) private platformId: Object
