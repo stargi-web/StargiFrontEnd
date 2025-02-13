@@ -6,17 +6,17 @@ import { ROLES } from '../../models/roles';
 import { AuthService } from '../../../core/auth/services/authService';
 import { SessionStorageService } from '../../services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../models/session-items';
-import { EXECUTIVE_LINKS } from '../navbar/models/navlinks/executive-links';
-import { HHRR_LINKS } from '../navbar/models/navlinks/hhrr-links';
-import { SUPERVISOR_LINKS } from '../navbar/models/navlinks/supervisor-links';
-import { ADMIN_LINKS } from '../navbar/models/navlinks/admin-links';
+import { EXECUTIVE_LINKS } from '../../models/navlinks/executive-links';
+import { HHRR_LINKS } from '../../models/navlinks/hhrr-links';
+import { SUPERVISOR_LINKS } from '../../models/navlinks/supervisor-links';
+import { ADMIN_LINKS } from '../../models/navlinks/admin-links';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { StyleClassModule } from 'primeng/styleclass';
 import { SidebarItemComponent } from '../sidebar-item/sidebar-item.component';
-
+import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -29,6 +29,7 @@ import { SidebarItemComponent } from '../sidebar-item/sidebar-item.component';
     RippleModule,
     StyleClassModule,
     SidebarItemComponent,
+    TooltipModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
@@ -52,17 +53,14 @@ export class SidebarComponent {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = window.innerWidth <= 768; // Safe to use window here
-      console.log('Es móvil:', this.isMobile);
     }
 
     // Obtén el nombre del usuario desde sessionStorage
     this.name = String(this.sessionStorageService.getItem(SESSION_ITEMS.NAME));
-
-    this.authService.getCurrentUserRole().subscribe((role) => {
-      //console.log('Rol actual:', role);
-      this.userRole = role;
-      this.updateMenuItems(); // Actualiza los ítems del menú cuando cambia el rol
-    });
+    this.userRole = String(
+      this.sessionStorageService.getItem(SESSION_ITEMS.ROLE)
+    );
+    this.updateMenuItems();
   }
   items: MenuItem[] = [];
 

@@ -5,7 +5,7 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { StyleClassModule } from 'primeng/styleclass';
-
+import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-sidebar-item',
   standalone: true,
@@ -16,6 +16,7 @@ import { StyleClassModule } from 'primeng/styleclass';
     RippleModule,
     StyleClassModule,
     SidebarItemComponent,
+    TooltipModule,
   ],
   templateUrl: './sidebar-item.component.html',
   styleUrl: './sidebar-item.component.css',
