@@ -6,10 +6,10 @@ import { MenubarModule } from 'primeng/menubar'; // Importa el módulo de Menuba
 import { ROLES } from '../../models/roles';
 import { AuthService } from '../../../core/auth/services/authService';
 import { Button } from 'primeng/button';
-import { ADMIN_LINKS } from './models/navlinks/admin-links';
-import { SUPERVISOR_LINKS } from './models/navlinks/supervisor-links';
-import { EXECUTIVE_LINKS } from './models/navlinks/executive-links';
-import { HHRR_LINKS } from './models/navlinks/hhrr-links';
+import { ADMIN_LINKS } from '../../models/navlinks/admin-links';
+import { SUPERVISOR_LINKS } from '../../models/navlinks/supervisor-links';
+import { EXECUTIVE_LINKS } from '../../models/navlinks/executive-links';
+import { HHRR_LINKS } from '../../models/navlinks/hhrr-links';
 import { SessionStorageService } from '../../services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../models/session-items';
 import { SidebarComponent } from '../sidebar/sidebar.component';
@@ -49,7 +49,6 @@ export class NavbarComponent {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = window.innerWidth <= 768; // Safe to use window here
-      console.log('Es móvil:', this.isMobile);
     }
 
     // Obtén el nombre del usuario desde sessionStorage
