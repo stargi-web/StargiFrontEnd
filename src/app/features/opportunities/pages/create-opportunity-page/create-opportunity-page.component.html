@@ -183,11 +183,17 @@
 
   <!-- Botón de envío fuera de la grilla para ocupar toda la fila -->
   <div class="mt-3">
-    <button
-      pButton
-      type="submit"
-      label="Crear Oportunidad"
-      [disabled]="opportunityForm.invalid"
-    ></button>
+    <span
+      pTooltip="Llene correctamente el formulario"
+      tooltipPosition="right"
+      [tooltipDisabled]="opportunityForm.valid"
+    >
+      <button
+        pButton
+        type="submit"
+        label="Crear Oportunidad"
+        [disabled]="opportunityForm.invalid"
+      ></button>
+    </span>
   </div>
 </form>

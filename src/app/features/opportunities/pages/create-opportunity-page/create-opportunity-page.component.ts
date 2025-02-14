@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OpportunityService } from '../../services/opportunityService';
 import { CommonModule } from '@angular/common';
+
 import {
   offers,
   opportunityTypes,
@@ -19,6 +20,7 @@ import {
 } from '../../models/constants';
 import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../../../shared/models/session-items';
+import { TooltipModule } from 'primeng/tooltip';
 
 interface FieldError {
   field: string;
@@ -38,6 +40,7 @@ interface FieldError {
     FormsModule,
     CalendarModule,
     InputTextareaModule,
+    TooltipModule,
   ],
   templateUrl: './create-opportunity-page.component.html',
   styleUrl: './create-opportunity-page.component.css',
