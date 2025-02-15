@@ -1,27 +1,3 @@
-<!-- Custom Confirm Dialog for Folder Deletion -->
-<app-custom-confirm-dialog
-  #deleteFolderDialog
-  [message]="'Seguro que quiere eliminar esta carpeta?'"
-  [header]="'Confirmación de eliminación de carpeta'"
-  [icon]="'pi pi-trash'"
-  [acceptButtonStyleClass]="'p-button-danger'"
-  [rejectButtonStyleClass]="'p-button-secondary'"
-  (onAccept)="handleDeleteFolder()"
-  (onReject)="handleReject()"
-></app-custom-confirm-dialog>
-
-<!-- Custom Confirm Dialog for File Deletion -->
-<app-custom-confirm-dialog
-  #deleteFileDialog
-  [message]="'Seguro que quiere eliminar este archivo?'"
-  [header]="'Confirmación de eliminación de archivo'"
-  [icon]="'pi pi-trash'"
-  [acceptButtonStyleClass]="'p-button-danger'"
-  [rejectButtonStyleClass]="'p-button-secondary'"
-  (onAccept)="handleDeleteFile()"
-  (onReject)="handleReject()"
-></app-custom-confirm-dialog>
-
 <div class="m-5">
   <p-fileUpload
     [disabled]="folderHistory.length > 0 && userRole === 'admin' ? false : true"
@@ -71,7 +47,7 @@
           >
           <p-button
             *ngIf="selectedFolder && userRole === 'admin'"
-            (click)="showDeleteFolderConfirmation($event)"
+            (click)="confirmDeleteFolder($event, selectedFolder)"
             icon="pi pi-trash"
             [outlined]="true"
             severity="danger"
@@ -80,7 +56,7 @@
 
           <p-button
             *ngIf="selectedFile && userRole === 'admin'"
-            (click)="showDeleteFileConfirmation(selectedFile)"
+            (click)="confirmDeleteFile($event, selectedFile)"
             icon="pi pi-trash"
             [outlined]="true"
             severity="danger"

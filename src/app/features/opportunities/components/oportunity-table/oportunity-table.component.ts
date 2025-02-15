@@ -14,13 +14,15 @@ import { OpportunityModel } from '../../models/opportunityModel';
 import { ExecutiveRecordsOppDialogComponent } from '../records-opportunity-dialog/executive-records-opp-dialog.component';
 import { SimpleChanges } from '@angular/core';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import {
   opportunityTypes,
   products,
   productTypes,
   states,
 } from '../../models/constants';
-import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
+
 import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../../../shared/models/session-items';
 
@@ -39,7 +41,7 @@ import { SESSION_ITEMS } from '../../../../shared/models/session-items';
     TableModule,
     CommonModule,
     CheckboxModule,
-    CustomConfirmDialogComponent,
+    ConfirmDialogModule,
   ],
   templateUrl: './oportunity-table.component.html',
   styleUrl: './oportunity-table.component.css',
@@ -95,16 +97,14 @@ export class OportunityTableComponent {
     { sigla: 'C', count: this.stateCounts.Cierre },
     { sigla: 'NoC', count: this.stateCounts['No cierre'] },
   ];
-
-  @ViewChild('deleteOportunityDialog')
-  deleteOportunityDialog!: CustomConfirmDialogComponent;
+  ref: DynamicDialogRef | undefined;
   @ViewChild('dataTable') dataTable: any;
   constructor(
-    public dialogService: DialogService,
+    private dialogService: DialogService,
     private opportunityService: OpportunityService,
-    private sessionStorageService: SessionStorageService
+    private sessionStorageService: SessionStorageService,
+    private confirmationService: ConfirmationService
   ) {}
-  ref: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
     this.userRole =
@@ -218,8 +218,42 @@ export class OportunityTableComponent {
   cancelEditing() {
     this.editingRowIndex = null;
   }
-  deleteOpportunity(name: string, id: number) {
-    this.opportunityService.deleteOpportunity(id).subscribe();
+  confirmDelete(event: Event, opportunity: OpportunityModel) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Seguro que quiere eliminar la oportunidad ${opportunity.businessName}?`,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => {
+        if (opportunity.id !== undefined) {
+          this.deleteOpportunity(opportunity);
+        }
+      },
+      reject: () => {},
+    });
+  }
+  deleteOpportunity(opportunity: OpportunityModel) {
+    const opportunityState = opportunity.state;
+    if (opportunity.id !== undefined) {
+      this.opportunityService.deleteOpportunity(opportunity.id).subscribe({
+        next: () => {
+          this.opportunities = this.opportunities.filter(
+            (opp) => opp.id !== opportunity.id
+          );
+          this.totalRecords -= 1;
+          this.loadStateSummary({
+            ...this.stateCounts,
+            [opportunityState as keyof typeof this.stateCounts]:
+              this.stateCounts[
+                opportunityState as keyof typeof this.stateCounts
+              ] - 1,
+          });
+        },
+      });
+    }
   }
   openRecordsDialog(oppId: number) {
     if (this.editingRowIndex == null) {
@@ -235,17 +269,6 @@ export class OportunityTableComponent {
         config
       );
     }
-  }
-
-  showDeleteOpportunityDialog(event: Event, opportunity: OpportunityModel) {
-    this.selectedOpportunity = opportunity;
-    this.deleteOportunityDialog.open(event);
-  }
-  handleDeleteOportunity() {
-    this.deleteOpportunity(
-      this.selectedOpportunity.businessName,
-      this.selectedOpportunity.id!
-    );
   }
 
   viewClosed() {

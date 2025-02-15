@@ -12,10 +12,11 @@ import { BadgeModule } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { FirebaseCloudStorageService } from '../../services/firebaseCloudStorageService';
 import { MessageNotificationService } from '../../../../shared/services/message-toast.service';
-import { CustomConfirmDialogComponent } from '../../../../shared/components/custom-confirm-dialog/custom-confirm-dialog.component';
 import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../../../shared/models/session-items';
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { File } from '../../models/fileStorageModel';
 @Component({
   selector: 'app-file-storage',
   standalone: true,
@@ -25,7 +26,7 @@ import { SESSION_ITEMS } from '../../../../shared/models/session-items';
     FileUploadModule,
     InputTextModule,
     BadgeModule,
-    CustomConfirmDialogComponent,
+    ConfirmDialogModule,
   ],
   templateUrl: './file-storage.component.html',
   styleUrls: ['./file-storage.component.css'],
@@ -47,7 +48,7 @@ export class FileStorageComponent implements OnInit {
   //file
   selectedFile: any;
   fileList: FileList = {} as FileList;
-  newFileList: File[] = Array.from(this.fileList || []); // Convert FileList to File[]
+  newFileList: any[] = Array.from(this.fileList || []); // Convert FileList to File[]
   uploadedFiles: any[] = [];
   totalSize: number = 0;
   totalSizePercent: number = 0;
@@ -61,10 +62,7 @@ export class FileStorageComponent implements OnInit {
   @ViewChild('removeUploadedFileButton') removeUploadedFileButton:
     | Button
     | undefined;
-  @ViewChild('deleteFolderDialog')
-  deleteFolderDialog!: CustomConfirmDialogComponent;
-  @ViewChild('deleteFileDialog')
-  deleteFileDialog!: CustomConfirmDialogComponent;
+
   //UI
   isCreatingFolder: boolean = false; // Estado para controlar la visibilidad del input
   isAdminParent: boolean = false;
@@ -76,7 +74,8 @@ export class FileStorageComponent implements OnInit {
     private userService: UserService,
     private firebaseCloudStorageService: FirebaseCloudStorageService,
     private messageNotificationService: MessageNotificationService,
-    private sessionStorageService: SessionStorageService
+    private sessionStorageService: SessionStorageService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -468,27 +467,49 @@ export class FileStorageComponent implements OnInit {
     this.selectedFolderAdmin = folder;
   }
 
-  // Show the confirmation dialog for folder deletion
-  showDeleteFolderConfirmation(event: Event) {
-    this.deleteFolderDialog.open(event);
+  confirmDelete<T>(
+    event: Event,
+    item: T,
+    itemType: 'folder' | 'archivo',
+    itemName: string,
+    deleteCallback: (item: T) => void
+  ) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `¿Seguro que quiere eliminar este ${itemType} ${itemName}?`,
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => {
+        deleteCallback(item);
+      },
+      reject: () => {},
+    });
   }
 
-  // Show the confirmation dialog for file deletion
-  showDeleteFileConfirmation(event: Event) {
-    this.deleteFileDialog.open(event);
+  // Llamar al método genérico para eliminar un folder
+  confirmDeleteFolder(event: Event, folder: Folder) {
+    this.confirmDelete(
+      event,
+      folder,
+      'folder',
+      folder.name,
+      this.deleteFolder.bind(this)
+    );
   }
 
-  // Handle the folder deletion
-  handleDeleteFolder() {
-    this.deleteFolder(this.selectedFolder);
+  // Llamar al método genérico para eliminar un file
+  confirmDeleteFile(event: Event, file: File) {
+    this.confirmDelete(
+      event,
+      file,
+      'archivo',
+      file.fileName,
+      this.deleteFile.bind(this)
+    );
   }
-
-  // Handle the file deletion
-  handleDeleteFile() {
-    this.deleteFile(this.selectedFile);
-  }
-
-  handleReject(): void {}
 
   getFileIcon(fileName: string): string {
     const extension = fileName.split('.').pop()?.toLowerCase();
