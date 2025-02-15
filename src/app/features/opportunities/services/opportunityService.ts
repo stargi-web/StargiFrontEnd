@@ -77,10 +77,6 @@ export class OpportunityService {
     );
   }
 
-  deleteUser(userId: number): Observable<any> {
-    return this.httpClient.delete<any>(`${this.apiUrl}/${userId}/user`);
-  }
-
   getOpportunities(
     page: number,
     size: number,

@@ -96,4 +96,19 @@ export class SurveyService {
       })
     );
   }
+
+  deleteSurvey(surveyId: number): Observable<any> {
+    return this.httpClient.delete<any>(`${this.apiUrl}/${surveyId}`).pipe(
+      tap(() => {
+        // Mostrar mensaje de éxito
+        this.messageNotificationService.showSuccess(
+          'Encuesta eliminada con éxito'
+        );
+      }),
+      catchError((error) => {
+        // Manejar el error y mostrar notificación
+        return throwError(() => new Error('Error al eliminar la encuesta'));
+      })
+    );
+  }
 }

@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { UserModel } from '../../models/userModel';
 import { UserService } from '../../services/userService';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SelectItemGroup } from 'primeng/api';
-import { OpportunityService } from '../../../opportunities/services/opportunityService';
-import { DeleteUserDialogComponent } from '../../components/delete-user-dialog/delete-user-dialog.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 @Component({
   selector: 'app-user-list-page',
   standalone: true,
-  providers: [DialogService],
-  imports: [TableModule, ButtonModule],
+  providers: [],
+  imports: [TableModule, ButtonModule, ConfirmDialogModule],
   templateUrl: './user-list-page.component.html',
   styleUrl: './user-list-page.component.css',
 })
@@ -21,12 +20,10 @@ export class UserListPageComponent {
 
   users!: UserModel[];
   constructor(
-    public dialogService: DialogService,
     private userService: UserService,
     private router: Router,
-    private oppService: OpportunityService
+    private confirmationService: ConfirmationService
   ) {}
-  ref: DynamicDialogRef | undefined;
 
   ngOnInit() {
     this.groupedUsers = [
@@ -68,15 +65,31 @@ export class UserListPageComponent {
     this.router.navigate([`/opportunities/user/${userId}`]);
   }
 
-  deleteUser(userId: number, groupedUsers: any) {
-    const config = {
-      data: {
-        userId,
+  confirmDelete(event: Event, user: any) {
+    if (user.id !== undefined) {
+      this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: `Seguro que quiere eliminar a ${user.firstName} ${user.lastName}?`,
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        acceptIcon: 'none',
+        rejectIcon: 'none',
+        rejectButtonStyleClass: 'p-button-text',
+        accept: () => {
+          if (user.id !== undefined) {
+            this.deleteUser(user.id);
+          }
+        },
+        reject: () => {},
+      });
+    }
+  }
+
+  deleteUser(userId: number) {
+    this.userService.deleteUser(userId).subscribe({
+      next: () => {
+        this.users = this.users.filter((user) => user.id !== userId);
       },
-      style: {
-        height: '800px',
-      },
-    };
-    this.ref = this.dialogService.open(DeleteUserDialogComponent, config);
+    });
   }
 }

@@ -29,16 +29,14 @@
                   (click)="downloadExcel(survey)"
                 ></button>
 
-                <!-- Botón de Cerrar Survey 
                 <button
                   *ngIf="hasAdminPermission()"
                   pButton
                   label=""
                   icon="pi pi-trash"
                   class="p-button-danger"
-                  (click)="closeSurvey(survey)"
+                  (click)="confirmDelete($event, survey)"
                 ></button>
-                -->
               </div>
             </ng-template>
 

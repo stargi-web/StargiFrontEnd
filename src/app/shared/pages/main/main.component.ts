@@ -3,11 +3,18 @@ import { Component, computed, input } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, NavbarComponent, NgxSpinnerModule],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    NavbarComponent,
+    NgxSpinnerModule,
+    ConfirmDialogModule,
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
