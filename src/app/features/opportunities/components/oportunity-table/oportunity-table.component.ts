@@ -222,7 +222,7 @@ export class OportunityTableComponent {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: `Seguro que quiere eliminar la oportunidad ${opportunity.businessName}?`,
-      header: 'Confirmation',
+      header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
       acceptIcon: 'none',
       rejectIcon: 'none',

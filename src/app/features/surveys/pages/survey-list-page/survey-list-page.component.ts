@@ -84,7 +84,7 @@ export class SurveyListPageComponent {
       this.confirmationService.confirm({
         target: event.target as EventTarget,
         message: 'Seguro que quiere eliminar esta encuesta?',
-        header: 'Confirmation',
+        header: 'Confirmación',
         icon: 'pi pi-exclamation-triangle',
         acceptIcon: 'none',
         rejectIcon: 'none',
