@@ -47,7 +47,10 @@
                 class="flex flex-row justify-content-between align-items-center"
               >
                 <p>
-                  Creado por <strong>{{ survey.user.firstName }}</strong>
+                  Creado por
+                  <strong>{{
+                    survey?.user?.firstName || "usuario desconocido"
+                  }}</strong>
                 </p>
                 <span>{{ survey.dateCreated | date : "short" }}</span>
               </div>
