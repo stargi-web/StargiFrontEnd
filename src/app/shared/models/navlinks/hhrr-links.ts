@@ -5,12 +5,12 @@ export const HHRR_LINKS: MenuItem[] = [
   {
     path: '/attendance/users',
     label: 'Asistencias de Usuarios',
-    icon: 'pi pi-home',
+    icon: 'pi pi-calendar',
   },
   {
     path: '/attendance/register',
     label: 'Registrar Asistencia',
-    icon: 'pi pi-calendar',
+    icon: 'pi pi-calendar-plus',
     mobile: false, // No se muestra en dispositivos móviles
   },
   { path: '/files', label: 'Archivos', icon: 'pi pi-file' },

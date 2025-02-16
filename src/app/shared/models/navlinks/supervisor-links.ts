@@ -5,17 +5,17 @@ export const SUPERVISOR_LINKS: MenuItem[] = [
   { path: '/team/members', label: 'Equipo', icon: 'pi pi-users' },
   {
     label: 'Oportunidades',
-    icon: 'pi pi-folder',
+    icon: 'pi pi-chart-line',
     items: [
       {
         path: '/opportunities',
         label: 'Oportunidades del equipo',
-        icon: 'pi pi-folder',
+        icon: 'pi pi-chart-line',
       },
       {
         path: '/opportunities/user',
         label: 'Mis oportunidades',
-        icon: 'pi pi-file',
+        icon: 'pi pi-chart-line',
       },
       {
         path: '/opportunities/create',
@@ -27,12 +27,12 @@ export const SUPERVISOR_LINKS: MenuItem[] = [
   {
     path: '/attendance/users',
     label: 'Asistencias de Usuarios',
-    icon: 'pi pi-home',
+    icon: 'pi pi-calendar',
   },
   {
     path: '/attendance/register',
     label: 'Registrar Asistencia',
-    icon: 'pi pi-calendar',
+    icon: 'pi pi-calendar-plus',
     mobile: false, // No se muestra en dispositivos móviles
   },
   { path: '/files', label: 'Archivos', icon: 'pi pi-file' },
