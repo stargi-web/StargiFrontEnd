@@ -19,7 +19,7 @@ import {
 } from '@angular/common/http';
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { httpErrorInterceptor } from './core/interceptors/httpError.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -38,5 +38,6 @@ export const appConfig: ApplicationConfig = {
     ),
     importProvidersFrom([BrowserAnimationsModule]),
     MessageService,
+    ConfirmationService,
   ],
 };

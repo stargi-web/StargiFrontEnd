@@ -56,7 +56,7 @@
         <p-button
           icon="pi pi-trash"
           [rounded]="true"
-          (onClick)="deleteUser(user.id, groupedUsers)"
+          (onClick)="confirmDelete($event, user)"
         />
       </td>
     </tr>

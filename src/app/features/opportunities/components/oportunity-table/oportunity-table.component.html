@@ -1,17 +1,3 @@
-<app-custom-confirm-dialog
-  #deleteOportunityDialog
-  [message]="
-    selectedOpportunity
-      ? 'Seguro que quiere eliminar ' + selectedOpportunity.businessName + '?'
-      : ''
-  "
-  [header]="'Confirmación de eliminación de oportunidad'"
-  [icon]="'pi pi-trash'"
-  [acceptButtonStyleClass]="'p-button-danger'"
-  [rejectButtonStyleClass]="'p-button-secondary'"
-  (onAccept)="handleDeleteOportunity()"
-></app-custom-confirm-dialog>
-
 <p-table
   #dataTable
   [value]="opportunities"
@@ -462,7 +448,7 @@
           icon="pi pi-trash"
           [rounded]="true"
           severity="danger"
-          (onClick)="showDeleteOpportunityDialog($event, opportunity)"
+          (onClick)="confirmDelete($event, opportunity)"
         />
         }
       </td>

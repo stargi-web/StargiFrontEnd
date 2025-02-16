@@ -1,4 +1,52 @@
 @if (teamId) {
+<div class="mb-4 mt-3">
+  <p-button
+    label="Agregar usuarios al equipo"
+    [outlined]="true"
+    icon="pi pi-plus"
+    (onClick)="op.toggle($event); loadExecutivosWithNoTeam()"
+  />
+
+  <p-overlayPanel #op [style]="{ width: '450px' }" [showCloseIcon]="true">
+    <ng-template pTemplate="content">
+      <p-table
+        [value]="noTeamExecutives"
+        selectionMode="single"
+        [(selection)]="selectedExecutive"
+        (onRowSelect)="onRowSelect(op, selectedExecutive)"
+        [paginator]="true"
+        [rows]="5"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="firstName">
+              Nombre <p-sortIcon field="firstName" />
+            </th>
+            <th pSortableColumn="lastName">
+              Apellido <p-sortIcon field="lastName" />
+            </th>
+            <th pSortableColumn="userName">
+              Usuario <p-sortIcon field="userName" />
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-user>
+          <tr [pSelectableRow]="rowData">
+            <td>
+              {{ user.firstName }}
+            </td>
+            <td>
+              {{ user.lastName }}
+            </td>
+            <td>{{ user.userName }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
+  </p-overlayPanel>
+</div>
+
 <p-table
   [value]="users"
   [paginator]="true"
@@ -37,6 +85,11 @@
           <p-columnFilter type="date" field="lastActivityDate" display="menu" />
         </div>
       </th>
+      <th>
+        <div class="flex align-items-center" style="min-width: 10rem">
+          Remover del equipo
+        </div>
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-user>
@@ -55,6 +108,14 @@
       </td>
       <td>
         {{ user.lastActivityDate | date : "dd/MM/yyyy" }}
+      </td>
+      <td>
+        <p-button
+          icon="pi pi-times"
+          [rounded]="true"
+          severity="danger"
+          (click)="confirmRemove($event, user)"
+        />
       </td>
     </tr>
   </ng-template>

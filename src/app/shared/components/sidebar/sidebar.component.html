@@ -6,6 +6,9 @@
     class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0"
   >
     <span
+      pTooltip="Abrir menú"
+      [tooltipDisabled]="!isLeftSidebarCollapsed()"
+      tooltipPosition="right"
       class="inline-flex align-items-center gap-2 cursor-pointer"
       (click)="toggleCollapse()"
     >
@@ -25,6 +28,8 @@
     <span>
       @if (!isLeftSidebarCollapsed()) {
       <p-button
+        pTooltip="Cerrar menú"
+        tooltipPosition="right"
         type="button"
         [text]="true"
         icon="pi pi-angle-double-left"
