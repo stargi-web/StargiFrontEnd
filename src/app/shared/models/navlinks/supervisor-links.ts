@@ -35,6 +35,6 @@ export const SUPERVISOR_LINKS: MenuItem[] = [
     icon: 'pi pi-calendar-plus',
     mobile: false, // No se muestra en dispositivos móviles
   },
-  { path: '/files', label: 'Archivos', icon: 'pi pi-file' },
+  { path: '/files', label: 'Archivos', icon: 'pi pi-folder' },
   { path: '/surveys', label: 'Encuestas', icon: 'pi pi-clipboard' },
 ];

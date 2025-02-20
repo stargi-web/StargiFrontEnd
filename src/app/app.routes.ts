@@ -47,13 +47,6 @@ export const routes: Routes = [
         (m) => m.TEAM_MANAGEMENT_ROUTES
       ),
   },
-  {
-    path: 'client',
-    loadChildren: () =>
-      import('./features/client-management/client.routes').then(
-        (m) => m.CLIENT_MANAGEMENT_ROUTES
-      ),
-  },
 
   {
     path: 'surveys',
