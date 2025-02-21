@@ -1,11 +1,18 @@
-.user-icon {
+.user-menu {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 35px; /* Adjust size */
-  height: 35px; /* Adjust size */
-  border-radius: 50%; /* Makes the div circular */
-  background-color: #007bff; /* Custom background color */
-  color: white; /* Icon color */
-  font-size: 1.5rem; /* Icon size */
+  cursor: pointer;
+  position: relative;
+}
+
+.username {
+  margin-left: 0.5rem;
+  font-weight: bold;
+}
+
+/* Ajustar posición del menú desplegable */
+::ng-deep .p-menu-overlay {
+  top: 3rem !important; /* Ajusta según la altura de tu navbar */
+  right: 0 !important;
+  left: auto !important;
 }

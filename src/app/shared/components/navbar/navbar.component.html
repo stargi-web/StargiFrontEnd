@@ -1,13 +1,18 @@
-<div *ngIf="!isEmpty">
-  <p-menubar [model]="menuItems">
-    <ng-template pTemplate="start"> </ng-template>
-    <ng-template pTemplate="end">
-      <div class="flex align-items-center gap-2">
-        <p>{{ name }}</p>
-        <div class="user-icon" (click)="goToProfile()">
-          <i class="pi pi-user"></i>
-        </div>
-      </div>
-    </ng-template>
-  </p-menubar>
-</div>
+<p-menubar [model]="menuItems">
+  <ng-template pTemplate="end">
+    <div
+      class="user-menu"
+      (mouseenter)="showMenu($event)"
+      (mouseleave)="hideMenu()"
+    >
+      <p-avatar
+        styleClass="my-2"
+        [label]="name ? name[0].toUpperCase() : 'N'"
+        shape="circle"
+      />
+      <span class="username mr-2">{{ name }}</span>
+      <i class="pi pi-angle-down pt-1 mr-2"></i>
+      <p-menu #menu [popup]="true" [model]="profileMenuItems"></p-menu>
+    </div>
+  </ng-template>
+</p-menubar>
