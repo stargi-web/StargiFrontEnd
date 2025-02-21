@@ -14,30 +14,13 @@ import { SESSION_ITEMS } from '../../../shared/models/session-items';
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
-  private currentUserRole = new BehaviorSubject<string>('');
   private userId = 0;
   constructor(
     private http: HttpClient,
     private router: Router,
     private userService: UserService,
     private sessionStorageService: SessionStorageService
-  ) {
-    // Recupera el rol desde sessionStorage al inicializar el servicio
-    const storedRole = this.sessionStorageService.getItem(SESSION_ITEMS.ROLE);
-    if (storedRole) {
-      this.currentUserRole.next(storedRole); // Actualiza el BehaviorSubject
-    }
-  }
-
-  // Método para obtener el rol del usuario
-  getCurrentUserRole() {
-    return this.currentUserRole.asObservable();
-  }
-
-  // Método para cambiar el rol del usuario
-  setUserRole(role: string) {
-    this.currentUserRole.next(role);
-  }
+  ) {}
 
   logIn(body: LogInUser): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}`, body).pipe(
@@ -55,7 +38,6 @@ export class AuthService {
         this.sessionStorageService.setItem(SESSION_ITEMS.ROLE, response.role);
 
         this.userId = response.userId;
-        this.setUserRole(response.role);
       }),
       catchError((error) => {
         return throwError(() => new Error('Error al iniciar sesión'));
