@@ -1,7 +1,8 @@
 <div class="card flex justify-content-center">
   <p-fileUpload
+    #fileUpload
     [customUpload]="true"
-    (uploadHandler)="onUpload($event)"
+    (uploadHandler)="onUpload($event, fileUpload)"
     [multiple]="false"
     accept=".xls,.xlsx,.csv"
     maxFileSize="0"

@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { FileUploadModule } from 'primeng/fileupload';
+import {
+  FileUpload,
+  FileUploadHandlerEvent,
+  FileUploadModule,
+} from 'primeng/fileupload';
 import { DeactivationService } from '../../services/deactivation.service';
 import { TableModule } from 'primeng/table';
 import { Deactivation } from '../../models/dactivation.interface';
+
 @Component({
   selector: 'app-dectivations-page',
   standalone: true,
@@ -28,10 +33,12 @@ export class DectivationsPageComponent {
     });
   }
 
-  onUpload(event: any) {
+  onUpload(event: FileUploadHandlerEvent, fileUpload: FileUpload) {
     for (let file of event.files) {
-      this.deactivationService.uploadFile(file).subscribe();
+      this.deactivationService.uploadFile(file).subscribe(() => {
+        this.getDeactivationList();
+        fileUpload.clear();
+      });
     }
-    this.getDeactivationList();
   }
 }
