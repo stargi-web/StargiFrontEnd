@@ -1,5 +1,6 @@
 <p-toast></p-toast>
 <app-sidebar
+  class="top-0 sticky z-2"
   *ngIf="!isLoginPage"
   [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
   (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"

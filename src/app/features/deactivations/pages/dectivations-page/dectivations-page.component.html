@@ -1,0 +1,63 @@
+<div class="card flex justify-content-center">
+  <p-fileUpload
+    #fileUpload
+    [customUpload]="true"
+    (uploadHandler)="onUpload($event, fileUpload)"
+    [multiple]="false"
+    accept=".xls,.xlsx,.csv"
+    maxFileSize="0"
+  >
+    <ng-template pTemplate="content">
+      <ul *ngIf="uploadedFiles.length">
+        <li *ngFor="let file of uploadedFiles">
+          {{ file.name }} - {{ file.size }} bytes
+        </li>
+      </ul>
+    </ng-template>
+    <ng-template pTemplate="empty">
+      <div
+        class="flex align-items-center justify-content-center flex-row gap-2"
+      >
+        <i
+          class="pi pi-cloud-upload border-2 border-circle p-2 text-2xl text-400 border-400"
+        ></i>
+        <p class="text-600">Arrastre y suelte aqui para subir archivos</p>
+      </div>
+    </ng-template>
+  </p-fileUpload>
+</div>
+
+<div class="card">
+  <p-table
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 20, 30]"
+    [value]="deactivationList"
+    styleClass="p-datatable-striped"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [scrollable]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>RUC</th>
+        <th>RAZON SOCIAL</th>
+        <th>UNIDADES</th>
+        <th>CONSULTOR</th>
+        <th>CONTACTO</th>
+        <th>EMAIL</th>
+        <th>TELEFONO</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-deactivation>
+      <tr>
+        <td>{{ deactivation.ruc }}</td>
+        <td>{{ deactivation.razonSocial }}</td>
+        <td>{{ deactivation.unidades }}</td>
+        <td>{{ deactivation.consultor }}</td>
+        <td>{{ deactivation.contacto }}</td>
+        <td>{{ deactivation.email }}</td>
+        <td>{{ deactivation.telefono }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

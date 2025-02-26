@@ -1,17 +1,15 @@
+<app-navbar *ngIf="!isLoginPage" class="top-0 sticky z-1"></app-navbar>
 <div class="body" [ngClass]="sizeClass()">
-  <app-navbar *ngIf="!isLoginPage"></app-navbar>
-  <div class="px-4 pt-3 pb-1">
+  <div class="px-4 pt-3 pb-1" style="height: 100vh">
     <router-outlet></router-outlet>
+    <ngx-spinner
+      bdColor="rgba(0, 0, 0, 0.2)"
+      size="medium"
+      color="#fff"
+      type="ball-clip-rotate"
+      [fullScreen]="false"
+    ></ngx-spinner>
   </div>
 
   <p-confirmDialog />
-
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.2)"
-    size="medium"
-    color="#fff"
-    type="ball-clip-rotate"
-    [fullScreen]="true"
-    ><p style="color: white">Cargando...</p></ngx-spinner
-  >
 </div>

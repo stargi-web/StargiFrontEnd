@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { AuthComponent } from './core/auth/auth.component';
-import { roleGuard } from './core/guards/authGuard';
 import { UnauthorizedPageComponent } from './shared/pages/unauthorized-page/unauthorized-page.component';
 
 export const routes: Routes = [
@@ -52,5 +51,13 @@ export const routes: Routes = [
     path: 'surveys',
     loadChildren: () =>
       import('./features/surveys/surveys.routes').then((m) => m.SURVEY_ROUTES),
+  },
+
+  {
+    path: 'deactivations',
+    loadChildren: () =>
+      import('./features/deactivations/deactivations.routes').then(
+        (m) => m.DEACTIVATION_ROUTES
+      ),
   },
 ];
