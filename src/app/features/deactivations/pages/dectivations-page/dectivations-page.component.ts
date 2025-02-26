@@ -19,9 +19,12 @@ export class DectivationsPageComponent {
   constructor(private deactivationService: DeactivationService) {}
 
   ngOnInit() {
+    this.getDeactivationList();
+  }
+
+  getDeactivationList() {
     this.deactivationService.getAllDeactivations().subscribe((response) => {
       this.deactivationList = response;
-      console.log(this.deactivationList);
     });
   }
 
@@ -29,5 +32,6 @@ export class DectivationsPageComponent {
     for (let file of event.files) {
       this.deactivationService.uploadFile(file).subscribe();
     }
+    this.getDeactivationList();
   }
 }
