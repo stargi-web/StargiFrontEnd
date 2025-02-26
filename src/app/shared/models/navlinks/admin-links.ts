@@ -7,4 +7,9 @@ export const ADMIN_LINKS: MenuItem[] = [
   { path: '/team/list', label: 'Equipos', icon: 'pi pi-users' },
   { path: '/files', label: 'Archivos', icon: 'pi pi-folder' },
   { path: '/surveys', label: 'Encuestas', icon: 'pi pi-clipboard' },
+  {
+    path: '/deactivations',
+    label: 'Base de Desactivaciones',
+    icon: 'pi pi-bullseye',
+  },
 ];
