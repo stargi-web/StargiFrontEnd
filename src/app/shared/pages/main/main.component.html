@@ -1,6 +1,6 @@
 <app-navbar *ngIf="!isLoginPage" class="top-0 sticky z-1"></app-navbar>
 <div class="body" [ngClass]="sizeClass()">
-  <div class="px-4 pt-3 pb-1" style="height: 100vh">
+  <div class="px-4 pt-3 pb-3">
     <router-outlet></router-outlet>
     <ngx-spinner
       bdColor="rgba(0, 0, 0, 0.2)"
