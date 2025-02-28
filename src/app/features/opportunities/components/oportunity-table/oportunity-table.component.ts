@@ -77,6 +77,7 @@ export class OportunityTableComponent {
   userIds: any[] = [];
   selectedUsers: any[] = [];
   selectedStates: any[] = [];
+  rows = 30;
 
   stateCounts = {
     'No contactado': 0,
@@ -109,7 +110,7 @@ export class OportunityTableComponent {
   ngOnInit(): void {
     this.userRole =
       this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) || '';
-    this.loadOpportunities({ first: 0, rows: 10 });
+    this.loadOpportunities({ first: 0, rows: this.rows });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -413,7 +414,7 @@ export class OportunityTableComponent {
 
   refreshOpportunityTable() {
     if (this.dataTable) this.dataTable.first = 0;
-    this.loadOpportunities({ first: 0, rows: 10 }); //recargar datos
+    this.loadOpportunities({ first: 0, rows: this.rows }); //recargar datos
   }
 
   loadStateSummary(stateSummary: any) {

@@ -1,8 +1,8 @@
 <p-table
   #dataTable
   [value]="opportunities"
-  [rows]="10"
-  [rowsPerPageOptions]="[10, 15, 20]"
+  [rows]="30"
+  [rowsPerPageOptions]="[30, 40, 50]"
   [loading]="false"
   [paginator]="true"
   [sortField]="sortField"
@@ -12,9 +12,8 @@
   [totalRecords]="totalRecords"
   (onLazyLoad)="loadOpportunities($event)"
   [filters]="primeFilters"
-  [scrollHeight]="'68vh'"
+  [scrollHeight]="'80vh'"
 >
-  >
   <ng-template pTemplate="caption">
     <div class="status-summary mb-3">
       <div class="status-item" *ngFor="let status of opportunityStateSummary">
