@@ -1,0 +1,24 @@
+<div class="content">
+  <div class="pig-container">
+    <lottie-player
+      src="/assets/piggy_blue.json"
+      background="transparent"
+      speed="2"
+      loop
+      autoplay
+    ></lottie-player>
+  </div>
+
+  <div class="progress-info">
+    <p class="text-2xl font-semibold">
+      S/ {{ currentAmount | number : "1.0-0" }} - S/
+      {{ goal | number : "1.0-0" }}
+    </p>
+  </div>
+  <div class="w-3 justify-content-center">
+    <p-progressBar [value]="percentage" [showValue]="false"></p-progressBar>
+    <span class="text-base flex justify-content-center mt-2"
+      >{{ fillPercentage | number : "1.2-2" }}%</span
+    >
+  </div>
+</div>
