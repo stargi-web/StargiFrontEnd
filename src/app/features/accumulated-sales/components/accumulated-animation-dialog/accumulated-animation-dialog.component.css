@@ -1,0 +1,17 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pig-container {
+  width: 80vw; /* 80% del ancho de la pantalla */
+  max-width: 450px;
+  height: 60vh; /* 60% del alto de la pantalla */
+  max-height: 350px;
+}
+
+.progress-info {
+  margin-top: 1rem;
+  text-align: center;
+}

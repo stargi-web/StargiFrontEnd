@@ -60,4 +60,12 @@ export const routes: Routes = [
         (m) => m.DEACTIVATION_ROUTES
       ),
   },
+
+  {
+    path: 'accumulated-sales',
+    loadChildren: () =>
+      import('./features/accumulated-sales/accumulated.routes').then(
+        (m) => m.ACCUMULATED_ROUTES
+      ),
+  },
 ];
