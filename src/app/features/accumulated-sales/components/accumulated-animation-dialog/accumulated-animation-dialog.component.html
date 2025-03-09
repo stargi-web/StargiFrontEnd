@@ -1,5 +1,5 @@
-<div class="content">
-  <div class="sm:h-4rem md:h-8rem lg:h-15rem xl:h-20rem">
+<div class="flex flex-column align-items-center">
+  <div class="flex sm:w-1 md:w-3 lg:w-4 xl:w-6">
     <lottie-player
       src="/assets/piggy_blue.json"
       background="transparent"
@@ -10,7 +10,7 @@
   </div>
 
   <div class="progress-info">
-    <p class="text-2xl font-semibold">
+    <p class="sm:text-sm md:base lg:xl xl:text-2xl font-semibold">
       S/ {{ currentAmount | number : "1.0-0" }} - S/
       {{ goal | number : "1.0-0" }}
     </p>
