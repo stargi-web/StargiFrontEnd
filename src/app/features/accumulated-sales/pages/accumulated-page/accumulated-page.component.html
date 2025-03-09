@@ -6,23 +6,29 @@
     <div class="flex-auto">
       <label class="font-bold" for="integeronly">Meta: </label>
       <p-inputNumber
-        inputId="integeronly"
-        [(ngModel)]="meta"
+        inputId="goalInput"
+        [(ngModel)]="goal"
         currency="PEN"
         locale="es-PE"
         mode="currency"
+        [minFractionDigits]="0"
+        [maxFractionDigits]="0"
       />
     </div>
     <div class="flex-auto">
-      <label class="font-bold" for="integeronly">Monto Acumulado: </label>
+      <label class="font-bold" for="integeronly"
+        >Monto Acumulado Actual:
+      </label>
       <p-inputNumber
-        inputId="integeronly"
-        [(ngModel)]="meta"
+        inputId="currentAccumulatedInput"
+        [(ngModel)]="currentAccumulated"
         currency="PEN"
         locale="es-PE"
         mode="currency"
+        [minFractionDigits]="0"
+        [maxFractionDigits]="0"
       />
     </div>
-    <p-button (onClick)="showDialog()" label="Guardar" />
+    <p-button (onClick)="saveForm()" label="Guardar" />
   </div>
 </div>

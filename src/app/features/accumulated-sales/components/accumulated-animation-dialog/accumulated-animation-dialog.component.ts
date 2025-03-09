@@ -1,6 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, NgZone } from '@angular/core';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { AccumulatedService } from '../../services/accumulated.service';
 
 @Component({
   selector: 'app-accumulated-animation-dialog',
@@ -11,8 +12,9 @@ import { ProgressBarModule } from 'primeng/progressbar';
   styleUrl: './accumulated-animation-dialog.component.css',
 })
 export class AccumulatedAnimationDialogComponent {
+  previousAccumulated: number = 0;
+  currentAccumulated: number = 0;
   currentAmount: number = 0;
-  updatedAmount: number = 6000;
   goal: number = 14000;
   fillPercentage: number = 0;
 
@@ -20,17 +22,29 @@ export class AccumulatedAnimationDialogComponent {
   value: number = 0;
   percentage: number = 0;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(
+    private ngZone: NgZone,
+    private accumulatedService: AccumulatedService
+  ) {}
 
   ngOnInit() {
-    this.animateAmount(this.currentAmount, this.updatedAmount, 2000);
+    this.accumulatedService.getLastAccumulated().subscribe((accumulated) => {
+      this.previousAccumulated = accumulated.previousAccumulated;
+      this.currentAccumulated = accumulated.currentAccumulated;
+      this.currentAmount = accumulated.previousAccumulated;
+      this.goal = accumulated.goal;
 
-    this.ngZone.runOutsideAngular(() => {
-      this.interval = setInterval(() => {
-        this.ngZone.run(() => {
-          this.percentage = Math.round((this.updatedAmount / this.goal) * 100);
-        });
-      }, 100);
+      this.animateAmount(0, this.currentAccumulated, 2000);
+
+      this.ngZone.runOutsideAngular(() => {
+        this.interval = setInterval(() => {
+          this.ngZone.run(() => {
+            this.percentage = Math.round(
+              (this.currentAccumulated / this.goal) * 100
+            );
+          });
+        }, 100);
+      });
     });
   }
 
@@ -62,6 +76,10 @@ export class AccumulatedAnimationDialogComponent {
         requestAnimationFrame(animate);
       } else {
         // La animación terminó, puedes agregar lógica adicional si lo requieres
+        const lottiePlayer = document.querySelector('lottie-player') as any;
+        if (lottiePlayer) {
+          lottiePlayer.stop(); // Detener la animación del lottie-player
+        }
       }
     };
 
