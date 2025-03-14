@@ -1,0 +1,18 @@
+.orange-dialog {
+  .p-dialog {
+    background-color: orange !important;
+  }
+
+  .p-dialog-header {
+    background-color: darkorange !important;
+    color: white !important;
+  }
+
+  .p-dialog-content {
+    background-color: orange !important;
+  }
+
+  .p-dialog-header-close {
+    color: white !important;
+  }
+}

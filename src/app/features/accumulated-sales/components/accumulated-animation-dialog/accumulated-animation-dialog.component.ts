@@ -1,12 +1,20 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NgZone } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  EventEmitter,
+  NgZone,
+  Output,
+} from '@angular/core';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AccumulatedService } from '../../services/accumulated.service';
 import { TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-accumulated-animation-dialog',
   standalone: true,
-  imports: [DecimalPipe, ProgressBarModule, TagModule],
+  imports: [DecimalPipe, ProgressBarModule, TagModule, ButtonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './accumulated-animation-dialog.component.html',
   styleUrl: './accumulated-animation-dialog.component.css',
@@ -23,6 +31,7 @@ export class AccumulatedAnimationDialogComponent {
   percentage: number = 0;
 
   constructor(
+    public ref: DynamicDialogRef,
     private ngZone: NgZone,
     private accumulatedService: AccumulatedService
   ) {}
