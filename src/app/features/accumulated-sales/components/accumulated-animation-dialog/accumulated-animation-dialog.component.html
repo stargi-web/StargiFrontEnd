@@ -1,5 +1,5 @@
 <div class="flex flex-column align-items-center">
-  <div class="flex sm:w-1 md:w-3 lg:w-4 xl:w-6">
+  <div class="flex sm:w-3 md:w-6 lg:w-7 xl:w-8">
     <lottie-player
       src="/assets/piggy_blue.json"
       background="transparent"
@@ -10,10 +10,21 @@
   </div>
 
   <div class="progress-info">
-    <p class="sm:text-sm md:base lg:xl xl:text-2xl font-semibold">
-      S/ {{ currentAmount | number : "1.0-0" }} - S/
-      {{ goal | number : "1.0-0" }}
-    </p>
+    <div class="flex justify-content-between gap-5">
+      <div class="flex flex-column justify-content-center align-items-center">
+        <p-tag severity="success" value="Acumulado" />
+        <p class="sm:text-sm md:base lg:xl xl:text-2xl font-semibold">
+          S/ {{ currentAmount | number : "1.0-0" }}
+        </p>
+      </div>
+      <div class="flex flex-column justify-content-center align-items-center">
+        <p-tag severity="danger" value="Meta" />
+        <p class="sm:text-sm md:base lg:xl xl:text-2xl font-semibold">
+          S/
+          {{ goal | number : "1.0-0" }}
+        </p>
+      </div>
+    </div>
   </div>
   <div class="w-3 justify-content-center">
     <p-progressBar [value]="percentage" [showValue]="false"></p-progressBar>

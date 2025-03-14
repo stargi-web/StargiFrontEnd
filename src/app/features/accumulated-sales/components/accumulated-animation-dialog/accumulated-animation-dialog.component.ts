@@ -2,11 +2,11 @@ import { DecimalPipe } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, NgZone } from '@angular/core';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AccumulatedService } from '../../services/accumulated.service';
-
+import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-accumulated-animation-dialog',
   standalone: true,
-  imports: [DecimalPipe, ProgressBarModule],
+  imports: [DecimalPipe, ProgressBarModule, TagModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './accumulated-animation-dialog.component.html',
   styleUrl: './accumulated-animation-dialog.component.css',
@@ -78,7 +78,7 @@ export class AccumulatedAnimationDialogComponent {
         // La animación terminó, puedes agregar lógica adicional si lo requieres
         const lottiePlayer = document.querySelector('lottie-player') as any;
         if (lottiePlayer) {
-          lottiePlayer.stop(); // Detener la animación del lottie-player
+          //lottiePlayer.stop(); // Detener la animación del lottie-player
         }
       }
     };

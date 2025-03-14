@@ -5,22 +5,31 @@ import { ButtonModule } from 'primeng/button';
 import { AttendanceMonthSummaryComponent } from '../../components/attendance-month-summary/attendance-month-summary.component';
 import { SessionStorageService } from '../../../../shared/services/sessionStorage.service';
 import { SESSION_ITEMS } from '../../../../shared/models/session-items';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AccumulatedAnimationDialogComponent } from '../../../accumulated-sales/components/accumulated-animation-dialog/accumulated-animation-dialog.component';
 
 @Component({
   selector: 'app-register-attendance-page',
   standalone: true,
   imports: [ButtonModule, ClockComponent, AttendanceMonthSummaryComponent],
+  providers: [DialogService],
   templateUrl: './register-attendance-page.component.html',
   styleUrl: './register-attendance-page.component.css',
 })
 export class RegisterAttendancePageComponent {
   @ViewChild(AttendanceMonthSummaryComponent)
   private attendanceSummary!: AttendanceMonthSummaryComponent;
-
+  ref: DynamicDialogRef | undefined;
   constructor(
     private attendanceService: AttendanceService,
-    private sessionStorageService: SessionStorageService
+    private sessionStorageService: SessionStorageService,
+    private dialogService: DialogService
   ) {}
+
+  ngOnInit() {
+    this.showDialog();
+  }
+
   registerAttendance() {
     const userId = Number(
       this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
@@ -49,5 +58,9 @@ export class RegisterAttendancePageComponent {
       hour12: true,
       timeZone: 'America/Lima',
     });
+  }
+
+  showDialog() {
+    this.ref = this.dialogService.open(AccumulatedAnimationDialogComponent, {});
   }
 }
