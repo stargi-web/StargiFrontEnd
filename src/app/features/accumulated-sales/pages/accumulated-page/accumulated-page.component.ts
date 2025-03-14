@@ -35,11 +35,7 @@ export class AccumulatedPageComponent {
   }
 
   showDialog() {
-    this.ref = this.dialogService.open(AccumulatedAnimationDialogComponent, {
-      header: '',
-      width: '50%',
-      height: '80%',
-    });
+    this.ref = this.dialogService.open(AccumulatedAnimationDialogComponent, {});
   }
 
   saveForm() {
