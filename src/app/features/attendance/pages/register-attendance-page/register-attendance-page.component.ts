@@ -61,6 +61,13 @@ export class RegisterAttendancePageComponent {
   }
 
   showDialog() {
-    this.ref = this.dialogService.open(AccumulatedAnimationDialogComponent, {});
+    this.ref = this.dialogService.open(AccumulatedAnimationDialogComponent, {
+      focusOnShow: false,
+      showHeader: false,
+      closable: true,
+      contentStyle: {
+        'background-color': 'var(--orange-300)',
+      },
+    });
   }
 }

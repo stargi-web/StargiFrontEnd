@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AccumulatedAnimationDialogComponent } from '../../components/accumulated-animation-dialog/accumulated-animation-dialog.component';
@@ -35,7 +35,14 @@ export class AccumulatedPageComponent {
   }
 
   showDialog() {
-    this.ref = this.dialogService.open(AccumulatedAnimationDialogComponent, {});
+    this.ref = this.dialogService.open(AccumulatedAnimationDialogComponent, {
+      focusOnShow: false,
+      showHeader: false,
+      closable: true,
+      contentStyle: {
+        'background-color': 'var(--orange-300)',
+      },
+    });
   }
 
   saveForm() {

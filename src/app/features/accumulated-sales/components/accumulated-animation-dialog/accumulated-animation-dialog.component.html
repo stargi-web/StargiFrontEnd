@@ -1,3 +1,12 @@
+<p-button
+  class="flex justify-content-end mt-2"
+  icon="pi pi-times"
+  [rounded]="true"
+  [text]="true"
+  [plain]="true"
+  severity="secondary"
+  (onClick)="ref.close()"
+/>
 <div class="flex flex-column align-items-center">
   <div class="flex sm:w-3 md:w-6 lg:w-7 xl:w-8">
     <lottie-player
@@ -28,7 +37,7 @@
   </div>
   <div class="w-3 justify-content-center">
     <p-progressBar [value]="percentage" [showValue]="false"></p-progressBar>
-    <span class="text-base flex justify-content-center mt-2"
+    <span class="text-base flex justify-content-center mt-2 font-semibold"
       >{{ fillPercentage | number : "1.2-2" }}%</span
     >
   </div>
