@@ -68,4 +68,9 @@ export const routes: Routes = [
         (m) => m.ACCUMULATED_ROUTES
       ),
   },
+  {
+    path: 'annexes',
+    loadChildren: () =>
+      import('./features/annexes/annexes.routes').then((m) => m.ANNEX_ROUTES),
+  },
 ];
