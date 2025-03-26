@@ -15,6 +15,7 @@ export const HHRR_LINKS: MenuItem[] = [
   },
   { path: '/files', label: 'Archivos', icon: 'pi pi-folder' },
   { path: '/surveys', label: 'Encuestas', icon: 'pi pi-clipboard' },
+  { path: '/annexes', label: 'Anexos', icon: 'pi pi-link' },
   {
     path: '/deactivations',
     label: 'Base de Desactivaciones',

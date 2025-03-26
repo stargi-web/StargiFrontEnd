@@ -5,6 +5,7 @@ export const ADMIN_LINKS: MenuItem[] = [
   { path: '/user/create', label: 'Crear Usuario', icon: 'pi pi-user-plus' },
   { path: '/opportunities', label: 'Oportunidades', icon: 'pi pi-chart-line' },
   { path: '/team/list', label: 'Equipos', icon: 'pi pi-users' },
+  { path: '/annexes', label: 'Anexos', icon: 'pi pi-link' },
   { path: '/files', label: 'Archivos', icon: 'pi pi-folder' },
   { path: '/surveys', label: 'Encuestas', icon: 'pi pi-clipboard' },
   {

@@ -1,0 +1,128 @@
+<div class="flex flex-column mb-3 align-items-center pt-4">
+  <div class="flex mb-4">
+    <p-button
+      *ngIf="hasAdminPermission()"
+      label="Crear anexo"
+      icon="pi pi-plus"
+      class="p-button-primary"
+      (onClick)="showDialog()"
+    ></p-button>
+  </div>
+  <div *ngIf="annexes.length > 0; else noAnnexes">
+    <div class="flex flex-row justify-content-center">
+      <div class="flex flex-row justify-content-center grid w-9">
+        <div *ngFor="let annex of paginatedAnnexes" class="col-fixed">
+          <p-card [style]="{ width: '400px' }">
+            <ng-template pTemplate="header">
+              <div
+                class="flex flex-row justify-content-end align-items-center pt-3 px-3"
+              >
+                <button
+                  *ngIf="hasAdminPermission()"
+                  pButton
+                  label=""
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  (click)="confirmDelete($event, annex)"
+                ></button>
+              </div>
+            </ng-template>
+
+            <!-- Cuerpo de la carta -->
+            <ng-template pTemplate="body">
+              <!-- Título, quien lo creó y número de preguntas -->
+              <div
+                class="flex flex-row justify-content-between align-items-center"
+              >
+                <p>
+                  <strong> Anexo: </strong>
+                  <span>{{ annex?.title }}</span>
+                </p>
+              </div>
+
+              <span style="word-wrap: break-word; white-space: normal">
+                {{ annex?.description }}
+              </span>
+            </ng-template>
+            <ng-template pTemplate="footer">
+              <!-- Botones -->
+              <a [href]="annex.url" target="_blank">
+                <button
+                  pTooltip="{{ annex.url }}"
+                  tooltipPosition="bottom"
+                  pButton
+                  label="Ir a link"
+                  [icon]="'pi pi-link'"
+                  class="p-button-primary w-full"
+                ></button>
+              </a>
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginador -->
+    <p-paginator
+      [rows]="6"
+      [totalRecords]="annexes.length"
+      [rowsPerPageOptions]="[6]"
+      (onPageChange)="onPageChange($event)"
+      class="p-mt-4"
+    ></p-paginator>
+  </div>
+</div>
+
+<!-- Create annex -->
+<p-dialog
+  header="Crear anexo"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '30rem' }"
+>
+  <div class="flex align-items-center gap-3 mb-3 mt-2">
+    <label for="username" class="font-semibold w-6rem">Titulo</label>
+    <input
+      pInputText
+      id="username"
+      class="flex-auto"
+      [(ngModel)]="annex.title"
+      autocomplete="off"
+    />
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+    <label for="email" class="font-semibold w-6rem">Descripcion</label>
+    <input
+      pInputText
+      id="email"
+      class="flex-auto"
+      [(ngModel)]="annex.description"
+      autocomplete="off"
+    />
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+    <label for="email" class="font-semibold w-6rem">Link URL</label>
+    <input
+      pInputText
+      id="email"
+      class="flex-auto"
+      [(ngModel)]="annex.url"
+      autocomplete="off"
+    />
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button
+      label="Cancelar"
+      severity="secondary"
+      (onClick)="visible = false"
+    />
+    <p-button label="Crear" (onClick)="createAnnex()" />
+  </div>
+</p-dialog>
+
+<ng-template #noAnnexes>
+  <div class="no-surveys pt-5">
+    <i class="pi pi-check-circle"></i>
+    <p>No hay anexos activos</p>
+  </div>
+</ng-template>
