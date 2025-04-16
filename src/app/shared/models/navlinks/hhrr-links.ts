@@ -21,10 +21,14 @@ export const HHRR_LINKS: MenuItem[] = [
     label: 'Base de Desactivaciones',
     icon: 'pi pi-bullseye',
   },
-
   {
     path: '/accumulated-sales',
     label: 'Acumulado de Ventas',
     icon: 'pi pi-dollar',
+  },
+  {
+    path: '/deleted',
+    label: 'Papelera',
+    icon: 'pi pi-trash',
   },
 ];

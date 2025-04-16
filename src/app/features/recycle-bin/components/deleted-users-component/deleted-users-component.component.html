@@ -1,0 +1,43 @@
+<div class="flex flex-column mb-3 align-items-center pt-4">
+  <div *ngIf="deletedUsers.length > 0; else noSurveys">
+    <div class="flex flex-row justify-content-center">
+      <div class="flex flex-row justify-content-center grid">
+        <div *ngFor="let survey of paginateddeletedUsers" class="col-fixed">
+          <p-card>
+            <!-- Cuerpo de la carta -->
+            <ng-template pTemplate="body">
+              <!-- Título, quien lo creó y número de preguntas -->
+              <div
+                class="flex flex-row justify-content-between align-items-center gap-4"
+              >
+                <p>{{ survey.firstName }} {{ survey.lastName }}</p>
+                <button
+                  pButton
+                  label=""
+                  icon="pi pi-history"
+                  class="p-button-info"
+                  (click)="confirmRestore($event, survey)"
+                ></button>
+              </div>
+            </ng-template>
+          </p-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginador -->
+    <p-paginator
+      [rows]="6"
+      [totalRecords]="deletedUsers.length"
+      [rowsPerPageOptions]="[6]"
+      (onPageChange)="onPageChange($event)"
+      class="p-mt-4"
+    ></p-paginator>
+  </div>
+</div>
+<ng-template #noSurveys>
+  <div class="no-surveys pt-5">
+    <i class="pi pi-check-circle"></i>
+    <p>No hay usuarios eliminados</p>
+  </div>
+</ng-template>
