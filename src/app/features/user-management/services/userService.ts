@@ -23,6 +23,25 @@ export class UserService {
   getUserById(id: number): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/${id}`);
   }
+
+  getUsersDeleted(): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/deleted`);
+  }
+
+  restoreUser(userId: number): Observable<any> {
+    return this.httpClient.post(`${this.apiUrl}/recover/${userId}`, {}).pipe(
+      tap(() => {
+        // Mostrar mensaje de éxito
+        this.messageNotificationService.showSuccess(
+          'Usuario restaurado  exitosamente'
+        );
+      }),
+      catchError((error) => {
+        // Manejar el error y mostrar notificación
+        return throwError(() => new Error('Error al restaurar usuario'));
+      })
+    );
+  }
   changePassword(body: { userId: number; password: string }): Observable<any> {
     return this.httpClient.patch(`${this.apiUrl}/password`, body);
   }

@@ -73,4 +73,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/annexes/annexes.routes').then((m) => m.ANNEX_ROUTES),
   },
+  {
+    path: 'deleted',
+    loadChildren: () =>
+      import('./features/recycle-bin/recycle-bin.routes').then(
+        (m) => m.RECYCLE_BIN_ROUTES
+      ),
+  },
 ];
