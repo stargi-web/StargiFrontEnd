@@ -13,4 +13,9 @@ export const ADMIN_LINKS: MenuItem[] = [
     label: 'Base de Desactivaciones',
     icon: 'pi pi-bullseye',
   },
+  {
+    path: '/deleted',
+    label: 'Papelera',
+    icon: 'pi pi-trash',
+  },
 ];
