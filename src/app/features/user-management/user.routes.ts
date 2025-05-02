@@ -11,7 +11,7 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
     component: UserListPageComponent,
     canActivate: [roleGuard],
     data: {
-      expectedRoles: ['admin'],
+      expectedRoles: ['admin', 'HHRR'],
     },
   },
   {

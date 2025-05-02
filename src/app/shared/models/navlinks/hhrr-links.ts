@@ -1,6 +1,7 @@
 import { MenuItem } from 'primeng/api';
 
 export const HHRR_LINKS: MenuItem[] = [
+  { path: '/user/list', label: 'Usuarios', icon: 'pi pi-user' },
   { path: '/user/create', label: 'Crear Usuario', icon: 'pi pi-user-plus' },
   {
     path: '/attendance/users',
