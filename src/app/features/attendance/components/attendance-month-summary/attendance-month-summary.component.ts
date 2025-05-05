@@ -59,7 +59,7 @@ export class AttendanceMonthSummaryComponent implements OnInit {
     this.attendanceService
       .getAttendancesByUserAndDates(this.userId, startDate, endDate)
       .subscribe((response) => {
-        console.log(response);
+        //console.log(response);
         this.attendances = response.attendances.map(
           (attendance: Attendance) => ({
             ...attendance,

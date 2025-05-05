@@ -54,6 +54,7 @@ export class MessageNotificationService {
       severity: 'info',
       summary: 'Información',
       detail: message,
+      life: 7000,
     });
   }
 
