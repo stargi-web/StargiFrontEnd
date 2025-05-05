@@ -19,8 +19,9 @@
           <p-button
             icon="pi pi-arrow-left"
             (onClick)="
-              userRole === 'admin' && folderHistory.length === 0
-                ? adminLoadAllUserFolders()
+              (userRole === 'admin' || userRole === 'supervisor') &&
+              folderHistory.length === 0
+                ? loadRootFolders()
                 : goBack()
             "
             [disabled]="
@@ -118,7 +119,12 @@
       <div style="min-height: 30rem">
         <div class="grid overflow-y-scroll max-h-30rem">
           <!--ADMIN Grid de carpetas -->
-          <ng-container *ngIf="userRole === 'admin' && isAdminParent">
+          <ng-container
+            *ngIf="
+              (userRole === 'admin' || userRole === 'supervisor') &&
+              isAdminParent
+            "
+          >
             <div
               class="folderCard flex flex-column m-2 p-2"
               [ngClass]="{
