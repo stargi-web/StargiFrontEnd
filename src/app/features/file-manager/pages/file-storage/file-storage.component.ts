@@ -40,7 +40,10 @@ export class FileStorageComponent implements OnInit {
   folderHistory: Folder[] = []; // Pila de historial de carpetas
   newFolderName: string = '';
   userId = Number(this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID));
-
+  mainUserId = Number(
+    this.sessionStorageService.getItem(SESSION_ITEMS.USER_ID)
+  );
+  username = this.sessionStorageService.getItem(SESSION_ITEMS.USERNAME);
   userName: string = '';
   userRole: string = '';
   adminUsersFolders: any = [];
@@ -81,18 +84,27 @@ export class FileStorageComponent implements OnInit {
   ngOnInit(): void {
     this.userRole =
       this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) || '';
+    this.loadRootFolders();
+  }
+
+  getBaseFirebasePath(): string {
+    return `users/${this.userName}/files`;
+  }
+
+  loadRootFolders(): void {
     if (this.userRole === 'admin') {
       this.adminLoadAllUserFolders();
+      this.isAdminParent = true;
+    } else if (this.userRole === 'supervisor') {
+      this.supervisorLoadAllUserFolders(
+        Number(this.sessionStorageService.getItem(SESSION_ITEMS.TEAM_ID))
+      );
       this.isAdminParent = true;
     } else {
       this.userName =
         this.sessionStorageService.getItem(SESSION_ITEMS.USERNAME) || '';
       this.loadParentFolders(this.userId);
     }
-  }
-
-  getBaseFirebasePath(): string {
-    return `users/${this.userName}/files`;
   }
 
   adminLoadAllUserFolders(): void {
@@ -103,7 +115,16 @@ export class FileStorageComponent implements OnInit {
       this.folders = [];
     });
   }
-
+  supervisorLoadAllUserFolders(teamId: number): void {
+    const currentUser = { id: this.mainUserId, userName: this.username };
+    this.deselectFolder();
+    this.userService.getUsersByTeamId(teamId).subscribe((users: any[]) => {
+      this.adminUsersFolders = users;
+      this.adminUsersFolders = [currentUser, ...users];
+      this.isAdminParent = true;
+      this.folders = [];
+    });
+  }
   // Cargar carpetas principales
   loadParentFolders(userId: number): void {
     this.folderService
