@@ -84,6 +84,13 @@ export class FileStorageComponent implements OnInit {
   ngOnInit(): void {
     this.userRole =
       this.sessionStorageService.getItem(SESSION_ITEMS.ROLE) || '';
+
+    if (this.userRole === 'HHRR') {
+      console.log(this.userRole);
+      this.userRole = 'admin'; // Cambia el rol a admin si es HHRR
+      console.log(this.userRole);
+    }
+
     this.loadRootFolders();
   }
 
